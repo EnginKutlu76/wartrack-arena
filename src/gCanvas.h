@@ -41,7 +41,12 @@ public:
 
 
 private:
-	static const int KEY_NONE = 0, KEY_W = 1, KEY_S = 2, KEY_D = 4, KEY_A = 8;
+
+	enum {
+		GAMESTATE_LOAD, GAMESTATE_PLAY, GAMESTATE_GAMEOVER, GAMESTATE_PAUSE, GAMESTATE_WIN
+	};
+
+	static const int KEY_NONE = 0, KEY_W = 1, KEY_S = 2, KEY_D = 4, KEY_A = 8, KEY_ESC = 16;
 	static const int trackframenum = 2;
 
 	void moveCharacter();
@@ -53,14 +58,37 @@ private:
 	void moveBullets();
 	void drawBullets();
 	void generateBullet(float bulletX, float bulletY, float bulletDx, float bulletDy, float bulletRotation, int bulletSender);
+	void drawMinimap();
+	void drawEnemies();
+	void drawGui();
+	void drawDialogues();
 
 	gApp* root;
+
+	int gamestate;
 
 	gImage map;
 	gImage tank1;
 	gImage track[trackframenum];
 	gImage gun;
 	gImage bulletimage;
+	gImage enemy;
+	gImage minimap;
+	gImage minimapradarsign1, minimapradarsign2;
+
+	gImage gui_charactericon;
+	gImage gui_healthicon, gui_bulleticon;
+	gImage gui_barframe, gui_barbackground;
+	gImage gui_healthbar;
+
+	gImage gui_gameoverdialogue;
+	gImage gui_pausedialogue;
+	gImage gui_windialogue;
+	gImage replaybutton;
+	gImage mainmbutton;
+	gImage continuebutton;
+	gImage nextlevelbutton;
+
 
 	gFont namefont;
 
@@ -70,6 +98,7 @@ private:
 	int cwh, chh;
 	float cdx, cdy;
 	float cspeed;
+	int chealth;
 
 	float cangle;
 	float cangletr;
@@ -77,11 +106,15 @@ private:
 
 	int keystate;
 
+	//camera
 	float camx, camy;
 	float camw, camh;
 	float camleftlimit, camrightlimit, camtoplimit, cambottomlimit;
 
+	//maps
 	int mapw, maph;
+	int minimapx, minimaph;
+	int minimapw, minimapy;
 
 	//track
 	float tx, ty;
@@ -97,12 +130,40 @@ private:
 	int gwh, ghh;
 	float gdx, gdy;
 
-
+	//bullet
 	std::vector<std::vector<float>> bullets;
 	float muzzleangle, muzzledistance;
+	int bulletamt;
 
+	//font
 	int fontx, fonty;
 	std::string name;
+	int bamtx, bamty;
+
+	//enemy
+	int ex, ey;
+	int ew, eh;
+	int ewh, ehh;
+
+	//gui
+	int gcix, gciy;
+	int ghix, ghiy, gbix, gbiy;
+	int gbiw, gbih;
+	int ghbfx, ghbfy, gbbfx, gbbfy;
+	int ghbbx, ghbby, gbbbx, gbbby;
+	int gbw, gbh;
+
+	int dialoguew, dialogueh;
+	int dialoguex, dialoguey;
+	bool dialogueshown;
+	int score;
+	int leftbx, leftby;
+	int leftbw, leftbh;
+	int rightbx, rightby;
+	int rightbw, rightbh;
+	int dialoguewidthhalf, dialogueheighthalf;
+	int scorex, scorey;
+	int scoretitlex, scoretitley;
 };
 
 #endif /* GCANVAS_H_ */
