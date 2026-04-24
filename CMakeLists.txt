@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.10.2)
 
 ########## PROJECT NAME ##########
-set(APP_NAME Vengeful_Jack)
+set(APP_NAME WarTrack_Arena)
 
 
 ########## USED PLUGINS LIST ##########
@@ -109,13 +109,25 @@ set(GlistApp_SOURCES
 		${APP_DIR}/src/main.cpp
 		${APP_DIR}/src/gApp.cpp
 		${APP_DIR}/src/gCanvas.cpp
-		${APP_DIR}/src/mainMenu.cpp
+		${APP_DIR}/src/MainMenu.cpp
+		${APP_DIR}/src/ShopCanvas.cpp
+		${APP_DIR}/src/CreditsCanvas.cpp
+		${APP_DIR}/src/HelpMenu.cpp
+		${APP_DIR}/src/OptionsCanvas.cpp
+		${APP_DIR}/src/StartCanvas.cpp
+		${APP_DIR}/src/TankCanvas.cpp
 )
 
 set(GlistApp_HEADERS
 		${APP_DIR}/src/gApp.h
 		${APP_DIR}/src/gCanvas.h
-		${APP_DIR}/src/mainMenu.h
+		${APP_DIR}/src/MainMenu.h
+		${APP_DIR}/src/ShopCanvas.h
+		${APP_DIR}/src/CreditsCanvas.h
+		${APP_DIR}/src/HelpMenu.h
+		${APP_DIR}/src/OptionsCanvas.h
+		${APP_DIR}/src/StartCanvas.h
+		${APP_DIR}/src/TankCanvas.h
 )
 
 add_executable(${APP_NAME}

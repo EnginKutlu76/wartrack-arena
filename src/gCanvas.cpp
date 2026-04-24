@@ -6,8 +6,8 @@
 */
 
 
+#include <MainMenu.h>
 #include "gCanvas.h"
-#include "mainMenu.h"
 
 
 gCanvas::gCanvas(gApp* root) : gBaseCanvas(root) {

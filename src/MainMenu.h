@@ -1,0 +1,102 @@
+/*
+ * mainMenu.h
+ *
+ *  Created on: 13 Mar 2026
+ *      Author: Engin Kutlu
+ */
+
+#ifndef SRC_MAINMENU_H_
+#define SRC_MAINMENU_H_
+
+#include "gBaseCanvas.h"
+#include "gApp.h"
+#include "gFont.h"
+#include "gImage.h"
+#include "gFont.h"
+
+//#include "Fade.h"
+
+class mainMenu: public gBaseCanvas {
+public:
+	mainMenu(gApp* root);
+	virtual ~mainMenu();
+
+	void setup();
+	void update();
+	void draw();
+
+	void keyPressed(int key);
+	void keyReleased(int key);
+	void charPressed(unsigned int codepoint);
+	void mouseMoved(int x, int y );
+	void mouseDragged(int x, int y, int button);
+	void mousePressed(int x, int y, int button);
+	void mouseReleased(int x, int y, int button);
+	void mouseScrolled(int x, int y);
+	void mouseEntered();
+	void mouseExited();
+	void windowResized(int w, int h);
+
+	void showNotify();
+	void hideNotify();
+
+	void menuSetup();
+	void menuDraw();
+	void menuPressed(int x, int y);
+	void menuReleased(int x, int y);
+	void menuFocus(int x, int y);
+
+	//std::unique_ptr<Fade> fadeeffect;
+
+private:
+	static const int  BUTTON_NONE = 0, BUTTON_PRESSED = 1, BUTTON_CANCELED = -1, BUTTON_PERFORMED = 2, BUTTON_FOCUS = 3;
+
+	gApp* root;
+
+	void logoSetup();
+	void startSetup();
+	void offlineSetup();
+	void optionSetup();
+	void tankSetup();
+	void shopSetup();
+	void helpSetup();
+	void creditSetup();
+	void exitSetup();
+	void colorSetup();
+
+	void updateButtonState(int x, int y);
+	void checkButtonPressed(int x, int y, int button);
+	void checkButtonReleased(int x, int y, int button);
+
+	void backgroundDraw();
+	void logoDraw();
+	void startDraw();
+	void offlineDraw();
+	void shopDraw();
+	void optionDraw();
+	void creditDraw();
+	void helpDraw();
+	void exitDraw();
+	void fadeEffectDraw();
+	void tankDraw();
+
+	gImage background;
+	std::string starttext, offlinetext, shoptext, optiontext, credittext, exittext, helptext, tanktext;
+	gImage glistlogo;
+	int glistlogox, glistlogoy, glistlogow, glistlogoh;
+	int nitralogox, nitralogoy, nitralogow, nitralogoh;
+	int startx, starty, startw, starth;
+	int offlinex, offliney, offlinew, offlineh;
+	int shopx, shopy, shopw, shoph;
+	int tankx, tanky, tankw, tankh;
+	int optionx, optiony, optionw, optionh;
+	int helpx, helpy, helpw, helph;
+	int creditx, credity, creditw, credith;
+	int exitx, exity, exitw, exith;
+	int titlex, titley;
+	gRect starthitbox, offlinehitbox, shophitbox, optionhitbox, credithitbox, exithitbox, helphitbox, tankhitbox;
+	int startstate, offlinestate, shopstate, optionstate, creditstate, exitstate, helpstate, tankstate;
+	gColor pressedcolor, normalcolor, focuscolor;
+	//std::unique_ptr<Fade> fadeeffect;
+};
+#endif /* SRC_MAINMENU_H_ */
