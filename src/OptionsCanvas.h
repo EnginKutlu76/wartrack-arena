@@ -106,10 +106,18 @@ private:
 	void audioTabButtonSetup();
 	void audioTabButtonDraw();
 	void audioSettingsSetup();
+	void musicSetup();
+	void fxSetup();
+	void musictickSetup();
+	void fxtickSetup();
 	void audioSettingsPressed(int x, int y);
 	void audioSettingsReleased(int x, int y);
 	void audioSettingsFocus(int x, int y);
 	void audioSettingsDraw();
+	void musicDraw();
+	void fxDraw();
+	void musictickDraw();
+	void fxtickDraw();
 
 	//apply&reset funcs
 	void applyTabButtonSetup();
@@ -273,6 +281,43 @@ private:
 	int resbackbuttonx, resbackbuttony, resbackbuttonw, resbackbuttonh, resforwardbuttonx;
 	int resbackstate, resfwstate;
 	int selectedresolution;
+
+	//audio settings
+	gImage musicbackbutton, musicforwardbutton;
+	gRect musicbackbuttonhitbox, musicforwardbuttonhitbox;
+	std::string musiclabeltext, musicnumtext;
+	int musicvalue;
+	int musiclabelx, musiclabely, musiclabelw, musiclabelh;
+	int musicx, musicw, musich;
+	int musicbackbuttonx, musicbackbuttony, musicbackbuttonw, musicbackbuttonh, musicforwardbuttonx;
+	int musicbackstate, musicfwstate;
+
+	gImage fxbackbutton, fxforwardbutton;
+	gRect fxbackbuttonhitbox, fxforwardbuttonhitbox;
+	std::string fxlabeltext, fxnumtext;
+	int effectvalue;
+	int fxlabelx, fxlabely, fxlabelw, fxlabelh;
+	int fxx, fxw, fxh;
+	int fxbackbuttonx, fxbackbuttony, fxbackbuttonw, fxbackbuttonh, fxforwardbuttonx;
+	int fxbackstate, fxfwstate;
+
+	gImage musicuncheck, musiccheck;
+	gRect musicbuttonhitbox;
+	std::string musictext;
+	int musictextx, musictexty, musictextw, musictexth;
+	int musicuncheckx, musicunchecky, musicuncheckw, musicuncheckh;
+	int musiccheckw, musiccheckh;
+	int musictickstate;
+	bool ismusicenabled;
+
+	gImage fxuncheck, fxcheck;
+	gRect fxbuttonhitbox;
+	std::string fxtext;
+	int fxtextx, fxtexty, fxtextw, fxtexth;
+	int fxuncheckx, fxunchecky, fxuncheckw, fxuncheckh;
+	int fxcheckw, fxcheckh;
+	int fxtickstate;
+	bool isfxenabled;
 
 	//return
 	int returnx, returny, returnw, returnh;

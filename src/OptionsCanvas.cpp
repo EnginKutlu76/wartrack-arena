@@ -313,6 +313,10 @@ void OptionsCanvas::graphicsSettingsSetup() {
 }
 
 void OptionsCanvas::audioSettingsSetup() {
+	musicSetup();
+	fxSetup();
+	musictickSetup();
+	fxtickSetup();
 }
 
 
@@ -347,7 +351,10 @@ void OptionsCanvas::graphicsSettingsDraw() {
 }
 
 void OptionsCanvas::audioSettingsDraw() {
-
+	musicDraw();
+	fxDraw();
+	musictickDraw();
+	fxtickDraw();
 }
 
 void OptionsCanvas::containerButtonPressed(int x, int y) {
@@ -730,15 +737,130 @@ void OptionsCanvas::graphicsSettingsFocus(int x, int y) {
 }
 
 void OptionsCanvas::audioSettingsPressed(int x, int y) {
+	if(musicbackstate != BUTTON_PRESSED) {
+		if(musicbackbuttonhitbox.contains(x, y)) {
+			musicbackstate = BUTTON_PRESSED;
+		}
+		else {
+			musicbackstate = BUTTON_NONE;
+		}
+	}
 
+	if(musicfwstate != BUTTON_PRESSED) {
+		if(musicforwardbuttonhitbox.contains(x, y)) {
+			musicfwstate = BUTTON_PRESSED;
+		}
+		else {
+			musicfwstate = BUTTON_NONE;
+		}
+	}
+
+	if(fxbackstate != BUTTON_PRESSED) {
+		if(fxbackbuttonhitbox.contains(x, y)) {
+			fxbackstate = BUTTON_PRESSED;
+		}
+		else {
+			fxbackstate = BUTTON_NONE;
+		}
+	}
+
+	if(fxfwstate != BUTTON_PRESSED) {
+		if(fxforwardbuttonhitbox.contains(x, y)) {
+			fxfwstate = BUTTON_PRESSED;
+		}
+		else {
+			fxfwstate = BUTTON_NONE;
+		}
+	}
+
+	if(musicbuttonhitbox.contains(x, y)) {
+		musictickstate = BUTTON_PRESSED;
+	}
+
+	if(fxbuttonhitbox.contains(x, y)) {
+		fxtickstate = BUTTON_PRESSED;
+	}
 }
 
 void OptionsCanvas::audioSettingsReleased(int x, int y) {
+	if(musicbackbuttonhitbox.contains(x, y) && musicbackstate == BUTTON_PRESSED) {
+		musicbackstate = BUTTON_PERFORMED;
+		if(musicvalue >= 5) musicvalue -= 5;
+		musicnumtext = gToStr(musicvalue);
+	}
+	else if(musicforwardbuttonhitbox.contains(x, y) && musicfwstate == BUTTON_PRESSED) {
+		musicfwstate = BUTTON_PERFORMED;
+		if(musicvalue < 100) musicvalue += 5;
+		musicnumtext = gToStr(musicvalue);
+	}
+	else if(fxbackbuttonhitbox.contains(x, y) && fxbackstate == BUTTON_PRESSED) {
+		fxbackstate = BUTTON_PERFORMED;
+		if(effectvalue >= 5) effectvalue -= 5;
+		fxnumtext = gToStr(effectvalue);
+	}
+	else if(fxforwardbuttonhitbox.contains(x, y) && fxfwstate == BUTTON_PRESSED) {
+		fxfwstate = BUTTON_PERFORMED;
+		if(effectvalue < 100) effectvalue += 5;
+		fxnumtext = gToStr(effectvalue);
+	}
+	else if(musicbuttonhitbox.contains(x, y) && musictickstate == BUTTON_PRESSED) {
+	    musictickstate = BUTTON_PERFORMED;
+	    ismusicenabled = !ismusicenabled;
+	}
+	else if(fxbuttonhitbox.contains(x, y) && fxtickstate == BUTTON_PRESSED) {
+	    fxtickstate = BUTTON_PERFORMED;
+	    isfxenabled = !isfxenabled;
+	}
+	else {
+		musicbackstate = BUTTON_CANCELED;
+		musicfwstate = BUTTON_CANCELED;
+		fxbackstate = BUTTON_CANCELED;
+		fxfwstate = BUTTON_CANCELED;
+		musictickstate = BUTTON_CANCELED;
+		fxtickstate = BUTTON_CANCELED;
+	}
 
 }
 
 void OptionsCanvas::audioSettingsFocus(int x, int y) {
+	if(musicbackstate != BUTTON_PRESSED) {
+		if(musicbackbuttonhitbox.contains(x, y)) {
+			musicbackstate = BUTTON_FOCUS;
+		}
 
+		else {
+			musicbackstate = BUTTON_NONE;
+		}
+	}
+
+	if(musicfwstate != BUTTON_PRESSED) {
+		if(musicforwardbuttonhitbox.contains(x, y)) {
+			musicfwstate = BUTTON_FOCUS;
+		}
+
+		else {
+			musicfwstate = BUTTON_NONE;
+		}
+	}
+	if(fxbackstate != BUTTON_PRESSED) {
+		if(fxbackbuttonhitbox.contains(x, y)) {
+			fxbackstate = BUTTON_FOCUS;
+		}
+
+		else {
+			fxbackstate = BUTTON_NONE;
+		}
+	}
+
+	if(fxfwstate != BUTTON_PRESSED) {
+		if(fxforwardbuttonhitbox.contains(x, y)) {
+			fxfwstate = BUTTON_FOCUS;
+		}
+
+		else {
+			fxfwstate = BUTTON_NONE;
+		}
+	}
 }
 
 void OptionsCanvas::returnSetup() {
@@ -1352,4 +1474,140 @@ void OptionsCanvas::resolutionDraw() {
 
 	if(resfwstate == BUTTON_FOCUS) setColor(focuscolor);
 	if(resfwstate == BUTTON_PRESSED || resfwstate == BUTTON_PERFORMED) setColor(pressedcolor);
+}
+
+void OptionsCanvas::musicSetup() {
+	musicbackbutton.loadImage("PNG/Icons/ArrowsLeft3.png");
+	musicforwardbutton.loadImage("PNG/Icons/ArrowsRight3.png");
+
+	musicvalue = 50;
+	musicnumtext = gToStr(musicvalue);
+	musiclabeltext = "Music Value";
+	musiclabelh = root->menutitlefont.getStringHeight("y");
+	musiclabelx = containerx + containerw / 10;
+	musiclabely = containery + containerh / 15 + musiclabelh;
+	musicw = root->menutitlefont.getStringWidth(musicnumtext);
+	musicx = musiclabelx + root->menutitlefont.getStringWidth(musiclabeltext) + 40;
+	musich = root->menutitlefont.getStringHeight(musicnumtext);
+	musicbackbuttonw = musicbackbutton.getWidth() * 0.4;
+	musicbackbuttonh = musicbackbutton.getHeight() * 0.4;
+	musicbackbuttonx = musicx - musicbackbuttonw - 10;
+	musicbackbuttony = musiclabely - (musich / 2) - (musicbackbuttonh / 2) +  3;
+	musicforwardbuttonx = musicx + musicw + 10;
+	musicbackbuttonhitbox.set(musicbackbuttonx, musicbackbuttony, musicbackbuttonx + musicbackbuttonw, musicbackbuttony + musicbackbuttonh);
+	musicforwardbuttonhitbox.set(musicforwardbuttonx, musicbackbuttony, musicforwardbuttonx + musicbackbuttonw, musicbackbuttony + musicbackbuttonh);
+}
+
+void OptionsCanvas::fxSetup() {
+	fxbackbutton.loadImage("PNG/Icons/ArrowsLeft3.png");
+	fxforwardbutton.loadImage("PNG/Icons/ArrowsRight3.png");
+
+	effectvalue = 50;
+	fxnumtext = gToStr(effectvalue);
+	fxlabeltext = "Effect Value";
+	fxlabelh = root->menutitlefont.getStringHeight("y");
+	fxlabelx = containerx + containerw / 10;
+	fxlabely = containery + containerh / 15 + fxlabelh + 100;
+	fxw = root->menutitlefont.getStringWidth(fxnumtext);
+	fxx = fxlabelx + root->menutitlefont.getStringWidth(fxlabeltext) + 40;
+	fxh = root->menutitlefont.getStringHeight(fxnumtext);
+	fxbackbuttonw = fxbackbutton.getWidth() * 0.4;
+	fxbackbuttonh = fxbackbutton.getHeight() * 0.4;
+	fxbackbuttonx = fxx - fxbackbuttonw - 10;
+	fxbackbuttony = fxlabely - (fxh / 2) - (fxbackbuttonh / 2) +  3;
+	fxforwardbuttonx = fxx + fxw + 10;
+	fxbackbuttonhitbox.set(fxbackbuttonx, fxbackbuttony, fxbackbuttonx + fxbackbuttonw, fxbackbuttony + fxbackbuttonh);
+	fxforwardbuttonhitbox.set(fxforwardbuttonx, fxbackbuttony, fxforwardbuttonx + fxbackbuttonw, fxbackbuttony + fxbackbuttonh);
+}
+
+void OptionsCanvas::musicDraw() {
+	setColor(0, 0, 0);
+	root->menutitlefont.drawText(musiclabeltext, musiclabelx, musiclabely);
+
+	if(musicbackstate == BUTTON_FOCUS) setColor(focuscolor);
+	if(musicbackstate == BUTTON_PRESSED || musicbackstate == BUTTON_PERFORMED) setColor(pressedcolor);
+	musicbackbutton.draw(musicbackbuttonx, musicbackbuttony, musicbackbuttonw, musicbackbuttonh);
+
+	setColor(0, 0, 0);
+	if(musicfwstate == BUTTON_FOCUS) setColor(focuscolor);
+	if(musicfwstate == BUTTON_PRESSED || musicfwstate == BUTTON_PERFORMED) setColor(pressedcolor);
+	musicforwardbutton.draw(musicforwardbuttonx, musicbackbuttony, musicbackbuttonw, musicbackbuttonh);
+
+	setColor(0, 0, 0);
+	root->menutitlefont.drawText(musicnumtext, musicx, musiclabely);
+}
+
+void OptionsCanvas::fxDraw() {
+	setColor(0, 0, 0);
+	root->menutitlefont.drawText(fxlabeltext, fxlabelx, fxlabely);
+
+	if(fxbackstate == BUTTON_FOCUS) setColor(focuscolor);
+	if(fxbackstate == BUTTON_PRESSED || fxbackstate == BUTTON_PERFORMED) setColor(pressedcolor);
+	fxbackbutton.draw(fxbackbuttonx, fxbackbuttony, fxbackbuttonw, fxbackbuttonh);
+
+	setColor(0, 0, 0);
+	if(fxfwstate == BUTTON_FOCUS) setColor(focuscolor);
+	if(fxfwstate == BUTTON_PRESSED || fxfwstate == BUTTON_PERFORMED) setColor(pressedcolor);
+	fxforwardbutton.draw(fxforwardbuttonx, fxbackbuttony, fxbackbuttonw, fxbackbuttonh);
+
+	setColor(0, 0, 0);
+	root->menutitlefont.drawText(fxnumtext, fxx, fxlabely);
+}
+
+void OptionsCanvas::musictickSetup() {
+	musictext = "Music";
+	musicuncheck.loadImage("PNG/inactivecolor.png");
+	musiccheck.loadImage("PNG/check-markred.png");
+	musictextw = root->menutitlefont.getStringWidth(musictext);
+	musictexth = root->menutitlefont.getStringHeight(musictext);
+	musictextx = fxlabelx;
+	musictexty = fxlabely + 100;
+	musicuncheckw = musicuncheck.getWidth();
+	musicuncheckh = musicuncheck.getHeight();
+	musicuncheckx = musictextx + 150;
+	musicunchecky = musictexty - (musictexth / 2) - (musicuncheckh / 2) + 3;
+	musiccheckw = musiccheck.getWidth() * 0.06;
+	musiccheckh = musiccheck.getHeight() * 0.06;
+	musicbuttonhitbox.set(musicuncheckx, musicunchecky, musicuncheckx + musicuncheckw, musicunchecky + musicuncheckh);
+	ismusicenabled = true;
+}
+
+void OptionsCanvas::fxtickSetup() {
+	fxtext = "FX Sound";
+	fxuncheck.loadImage("PNG/inactivecolor.png");
+	fxcheck.loadImage("PNG/check-markred.png");
+	fxtextw = root->menutitlefont.getStringWidth(fxtext);
+	fxtexth = root->menutitlefont.getStringHeight(fxtext);
+	fxtextx = fxlabelx;
+	fxtexty = fxlabely + 200;
+	fxuncheckw = fxuncheck.getWidth();
+	fxuncheckh = fxuncheck.getHeight();
+	fxuncheckx = fxtextx + 150;
+	fxunchecky = fxtexty - (fxtexth / 2) - (fxuncheckh / 2) + 3;
+	fxcheckw = fxcheck.getWidth() * 0.06;
+	fxcheckh = fxcheck.getHeight() * 0.06;
+	fxbuttonhitbox.set(fxuncheckx, fxunchecky, fxuncheckx + fxuncheckw, fxunchecky + fxuncheckh);
+	isfxenabled = true;
+}
+
+void OptionsCanvas::musictickDraw() {
+	setColor(0, 0, 0);
+	root->menutitlefont.drawText(musictext, musictextx, musictexty);
+	musicuncheck.draw(musicuncheckx, musicunchecky);
+	if(ismusicenabled) {
+		setColor(255, 255, 255);
+		musiccheck.draw(musicuncheckx, musicunchecky, musiccheckw, musiccheckh);
+	}
+	setColor(0, 0, 0);
+}
+
+void OptionsCanvas::fxtickDraw() {
+	setColor(0, 0, 0);
+	root->menutitlefont.drawText(fxtext, fxtextx, fxtexty);
+	fxuncheck.draw(fxuncheckx, fxunchecky);
+	if(isfxenabled) {
+		setColor(255, 255, 255);
+		fxcheck.draw(fxuncheckx, fxunchecky, fxcheckw, fxcheckh);
+	}
+	setColor(0, 0, 0);
 }
