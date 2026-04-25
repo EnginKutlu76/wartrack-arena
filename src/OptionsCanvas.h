@@ -43,54 +43,83 @@ private:
 	static const int LANG_EN = 1, LANG_TR = 2;
 	static const int KEY_NONE = -1, KEY_FORWARD = 0, KEY_BACKWARD = 1, KEY_RIGHT = 2, KEY_LEFT = 3, KEY_RUN = 4, KEY_FIRE = 5, KEY_INTERACT = 6;
 
+	//tab funcs
 	void tabSetup();
-	void gameTabButtonSetup();
-	void controlsTabButtonSetup();
-	void graphicsTabButtonSetup();
-	void audioTabButtonSetup();
-	void applyTabButtonSetup();
-	void resetTabButtonSetup();
-
-	void containerSetup();
-	void gameSettingsSetup();
-	void controlsSettingsSetup();
-	void graphicsSettingsSetup();
-	void audioSettingsSetup();
-
 	void tabDraw();
-	void gameTabButtonDraw();
-	void controlsTabButtonDraw();
-	void graphicsTabButtonDraw();
-	void audioTabButtonDraw();
-	void applyTabButtonDraw();
-	void resetTabButtonDraw();
-
-	void containerDraw();
-	void gameSettingsDraw();
-	void controlsSettingsDraw();
-	void graphicsSettingsDraw();
-	void audioSettingsDraw();
-
 	void tabButtonPressed(int x, int y);
 	void tabButtonReleased(int x, int y);
 	void tabButtonFocus(int x, int y);
 
+	//container funcs
+	void containerSetup();
+	void containerDraw();
 	void containerButtonPressed(int x, int y);
 	void containerButtonReleased(int x, int y);
 	void containerButtonFocus(int x, int y);
 
+	//game funcs
+	void gameTabButtonSetup();
+	void gameTabButtonDraw();
+	void gameSettingsSetup();
+	void languageSetup();
+	void minimapSetup();
+	void fpsSetup();
 	void gameSettingsPressed(int x, int y);
 	void gameSettingsReleased(int x, int y);
 	void gameSettingsFocus(int x, int y);
+	void gameSettingsDraw();
+	void languageDraw();
+	void minimapDraw();
+	void fpsDraw();
+
+	//control funcs
+	void controlsTabButtonSetup();
+	void controlsTabButtonDraw();
+	void controlsSettingsSetup();
+	void controlButtonsSetup();
+	void sensitivitySetup();
 	void controlsSettingsPressed(int x, int y);
 	void controlsSettingsReleased(int x, int y);
 	void controlsSettingsFocus(int x, int y);
+	void controlsSettingsDraw();
+	void controlButtonsDraw();
+	void sensitivityDraw();
+
+	//graphics funcs
+	void graphicsTabButtonSetup();
+	void graphicsTabButtonDraw();
+	void graphicsSettingsSetup();
+	void brightnessSetup();
+	void resolutionSetup();
+	void windowmodeSetup();
+	void qualitySetup();
 	void graphicsSettingsPressed(int x, int y);
 	void graphicsSettingsReleased(int x, int y);
 	void graphicsSettingsFocus(int x, int y);
+	void graphicsSettingsDraw();
+	void brightnessDraw();
+	void resolutionDraw();
+	void windowmodeDraw();
+	void qualityDraw();
+
+	//audio funcs
+	void audioTabButtonSetup();
+	void audioTabButtonDraw();
+	void audioSettingsSetup();
 	void audioSettingsPressed(int x, int y);
 	void audioSettingsReleased(int x, int y);
 	void audioSettingsFocus(int x, int y);
+	void audioSettingsDraw();
+
+	//apply&reset funcs
+	void applyTabButtonSetup();
+	void resetTabButtonSetup();
+	void applyTabButtonDraw();
+	void resetTabButtonDraw();
+
+	//return funcs
+	void returnSetup();
+	void returnDraw();
 
 	//tabs
 	gRect gametabbutton, controlstabbutton, graphicstabbutton, audiotabbutton, applytabbutton, resettabbutton;
@@ -117,118 +146,145 @@ private:
 	//game settings
 	std::string languagelabeltext;
 	std::string languages[2];
+	gImage langbackbutton, langforwardbutton;
+	gRect langbackbuttonhitbox, langforwardbuttonhitbox;
 	int languagelabelx, languagelabely, languagelabelw, languagelabelh;
 	int languagesx, languagesw, languagesh;
+	int langbackbuttonx, langbackbuttony, langbackbuttonw, langbackbuttonh, langforwardbuttonx;
+	int langbackstate, langfwstate;
+	int selectedlanguage;
+
+	gImage muncheck, mcheck;
+	gRect mapbuttonhitbox;
+	std::string minimaptext;
+	int maptextx, maptexty, maptextw, maptexth;
+	int muncheckx, munchecky, muncheckw, muncheckh;
+	int mcheckw, mcheckh;
+	int maptickstate;
+	bool isminimapenabled;
+
+	gImage fpsuncheck, fpscheck;
+	gRect fpsbuttonhitbox;
+	std::string fpstext;
+	int fpstextx, fpstexty, fpstextw, fpstexth;
+	int fpsuncheckx, fpsunchecky, fpsuncheckw, fpsuncheckh;
+	int fpscheckw, fpscheckh;
+	int fpstickstate;
+	bool isfpsenabled;
 
 	//controls settings
 	bool ischangingkey;
 	int selectedkey;
 	int keyboardcontrols[keynum];
 
-	std::string controllabeltext[keynum], controldisplaytext[keynum];
 	gRect controlbutton[keynum];
+	std::string controllabeltext[keynum], controldisplaytext[keynum];
 	int controlbuttonstate[keynum];
 	int controllabelx[keynum], controllabely[keynum], controllabelw[keynum], controllabelh[keynum];
 	int controlx[keynum], controly[keynum], controlw[keynum], controlh[keynum];
 
-	std::string backwardlabeltext, backwarddisplaytext;
 	gRect backwardbutton;
+	std::string backwardlabeltext, backwarddisplaytext;
 	int backwardbuttonstate;
 	int backwardkey;
 	int backwardlabelx, backwardlabely, backwardlabelw, backwardlabelh;
 	int backwardx, backwardy, backwardw, backwardh;
 
-	std::string rightlabeltext, rightdisplaytext;
 	gRect rightbutton;
+	std::string rightlabeltext, rightdisplaytext;
 	int rightbuttonstate;
 	int rightkey;
 	int rightlabelx, rightlabely, rightlabelw, rightlabelh;
 	int rightx, righty, rightw, righth;
 
-	std::string leftlabeltext, leftdisplaytext;
 	gRect leftbutton;
+	std::string leftlabeltext, leftdisplaytext;
 	int leftbuttonstate;
 	int leftkey;
 	int leftlabelx, leftlabely, leftlabelw, leftlabelh;
 	int leftx, lefty, leftw, lefth;
 
-	std::string runlabeltext, rundisplaytext;
 	gRect runbutton;
+	std::string runlabeltext, rundisplaytext;
 	int runbuttonstate;
 	int runkey;
 	int runlabelx, runlabely, runlabelw, runlabelh;
 	int runx, runy, runw, runh;
 
-	std::string firelabeltext, firedisplaytext;
 	gRect firebutton;
+	std::string firelabeltext, firedisplaytext;
 	int firebuttonstate;
 	int firekey;
 	int firelabelx, firelabely, firelabelw, firelabelh;
 	int firex, firey, firew, fireh;
 
-    std::string interactlabeltext, interactdisplaytext;
 	gRect interactbutton;
+    std::string interactlabeltext, interactdisplaytext;
     int interactbuttonstate;
 	int interactkey;
 	int interactlabelx, interactlabely, interactlabelw, interactlabelh;
 	int interactx, interacty, interactw, interacth;
 
-	int sensitivity;
+	gImage sensbackbutton, sensforwardbutton;
+	gRect sensbackbuttonhitbox, sensforwardbuttonhitbox;
 	std::string senslabeltext, sensnumtext;
+	int sensitivity;
 	int senslabelx, senslabely, senslabelw, senslabelh;
 	int sensx, sensw, sensh	;
-	gImage sensbackbutton, sensforwardbutton;
 	int sensbackbuttonx, sensbackbuttony, sensbackbuttonw, sensbackbuttonh, sensforwardbuttonx;
-	gRect sensbackbuttonhitbox, sensforwardbuttonhitbox;
 	int sensbackstate, sensfwstate;
 
-	   //items settings
-	std::string graphicslabeltext[5];
-	int graphicslabelx[5], graphicslabely[5], graphicslabelw[5], graphicslabelh[5];
+	//graphics settings
+	gImage brightbackbutton, brightforwardbutton;
+	gRect brightbackbuttonhitbox, brightforwardbuttonhitbox;
+	std::string brightlabeltext, brightnumtext;
+	int brightness;
+	int brightlabelx, brightlabely, brightlabelw, brightlabelh;
+	int brightx, brightw, brighth	;
+	int brightbackbuttonx, brightbackbuttony, brightbackbuttonw, brightbackbuttonh, brightforwardbuttonx;
+	int brightbackstate, brightfwstate;
 
-    void returnSetup();
-	void returnDraw();
+	gImage quabackbutton, quaforwardbutton;
+	gRect quabackbuttonhitbox, quaforwardbuttonhitbox;
+	std::string qualitylabeltext;
+	std::string qualities[3];
+	int qualabelx, qualabely, qualabelw, qualabelh;
+	int qualitiesx, qualitiesw, qualitiesh;
+	int quabackbuttonx, quabackbuttony, quabackbuttonw, quabackbuttonh, quaforwardbuttonx;
+	int quabackstate, quafwstate;
+	int selectedquality;
 
+	gImage winbackbutton, winforwardbutton;
+	gRect winbackbuttonhitbox, winforwardbuttonhitbox;
+	std::string windowmodelabeltext;
+	std::string windowmodes[3];
+	int winlabelx, winlabely, winlabelw, winlabelh;
+	int windowmodesx, windowmodesw, windowmodesh;
+	int winbackbuttonx, winbackbuttony, winbackbuttonw, winbackbuttonh, winforwardbuttonx;
+	int winbackstate, winfwstate;
+	int selectedwindowmode;
+
+	gImage resbackbutton, resforwardbutton;
+	gRect resbackbuttonhitbox, resforwardbuttonhitbox;
+	std::string resolutionlabeltext;
+	std::string resolutions[3];
+	int reslabelx, reslabely, reslabelw, reslabelh;
+	int resolutionsx, resolutionsw, resolutionsh;
+	int resbackbuttonx, resbackbuttony, resbackbuttonw, resbackbuttonh, resforwardbuttonx;
+	int resbackstate, resfwstate;
+	int selectedresolution;
+
+	//return
 	int returnx, returny, returnw, returnh;
 	std::string returntext;
 	gRect returnhitbox;
 	int returnbuttonstate;
 
-	gImage logo[5];
-	int logox[5], logoy[5], logow[5], logoh[5];
-
-	std::vector<std::string> generallabellines;
-
+	//titles
 	std::string tabtitle;
 	int tabtextx, tabtexty, tabtextw, tabtexth;
-
 	std::string sectiontitle;
 	int titlex, titley;
-
-	//game section
-	gImage langbackbutton, langforwardbutton;
-	int langbackbuttonx, langbackbuttony, langbackbuttonw, langbackbuttonh, langforwardbuttonx;
-	gRect langbackbuttonhitbox, langforwardbuttonhitbox;
-	int langbackstate, langfwstate;
-	int selectedlanguage;
-
-	std::string minimaptext;
-	int maptextx, maptexty, maptextw, maptexth;
-	gImage muncheck, mcheck;
-	int muncheckx, munchecky, muncheckw, muncheckh;
-	int mcheckw, mcheckh;
-	gRect mapbuttonhitbox;
-	int maptickstate;
-	bool isminimapenabled;
-
-	std::string fpstext;
-	int fpstextx, fpstexty, fpstextw, fpstexth;
-	gImage fpsuncheck, fpscheck;
-	int fpsuncheckx, fpsunchecky, fpsuncheckw, fpsuncheckh;
-	int fpscheckw, fpscheckh;
-	gRect fpsbuttonhitbox;
-	int fpstickstate;
-	bool isfpsenabled;
 };
 
 #endif /* SRC_OPTIONSCANVAS_H_ */

@@ -295,229 +295,21 @@ void OptionsCanvas::containerSetup() {
 }
 
 void OptionsCanvas::gameSettingsSetup() {
-	languagelabeltext = "Language: ";
-	languages[0] = "English";
-	languages[1] = "Turkish";
-	langbackbutton.loadImage("PNG/Icons/ArrowsLeft3.png");
-	langforwardbutton.loadImage("PNG/Icons/ArrowsRight3.png");
-
-	minimaptext = "Minimap";
-	muncheck.loadImage("PNG/inactivecolor.png");
-	mcheck.loadImage("PNG/check-markred.png");
-
-	fpstext = "Show Fps";
-	fpsuncheck.loadImage("PNG/inactivecolor.png");
-	fpscheck.loadImage("PNG/check-markred.png");
-
-	selectedlanguage = 0;
-	languagelabelh = root->menutitlefont.getStringHeight("y");
-	languagelabelx = containerx + containerw / 10;
-	languagelabely = containery + containerh / 15 + languagelabelh;
-	languagesw = root->menutitlefont.getStringWidth(languages[selectedlanguage]);
-	languagesx = languagelabelx + languagesw * 2;
-	languagesh = root->menutitlefont.getStringHeight(languages[selectedlanguage]);
-	langbackbuttonw = langbackbutton.getWidth() * 0.4;
-	langbackbuttonh = langbackbutton.getHeight() * 0.4;
-	langbackbuttonx = languagesx - langbackbuttonw;
-	langbackbuttony = languagelabely - (languagesh / 2) - (langbackbuttonh / 2) + 3;
-	langforwardbuttonx = languagesx + languagesw + (langbackbuttonw / 2);
-	langbackbuttonhitbox.set(langbackbuttonx, langbackbuttony, langbackbuttonx + langbackbuttonw, langbackbuttony + langbackbuttonh);
-	langforwardbuttonhitbox.set(langforwardbuttonx, langbackbuttony, langforwardbuttonx + langbackbuttonw, langbackbuttony + langbackbuttonh);
-	maptextw = root->menutitlefont.getStringWidth(minimaptext);
-	maptexth = root->menutitlefont.getStringHeight(minimaptext);
-	maptextx = languagelabelx;
-	maptexty = languagelabely + languagesw + maptexth;
-	muncheckw = muncheck.getWidth();
-	muncheckh = muncheck.getHeight();
-	muncheckx = maptextx + maptextw + muncheckw;
-	munchecky = maptexty - (maptexth / 2) - (muncheckh / 2) + 3;
-	mcheckw = mcheck.getWidth() * 0.06;
-	mcheckh = mcheck.getHeight() * 0.06;
-	mapbuttonhitbox.set(muncheckx, munchecky, muncheckx + muncheckw, munchecky + muncheckh);
-	isminimapenabled = true;
-
-	fpstextw = root->menutitlefont.getStringWidth(fpstext);
-	fpstexth = root->menutitlefont.getStringHeight(fpstext);
-	fpstextx = languagelabelx;
-	fpstexty = maptexty + fpstexth + languagesw;
-	fpsuncheckw = fpsuncheck.getWidth();
-	fpsuncheckh = fpsuncheck.getHeight();
-	fpsuncheckx = muncheckx;
-	fpsunchecky = fpstexty - (fpstexth / 2) - (fpsuncheckh / 2) + 3;
-	fpscheckw = fpscheck.getWidth() * 0.06;
-	fpscheckh = fpscheck.getHeight() * 0.06;
-	fpsbuttonhitbox.set(fpsuncheckx, fpsunchecky, fpsuncheckx + fpsuncheckw, fpsunchecky + fpsuncheckh);
-	isfpsenabled = true;
+	languageSetup();
+	minimapSetup();
+	fpsSetup();
 }
 
 void OptionsCanvas::controlsSettingsSetup() {
-	ischangingkey = false;
-
-	selectedkey = KEY_NONE;
-	keyboardcontrols[KEY_FORWARD] = root->getForwardKey();
-	keyboardcontrols[KEY_BACKWARD] = root->getBackwardKey();
-	keyboardcontrols[KEY_RIGHT] = root->getRightKey();
-	keyboardcontrols[KEY_LEFT] = root->getLeftKey();
-	keyboardcontrols[KEY_RUN] = root->getRunKey();
-	keyboardcontrols[KEY_FIRE] = root->getFireKey();
-	keyboardcontrols[KEY_INTERACT] = root->getInteractKey();
-
-	//forward
-	controllabeltext[KEY_FORWARD] = root->localizeWord(root->forwardkey);
-	controldisplaytext[KEY_FORWARD] = gCodepointToStr(keyboardcontrols[KEY_FORWARD]);
-	controllabelw[KEY_FORWARD] = root->menutitlefont.getStringWidth(controllabeltext[KEY_FORWARD]);
-	controllabelh[KEY_FORWARD] = root->menutitlefont.getStringHeight(controllabeltext[KEY_FORWARD]);
-	controllabelx[KEY_FORWARD] = containerx + containerw / 10;
-	controllabely[KEY_FORWARD] = containery + containerh / 15 + controllabelh[KEY_FORWARD];
-	controlw[KEY_FORWARD] = root->menutitlefont.getStringWidth(controldisplaytext[KEY_FORWARD]);
-	controlh[KEY_FORWARD] = root->menutitlefont.getStringHeight(controldisplaytext[KEY_FORWARD]);
-	controlx[KEY_FORWARD] = containerx + (containerw / 2) - (containerw / 10) - controlw[KEY_FORWARD];
-	controly[KEY_FORWARD] = controllabely[KEY_FORWARD];
-
-	controlbutton[KEY_FORWARD].set(controlx[KEY_FORWARD], controly[KEY_FORWARD] - controlh[KEY_FORWARD], controlx[KEY_FORWARD] + controlw[KEY_FORWARD], controly[KEY_FORWARD]);
-
-	//backward
-	controllabeltext[KEY_BACKWARD] = root->localizeWord(root->backwardkey);
-	controldisplaytext[KEY_BACKWARD] = gCodepointToStr(keyboardcontrols[KEY_BACKWARD]);
-	controllabelw[KEY_BACKWARD] = root->menutitlefont.getStringWidth(controllabeltext[KEY_BACKWARD]);
-	controllabelh[KEY_BACKWARD] = root->menutitlefont.getStringHeight(controllabeltext[KEY_BACKWARD]);
-	controllabelx[KEY_BACKWARD] = controllabelx[KEY_FORWARD];
-	controllabely[KEY_BACKWARD] = controllabely[KEY_FORWARD]  + containerh / 15 + controllabelh[KEY_BACKWARD];
-	controlw[KEY_BACKWARD] = root->menutitlefont.getStringWidth(controldisplaytext[KEY_BACKWARD]);
-	controlh[KEY_BACKWARD] = root->menutitlefont.getStringHeight(controldisplaytext[KEY_BACKWARD]);
-	controlx[KEY_BACKWARD] = containerx + (containerw / 2) - (containerw / 10) - controlw[KEY_BACKWARD];
-	controly[KEY_BACKWARD] = controllabely[KEY_BACKWARD];
-
-	controlbutton[KEY_BACKWARD].set(controlx[KEY_BACKWARD], controly[KEY_BACKWARD] - controlh[KEY_BACKWARD], controlx[KEY_BACKWARD] + controlw[KEY_BACKWARD], controly[KEY_BACKWARD]);
-
-	//right
-	controllabeltext[KEY_RIGHT] = root->localizeWord(root->rightkey);
-	controldisplaytext[KEY_RIGHT] = gCodepointToStr(keyboardcontrols[KEY_RIGHT]);
-	controllabelw[KEY_RIGHT] = root->menutitlefont.getStringWidth(controllabeltext[KEY_RIGHT]);
-	controllabelh[KEY_RIGHT] = root->menutitlefont.getStringHeight(controllabeltext[KEY_RIGHT]);
-	controllabelx[KEY_RIGHT] = controllabelx[KEY_FORWARD];
-	controllabely[KEY_RIGHT] = controllabely[KEY_BACKWARD]  + containerh / 15 + controllabelh[KEY_RIGHT];
-	controlw[KEY_RIGHT] = root->menutitlefont.getStringWidth(controldisplaytext[KEY_RIGHT]);
-	controlh[KEY_RIGHT] = root->menutitlefont.getStringHeight(controldisplaytext[KEY_RIGHT]);
-	controlx[KEY_RIGHT] = containerx + (containerw / 2) - (containerw / 10) - controlw[KEY_RIGHT];
-	controly[KEY_RIGHT] = controllabely[KEY_RIGHT];
-
-	controlbutton[KEY_RIGHT].set(controlx[KEY_RIGHT], controly[KEY_RIGHT] - controlh[KEY_RIGHT], controlx[KEY_RIGHT] + controlw[KEY_RIGHT], controly[KEY_RIGHT]);
-
-	//left
-	controllabeltext[KEY_LEFT] = root->localizeWord(root->leftkey);
-	controldisplaytext[KEY_LEFT] = gCodepointToStr(keyboardcontrols[KEY_LEFT]);
-	controllabelw[KEY_LEFT] = root->menutitlefont.getStringWidth(controllabeltext[KEY_LEFT]);
-	controllabelh[KEY_LEFT] = root->menutitlefont.getStringHeight(controllabeltext[KEY_LEFT]);
-	controllabelx[KEY_LEFT] = controllabelx[KEY_FORWARD];
-	controllabely[KEY_LEFT] = controllabely[KEY_RIGHT]  + containerh / 15 + controllabelh[KEY_LEFT];
-	controlw[KEY_LEFT] = root->menutitlefont.getStringWidth(controldisplaytext[KEY_LEFT]);
-	controlh[KEY_LEFT] = root->menutitlefont.getStringHeight(controldisplaytext[KEY_LEFT]);
-	controlx[KEY_LEFT] = containerx + (containerw / 2) - (containerw / 10) - controlw[KEY_LEFT];
-	controly[KEY_LEFT] = controllabely[KEY_LEFT];
-
-	controlbutton[KEY_LEFT].set(controlx[KEY_LEFT], controly[KEY_LEFT] - controlh[KEY_LEFT], controlx[KEY_LEFT] + controlw[KEY_LEFT], controly[KEY_LEFT]);
-
-	//run
-	controllabeltext[KEY_RUN] = root->localizeWord(root->runkey);
-	controldisplaytext[KEY_RUN] = gCodepointToStr(keyboardcontrols[KEY_RUN]);
-	controllabelw[KEY_RUN] = root->menutitlefont.getStringWidth(controllabeltext[KEY_RUN]);
-	controllabelh[KEY_RUN] = root->menutitlefont.getStringHeight(controllabeltext[KEY_RUN]);
-	controllabelx[KEY_RUN] = containerx + containerw / 2;
-	controllabely[KEY_RUN] = containery  + containerh / 15 + controllabelh[KEY_RUN];
-	controlw[KEY_RUN] = root->menutitlefont.getStringWidth(controldisplaytext[KEY_RUN]);
-	controlh[KEY_RUN] = root->menutitlefont.getStringHeight(controldisplaytext[KEY_RUN]);
-	controlx[KEY_RUN] = containerx + containerw - (containerw / 10) - controlw[KEY_RUN];
-	controly[KEY_RUN] = controllabely[KEY_RUN];
-
-	controlbutton[KEY_RUN].set(controlx[KEY_RUN], controly[KEY_RUN] - controlh[KEY_RUN], controlx[KEY_RUN] + controlw[KEY_RUN], controly[KEY_RUN]);
-
-	//fire
-	controllabeltext[KEY_FIRE] = root->localizeWord(root->firekey);
-	controldisplaytext[KEY_FIRE] = gCodepointToStr(keyboardcontrols[KEY_FIRE]);
-	controllabelw[KEY_FIRE] = root->menutitlefont.getStringWidth(controllabeltext[KEY_FIRE]);
-	controllabelh[KEY_FIRE] = root->menutitlefont.getStringHeight(controllabeltext[KEY_FIRE]);
-	controllabelx[KEY_FIRE] = controllabelx[KEY_RUN];
-	controllabely[KEY_FIRE] = controllabely[KEY_RUN]  + containerh / 15 + controllabelh[KEY_FIRE];
-	controlw[KEY_FIRE] = root->menutitlefont.getStringWidth(controldisplaytext[KEY_FIRE]);
-	controlh[KEY_FIRE] = root->menutitlefont.getStringHeight(controldisplaytext[KEY_FIRE]);
-	controlx[KEY_FIRE] = containerx + containerw - (containerw / 10) - controlw[KEY_FIRE];
-	controly[KEY_FIRE] = controllabely[KEY_FIRE];
-
-	controlbutton[KEY_FIRE].set(controlx[KEY_FIRE], controly[KEY_FIRE] - controlh[KEY_FIRE], controlx[KEY_FIRE] + controlw[KEY_FIRE], controly[KEY_FIRE]);
-
-	//interact
-	controllabeltext[KEY_INTERACT] = root->localizeWord(root->interactkey);
-	controldisplaytext[KEY_INTERACT] = gCodepointToStr(keyboardcontrols[KEY_INTERACT]);
-	controllabelw[KEY_INTERACT] = root->menutitlefont.getStringWidth(controllabeltext[KEY_INTERACT]);
-	controllabelh[KEY_INTERACT] = root->menutitlefont.getStringHeight(controllabeltext[KEY_INTERACT]);
-	controllabelx[KEY_INTERACT] = controllabelx[KEY_RUN];
-	controllabely[KEY_INTERACT] = controllabely[KEY_FIRE]  + containerh / 15 + controllabelh[KEY_INTERACT];
-	controlw[KEY_INTERACT] = root->menutitlefont.getStringWidth(controldisplaytext[KEY_INTERACT]);
-	controlh[KEY_INTERACT] = root->menutitlefont.getStringHeight(controldisplaytext[KEY_INTERACT]);
-	controlx[KEY_INTERACT] = containerx + containerw - (containerw / 10) - controlw[KEY_INTERACT];
-	controly[KEY_INTERACT] = controllabely[KEY_INTERACT];
-
-	controlbutton[KEY_INTERACT].set(controlx[KEY_INTERACT], controly[KEY_INTERACT] - controlh[KEY_INTERACT], controlx[KEY_INTERACT] + controlw[KEY_INTERACT], controly[KEY_INTERACT]);
-
-	sensbackbutton.loadImage("PNG/Icons/ArrowsLeft3.png");
-	sensforwardbutton.loadImage("PNG/Icons/ArrowsRight3.png");
-
-	minimaptext = "Minimap";
-	muncheck.loadImage("PNG/inactivecolor.png");
-	mcheck.loadImage("PNG/check-markred.png");
-
-	fpstext = "Show Fps";
-	fpsuncheck.loadImage("PNG/inactivecolor.png");
-	fpscheck.loadImage("PNG/check-markred.png");
-
-	sensitivity = 50;
-	sensnumtext = gToStr(sensitivity);
-	senslabeltext = "Sensitivity";
-	senslabelh = root->menutitlefont.getStringHeight("y");
-	senslabelx = containerx + containerw / 10;
-	senslabely = containery + containerh / 15 + senslabelh;
-	sensw = root->menutitlefont.getStringWidth(sensnumtext);
-	sensx = senslabelx + root->menutitlefont.getStringWidth(senslabeltext) + 40;
-	sensh = root->menutitlefont.getStringHeight(sensnumtext);
-	sensbackbuttonw = sensbackbutton.getWidth() * 0.4;
-	sensbackbuttonh = sensbackbutton.getHeight() * 0.4;
-	sensbackbuttonx = sensx - sensbackbuttonw - 10;
-	sensbackbuttony = senslabely - (sensh / 2) - (sensbackbuttonh / 2) + 3;
-	sensforwardbuttonx = sensx + sensw + 10;
-	sensbackbuttonhitbox.set(sensbackbuttonx, sensbackbuttony, sensbackbuttonx + sensbackbuttonw, sensbackbuttony + sensbackbuttonh);
-	sensforwardbuttonhitbox.set(sensforwardbuttonx, sensbackbuttony, sensforwardbuttonx + sensbackbuttonw, sensbackbuttony + sensbackbuttonh);
+	controlButtonsSetup();
+	sensitivitySetup();
 }
 
 void OptionsCanvas::graphicsSettingsSetup() {
-	logo[0].loadImage("armor.png");
-	logo[1].loadImage("heavyarmor.png");
-	logo[2].loadImage("helmet.png");
-	logo[3].loadImage("invisible.png");
-	logo[4].loadImage("strength.png");
-
-	logow[0] =  50; logoh[0] = 50; logox[0] = (containerx + containerw / 10) - 50; logoy[0] = (containery + containerh / 10) - 30;
-	logow[1] =  50;	logoh[1] = 50; logox[1] = (containerx + containerw / 10) - 50; logoy[1] = (containery + containerh / 10) + 28;
-	logow[2] =  50;	logoh[2] = 50; logox[2] = (containerx + containerw / 10) - 50; logoy[2] = (containery + containerh / 10) + 86;
-	logow[3] =  50;	logoh[3] = 50; logox[3] = (containerx + containerw / 10) - 50; logoy[3] = (containery + containerh / 10) + 148;
-	logow[4] =  50;	logoh[4] = 50; logox[4] = (containerx + containerw / 10) - 50; logoy[4] = (containery + containerh / 10) + 200;
-
-	 graphicslabeltext[0] = "Zirh";
-	 graphicslabeltext[1] = "Super Zirh";
-	 graphicslabeltext[2] = "Kask";
-	 graphicslabeltext[3] = "Gorunmezlik";
-	 graphicslabeltext[4] = "Guc";
-
-	 for(int i = 0; i < 5; i++) {
-		 logo[i];
-		logoh[i];
-		logox[i];
-		logoy[i];
-		graphicslabelw[i] = root->menutitlefont.getStringWidth(graphicslabeltext[i]);
-	    graphicslabelh[i] = root->menutitlefont.getStringHeight(graphicslabeltext[i]);
-	    graphicslabelx[i] = containerx + containerw / 10;
-	    graphicslabely[i] = containery + containerh / 10 + (i * 60);
-	 }
+	brightnessSetup();
+	qualitySetup();
+	windowmodeSetup();
+	resolutionSetup();
 }
 
 void OptionsCanvas::audioSettingsSetup() {
@@ -536,107 +328,26 @@ void OptionsCanvas::containerDraw() {
 }
 
 void OptionsCanvas::gameSettingsDraw() {
-	setColor(0, 0, 0);
-
-	root->menutitlefont.drawText(languagelabeltext, languagelabelx, languagelabely);
-	root->menutitlefont.drawText(languages[selectedlanguage], languagesx, languagelabely);
-	langbackbutton.draw(langbackbuttonx, langbackbuttony, langbackbuttonw, langbackbuttonh);
-	langforwardbutton.draw(langforwardbuttonx, langbackbuttony, langbackbuttonw, langbackbuttonh);
-
-	root->menutitlefont.drawText(minimaptext, maptextx, maptexty);
-	muncheck.draw(muncheckx, munchecky);
-	if(isminimapenabled) {
-		setColor(255, 255, 255);
-	    mcheck.draw(muncheckx, munchecky, mcheckw, mcheckh);
-	}
-
-	setColor(0, 0, 0);
-	root->menutitlefont.drawText(fpstext, fpstextx, fpstexty);
-	fpsuncheck.draw(fpsuncheckx, fpsunchecky);
-	if(isfpsenabled) {
-		setColor(255, 255, 255);
-	    fpscheck.draw(fpsuncheckx, fpsunchecky, fpscheckw, fpscheckh);
-	}
-
-	if(langbackstate == BUTTON_FOCUS) setColor(focuscolor);
-	if(langbackstate == BUTTON_PRESSED || langbackstate == BUTTON_PERFORMED) setColor(pressedcolor);
-
-	if(langfwstate == BUTTON_FOCUS) setColor(focuscolor);
-	if(langfwstate == BUTTON_PRESSED || langfwstate == BUTTON_PERFORMED) setColor(pressedcolor);
+	languageDraw();
+	minimapDraw();
+	fpsDraw();
 }
 
 void OptionsCanvas::controlsSettingsDraw() {
-	setColor(0, 0, 0);
-	root->menutitlefont.drawText(controllabeltext[KEY_FORWARD], controllabelx[KEY_FORWARD], controllabely[KEY_FORWARD] );
-	setColor(normalcolor);
-	if(controlbuttonstate[KEY_FORWARD] == BUTTON_FOCUS) setColor(focuscolor);
-	if(controlbuttonstate[KEY_FORWARD] == BUTTON_PRESSED || controlbuttonstate[KEY_FORWARD] == BUTTON_PERFORMED) setColor(pressedcolor);
-	root->menutitlefont.drawText(controldisplaytext[KEY_FORWARD], controlx[KEY_FORWARD], controly[KEY_FORWARD]);
-
-	setColor(0, 0, 0);
-	root->menutitlefont.drawText(controllabeltext[KEY_BACKWARD], controllabelx[KEY_BACKWARD], controllabely[KEY_BACKWARD] );
-	setColor(normalcolor);
-	if(controlbuttonstate[KEY_BACKWARD] == BUTTON_FOCUS) setColor(focuscolor);
-	if(controlbuttonstate[KEY_BACKWARD] == BUTTON_PRESSED || controlbuttonstate[KEY_BACKWARD] == BUTTON_PERFORMED) setColor(pressedcolor);
-	root->menutitlefont.drawText(controldisplaytext[KEY_BACKWARD], controlx[KEY_BACKWARD], controly[KEY_BACKWARD]);
-
-	setColor(0, 0, 0);
-	root->menutitlefont.drawText(controllabeltext[KEY_RIGHT], controllabelx[KEY_RIGHT], controllabely[KEY_RIGHT] );
-	setColor(normalcolor);
-	if(controlbuttonstate[KEY_RIGHT] == BUTTON_FOCUS) setColor(focuscolor);
-	if(controlbuttonstate[KEY_RIGHT] == BUTTON_PRESSED || controlbuttonstate[KEY_RIGHT] == BUTTON_PERFORMED) setColor(pressedcolor);
-	root->menutitlefont.drawText(controldisplaytext[KEY_RIGHT], controlx[KEY_RIGHT], controly[KEY_RIGHT]);
-
-	setColor(0, 0, 0);
-	root->menutitlefont.drawText(controllabeltext[KEY_LEFT], controllabelx[KEY_LEFT], controllabely[KEY_LEFT] );
-	setColor(normalcolor);
-	if(controlbuttonstate[KEY_LEFT] == BUTTON_FOCUS) setColor(focuscolor);
-	if(controlbuttonstate[KEY_LEFT] == BUTTON_PRESSED || controlbuttonstate[KEY_LEFT] == BUTTON_PERFORMED) setColor(pressedcolor);
-	root->menutitlefont.drawText(controldisplaytext[KEY_LEFT], controlx[KEY_LEFT], controly[KEY_LEFT]);
-
-	setColor(0, 0, 0);
-	root->menutitlefont.drawText(controllabeltext[KEY_RUN], controllabelx[KEY_RUN], controllabely[KEY_RUN] );
-	setColor(normalcolor);
-	if(controlbuttonstate[KEY_RUN] == BUTTON_FOCUS) setColor(focuscolor);
-	if(controlbuttonstate[KEY_RUN] == BUTTON_PRESSED || controlbuttonstate[KEY_RUN] == BUTTON_PERFORMED) setColor(pressedcolor);
-	root->menutitlefont.drawText(controldisplaytext[KEY_RUN], controlx[KEY_RUN], controly[KEY_RUN]);
-
-	setColor(0, 0, 0);
-	root->menutitlefont.drawText(controllabeltext[KEY_FIRE], controllabelx[KEY_FIRE], controllabely[KEY_FIRE] );
-	setColor(normalcolor);
-	if(controlbuttonstate[KEY_FIRE] == BUTTON_FOCUS) setColor(focuscolor);
-	if(controlbuttonstate[KEY_FIRE] == BUTTON_PRESSED || controlbuttonstate[KEY_FIRE] == BUTTON_PERFORMED) setColor(pressedcolor);
-	root->menutitlefont.drawText(controldisplaytext[KEY_FIRE], controlx[KEY_FIRE], controly[KEY_FIRE]);
-
-	setColor(0, 0, 0);
-	root->menutitlefont.drawText(controllabeltext[KEY_INTERACT], controllabelx[KEY_INTERACT], controllabely[KEY_INTERACT] );
-	setColor(normalcolor);
-	if(controlbuttonstate[KEY_INTERACT] == BUTTON_FOCUS) setColor(focuscolor);
-	if(controlbuttonstate[KEY_INTERACT] == BUTTON_PRESSED || controlbuttonstate[KEY_INTERACT] == BUTTON_PERFORMED) setColor(pressedcolor);
-	root->menutitlefont.drawText(controldisplaytext[KEY_INTERACT], controlx[KEY_INTERACT], controly[KEY_INTERACT]);
-
-	setColor(0, 0, 0);
-	root->menutitlefont.drawText(senslabeltext, senslabelx, senslabely + 300);
-	root->menutitlefont.drawText(sensnumtext, sensx, senslabely + 300);
-	sensbackbutton.draw(sensbackbuttonx, sensbackbuttony + 300, sensbackbuttonw, sensbackbuttonh);
-	sensforwardbutton.draw(sensforwardbuttonx, sensbackbuttony + 300, sensbackbuttonw, sensbackbuttonh);
+	controlButtonsDraw();
+	sensitivityDraw();
 }
 
 
 void OptionsCanvas::graphicsSettingsDraw() {
-	setColor(0, 0, 0);
-	    for(int i = 0; i < 5; i++) {
-	    	logo[0].draw(logox[0], logoy[0], logow[0], logoh[0]);
-	    	logo[1].draw(logox[1], logoy[1], logow[1], logoh[1]);
-	    	logo[2].draw(logox[2], logoy[2], logow[2], logoh[2]);
-	    	logo[3].draw(logox[3], logoy[3], logow[3], logoh[3]);
-	    	logo[4].draw(logox[4], logoy[4], logow[4], logoh[4]);
-
-	        root->menutitlefont.drawText(graphicslabeltext[i], graphicslabelx[i], graphicslabely[i]);
-	    }
+	brightnessDraw();
+	qualityDraw();
+	windowmodeDraw();
+	resolutionDraw();
 }
 
 void OptionsCanvas::audioSettingsDraw() {
+
 }
 
 void OptionsCanvas::containerButtonPressed(int x, int y) {
@@ -779,9 +490,8 @@ void OptionsCanvas::gameSettingsFocus(int x, int y) {
 void OptionsCanvas::controlsSettingsPressed(int x, int y) {
 	if(sensbackstate != BUTTON_PRESSED) {
 		if(sensbackbuttonhitbox.contains(x, y)) {
-			sensbackstate = BUTTON_FOCUS;
+			sensbackstate = BUTTON_PRESSED;
 		}
-
 		else {
 			sensbackstate = BUTTON_NONE;
 		}
@@ -789,9 +499,8 @@ void OptionsCanvas::controlsSettingsPressed(int x, int y) {
 
 	if(sensfwstate != BUTTON_PRESSED) {
 		if(sensforwardbuttonhitbox.contains(x, y)) {
-			sensfwstate = BUTTON_FOCUS;
+			sensfwstate = BUTTON_PRESSED;
 		}
-
 		else {
 			sensfwstate = BUTTON_NONE;
 		}
@@ -801,14 +510,14 @@ void OptionsCanvas::controlsSettingsPressed(int x, int y) {
 void OptionsCanvas::controlsSettingsReleased(int x, int y) {
 	if(sensbackbuttonhitbox.contains(x, y) && sensbackstate == BUTTON_PRESSED) {
 		sensbackstate = BUTTON_PERFORMED;
-		sensitivity += 5;
+		if(sensitivity >= 5) sensitivity -= 5;
+		sensnumtext = gToStr(sensitivity);
 	}
-
 	else if(sensforwardbuttonhitbox.contains(x, y) && sensfwstate == BUTTON_PRESSED) {
 		sensfwstate = BUTTON_PERFORMED;
-		sensitivity += 50;
+		if(sensitivity < 100) sensitivity += 5;
+		sensnumtext = gToStr(sensitivity);
 	}
-
 	else {
 		sensbackstate = BUTTON_CANCELED;
 		sensfwstate = BUTTON_CANCELED;
@@ -838,15 +547,186 @@ void OptionsCanvas::controlsSettingsFocus(int x, int y) {
 }
 
 void OptionsCanvas::graphicsSettingsPressed(int x, int y) {
+	if(brightbackstate != BUTTON_PRESSED) {
+		if(brightbackbuttonhitbox.contains(x, y)) {
+			brightbackstate = BUTTON_PRESSED;
+		}
+		else {
+			brightbackstate = BUTTON_NONE;
+		}
+	}
 
+	if(brightfwstate != BUTTON_PRESSED) {
+		if(brightforwardbuttonhitbox.contains(x, y)) {
+			brightfwstate = BUTTON_PRESSED;
+		}
+		else {
+			brightfwstate = BUTTON_NONE;
+		}
+	}
+
+	if(quabackbuttonhitbox.contains(x, y)) {
+		quabackstate = BUTTON_PRESSED;
+	}
+
+	if(quaforwardbuttonhitbox.contains(x, y)) {
+		quafwstate = BUTTON_PRESSED;
+	}
+
+	if(winbackbuttonhitbox.contains(x, y)) {
+		winbackstate = BUTTON_PRESSED;
+	}
+
+	if(winforwardbuttonhitbox.contains(x, y)) {
+		winfwstate = BUTTON_PRESSED;
+	}
+
+	if(resbackbuttonhitbox.contains(x, y)) {
+		resbackstate = BUTTON_PRESSED;
+	}
+
+	if(resforwardbuttonhitbox.contains(x, y)) {
+		resfwstate = BUTTON_PRESSED;
+	}
 }
 
 void OptionsCanvas::graphicsSettingsReleased(int x, int y) {
+	if(brightbackbuttonhitbox.contains(x, y) && brightbackstate == BUTTON_PRESSED) {
+		brightbackstate = BUTTON_PERFORMED;
+		if(brightness >= 5) brightness -= 5;
+		brightnumtext = gToStr(brightness);
+	}
+	else if(brightforwardbuttonhitbox.contains(x, y) && brightfwstate == BUTTON_PRESSED) {
+		brightfwstate = BUTTON_PERFORMED;
+		if(brightness < 100) brightness += 5;
+		brightnumtext = gToStr(brightness);
+	}
+	else if(quabackbuttonhitbox.contains(x, y) && quabackstate == BUTTON_PRESSED) {
+		quabackstate = BUTTON_PERFORMED;
+		selectedquality++;
+		if(selectedquality >= qualitynum) selectedquality = 0;
+	}
+
+	else if(quaforwardbuttonhitbox.contains(x, y) && quafwstate == BUTTON_PRESSED) {
+		quafwstate = BUTTON_PERFORMED;
+		selectedquality++;
+		if(selectedquality >= qualitynum) selectedquality = 0;
+	}
+	else if(winbackbuttonhitbox.contains(x, y) && winbackstate == BUTTON_PRESSED) {
+		winbackstate = BUTTON_PERFORMED;
+		selectedwindowmode++;
+		if(selectedwindowmode >= windowmodenum) selectedwindowmode = 0;
+	}
+
+	else if(winforwardbuttonhitbox.contains(x, y) && winfwstate == BUTTON_PRESSED) {
+		winfwstate = BUTTON_PERFORMED;
+		selectedwindowmode++;
+		if(selectedwindowmode >= qualitynum) selectedwindowmode = 0;
+	}
+	else if(resbackbuttonhitbox.contains(x, y) && resbackstate == BUTTON_PRESSED) {
+		resbackstate = BUTTON_PERFORMED;
+		selectedresolution++;
+		if(selectedresolution >= resolutionnum) selectedresolution = 0;
+	}
+
+	else if(resforwardbuttonhitbox.contains(x, y) && resfwstate == BUTTON_PRESSED) {
+		resfwstate = BUTTON_PERFORMED;
+		selectedresolution++;
+		if(selectedresolution >= resolutionnum) selectedresolution = 0;
+	}
+	else {
+		brightbackstate = BUTTON_CANCELED;
+		brightfwstate = BUTTON_CANCELED;
+		quabackstate = BUTTON_CANCELED;
+		quafwstate = BUTTON_CANCELED;
+		winbackstate = BUTTON_CANCELED;
+		winfwstate = BUTTON_CANCELED;
+		resbackstate = BUTTON_CANCELED;
+		resfwstate = BUTTON_CANCELED;
+	}
 
 }
 
 void OptionsCanvas::graphicsSettingsFocus(int x, int y) {
+	if(brightbackstate != BUTTON_PRESSED) {
+		if(brightbackbuttonhitbox.contains(x, y)) {
+			brightbackstate = BUTTON_FOCUS;
+		}
 
+		else {
+			brightbackstate = BUTTON_NONE;
+		}
+	}
+
+	if(brightfwstate != BUTTON_PRESSED) {
+		if(brightforwardbuttonhitbox.contains(x, y)) {
+			brightfwstate = BUTTON_FOCUS;
+		}
+
+		else {
+			brightfwstate = BUTTON_NONE;
+		}
+	}
+
+	if(quabackstate != BUTTON_PRESSED) {
+		if(quabackbuttonhitbox.contains(x, y)) {
+			quabackstate = BUTTON_FOCUS;
+		}
+
+		else {
+			quabackstate = BUTTON_NONE;
+		}
+	}
+
+	if(quafwstate != BUTTON_PRESSED) {
+		if(quaforwardbuttonhitbox.contains(x, y)) {
+			quafwstate = BUTTON_FOCUS;
+		}
+
+		else {
+			quafwstate = BUTTON_NONE;
+		}
+	}
+
+	if(winbackstate != BUTTON_PRESSED) {
+		if(winbackbuttonhitbox.contains(x, y)) {
+			winbackstate = BUTTON_FOCUS;
+		}
+
+		else {
+			winbackstate = BUTTON_NONE;
+		}
+	}
+
+	if(winfwstate != BUTTON_PRESSED) {
+		if(winforwardbuttonhitbox.contains(x, y)) {
+			winfwstate = BUTTON_FOCUS;
+		}
+
+		else {
+			winfwstate = BUTTON_NONE;
+		}
+	}
+
+	if(resbackstate != BUTTON_PRESSED) {
+		if(resbackbuttonhitbox.contains(x, y)) {
+			resbackstate = BUTTON_FOCUS;
+		}
+
+		else {
+			resbackstate = BUTTON_NONE;
+		}
+	}
+
+	if(resfwstate != BUTTON_PRESSED) {
+		if(resforwardbuttonhitbox.contains(x, y)) {
+			resfwstate = BUTTON_FOCUS;
+		}
+
+		else {
+			resfwstate = BUTTON_NONE;
+		}
+	}
 }
 
 void OptionsCanvas::audioSettingsPressed(int x, int y) {
@@ -1022,4 +902,454 @@ void OptionsCanvas::resetTabButtonDraw() {
 	setColor(255, 255, 255);
 	root->menutitlefont.drawText(resettabtext, tabfontx, tabfonty);
 	setColor(normalcolor);
+}
+
+void OptionsCanvas::languageSetup() {
+	languagelabeltext = "Language: ";
+	languages[0] = "English";
+	languages[1] = "Turkish";
+	langbackbutton.loadImage("PNG/Icons/ArrowsLeft3.png");
+	langforwardbutton.loadImage("PNG/Icons/ArrowsRight3.png");
+
+	selectedlanguage = 0;
+	languagelabelh = root->menutitlefont.getStringHeight("y");
+	languagelabelx = containerx + containerw / 10;
+	languagelabely = containery + containerh / 15 + languagelabelh;
+	languagesw = root->menutitlefont.getStringWidth(languages[selectedlanguage]);
+	languagesx = languagelabelx + languagesw * 2;
+	languagesh = root->menutitlefont.getStringHeight(languages[selectedlanguage]);
+	langbackbuttonw = langbackbutton.getWidth() * 0.4;
+	langbackbuttonh = langbackbutton.getHeight() * 0.4;
+	langbackbuttonx = languagesx - langbackbuttonw;
+	langbackbuttony = languagelabely - (languagesh / 2) - (langbackbuttonh / 2) + 3;
+	langforwardbuttonx = languagesx + languagesw + (langbackbuttonw / 2);
+	langbackbuttonhitbox.set(langbackbuttonx, langbackbuttony, langbackbuttonx + langbackbuttonw, langbackbuttony + langbackbuttonh);
+	langforwardbuttonhitbox.set(langforwardbuttonx, langbackbuttony, langforwardbuttonx + langbackbuttonw, langbackbuttony + langbackbuttonh);
+}
+
+void OptionsCanvas::minimapSetup() {
+	minimaptext = "Minimap";
+	muncheck.loadImage("PNG/inactivecolor.png");
+	mcheck.loadImage("PNG/check-markred.png");
+
+	maptextw = root->menutitlefont.getStringWidth(minimaptext);
+	maptexth = root->menutitlefont.getStringHeight(minimaptext);
+	maptextx = languagelabelx;
+	maptexty = languagelabely + languagesw + maptexth;
+	muncheckw = muncheck.getWidth();
+	muncheckh = muncheck.getHeight();
+	muncheckx = maptextx + maptextw + muncheckw;
+	munchecky = maptexty - (maptexth / 2) - (muncheckh / 2) + 3;
+	mcheckw = mcheck.getWidth() * 0.06;
+	mcheckh = mcheck.getHeight() * 0.06;
+	mapbuttonhitbox.set(muncheckx, munchecky, muncheckx + muncheckw, munchecky + muncheckh);
+	isminimapenabled = true;
+}
+
+void OptionsCanvas::fpsSetup() {
+	fpstext = "Show Fps";
+	fpsuncheck.loadImage("PNG/inactivecolor.png");
+	fpscheck.loadImage("PNG/check-markred.png");
+	fpstextw = root->menutitlefont.getStringWidth(fpstext);
+	fpstexth = root->menutitlefont.getStringHeight(fpstext);
+	fpstextx = languagelabelx;
+	fpstexty = maptexty + fpstexth + languagesw;
+	fpsuncheckw = fpsuncheck.getWidth();
+	fpsuncheckh = fpsuncheck.getHeight();
+	fpsuncheckx = muncheckx;
+	fpsunchecky = fpstexty - (fpstexth / 2) - (fpsuncheckh / 2) + 3;
+	fpscheckw = fpscheck.getWidth() * 0.06;
+	fpscheckh = fpscheck.getHeight() * 0.06;
+	fpsbuttonhitbox.set(fpsuncheckx, fpsunchecky, fpsuncheckx + fpsuncheckw, fpsunchecky + fpsuncheckh);
+	isfpsenabled = true;
+}
+
+void OptionsCanvas::languageDraw() {
+	setColor(0, 0, 0);
+
+	root->menutitlefont.drawText(languagelabeltext, languagelabelx, languagelabely);
+	root->menutitlefont.drawText(languages[selectedlanguage], languagesx, languagelabely);
+	langbackbutton.draw(langbackbuttonx, langbackbuttony, langbackbuttonw, langbackbuttonh);
+	langforwardbutton.draw(langforwardbuttonx, langbackbuttony, langbackbuttonw, langbackbuttonh);
+
+	if(langbackstate == BUTTON_FOCUS) setColor(focuscolor);
+	if(langbackstate == BUTTON_PRESSED || langbackstate == BUTTON_PERFORMED) setColor(pressedcolor);
+
+	if(langfwstate == BUTTON_FOCUS) setColor(focuscolor);
+	if(langfwstate == BUTTON_PRESSED || langfwstate == BUTTON_PERFORMED) setColor(pressedcolor);
+}
+
+void OptionsCanvas::minimapDraw() {
+	setColor(0, 0, 0);
+	root->menutitlefont.drawText(minimaptext, maptextx, maptexty);
+	muncheck.draw(muncheckx, munchecky);
+	if(isminimapenabled) {
+		setColor(255, 255, 255);
+	    mcheck.draw(muncheckx, munchecky, mcheckw, mcheckh);
+	}
+}
+
+void OptionsCanvas::fpsDraw() {
+	setColor(0, 0, 0);
+	root->menutitlefont.drawText(fpstext, fpstextx, fpstexty);
+	fpsuncheck.draw(fpsuncheckx, fpsunchecky);
+	if(isfpsenabled) {
+		setColor(255, 255, 255);
+	    fpscheck.draw(fpsuncheckx, fpsunchecky, fpscheckw, fpscheckh);
+	}
+	setColor(0, 0, 0);
+}
+
+void OptionsCanvas::controlButtonsSetup() {
+	ischangingkey = false;
+
+	selectedkey = KEY_NONE;
+	keyboardcontrols[KEY_FORWARD] = root->getForwardKey();
+	keyboardcontrols[KEY_BACKWARD] = root->getBackwardKey();
+	keyboardcontrols[KEY_RIGHT] = root->getRightKey();
+	keyboardcontrols[KEY_LEFT] = root->getLeftKey();
+	keyboardcontrols[KEY_RUN] = root->getRunKey();
+	keyboardcontrols[KEY_FIRE] = root->getFireKey();
+	keyboardcontrols[KEY_INTERACT] = root->getInteractKey();
+
+	//forward
+	controllabeltext[KEY_FORWARD] = root->localizeWord(root->forwardkey);
+	controldisplaytext[KEY_FORWARD] = gCodepointToStr(keyboardcontrols[KEY_FORWARD]);
+	controllabelw[KEY_FORWARD] = root->menutitlefont.getStringWidth(controllabeltext[KEY_FORWARD]);
+	controllabelh[KEY_FORWARD] = root->menutitlefont.getStringHeight(controllabeltext[KEY_FORWARD]);
+	controllabelx[KEY_FORWARD] = containerx + containerw / 10;
+	controllabely[KEY_FORWARD] = containery + containerh / 15 + controllabelh[KEY_FORWARD];
+	controlw[KEY_FORWARD] = root->menutitlefont.getStringWidth(controldisplaytext[KEY_FORWARD]);
+	controlh[KEY_FORWARD] = root->menutitlefont.getStringHeight(controldisplaytext[KEY_FORWARD]);
+	controlx[KEY_FORWARD] = containerx + (containerw / 2) - (containerw / 10) - controlw[KEY_FORWARD];
+	controly[KEY_FORWARD] = controllabely[KEY_FORWARD];
+
+	controlbutton[KEY_FORWARD].set(controlx[KEY_FORWARD], controly[KEY_FORWARD] - controlh[KEY_FORWARD], controlx[KEY_FORWARD] + controlw[KEY_FORWARD], controly[KEY_FORWARD]);
+
+	//backward
+	controllabeltext[KEY_BACKWARD] = root->localizeWord(root->backwardkey);
+	controldisplaytext[KEY_BACKWARD] = gCodepointToStr(keyboardcontrols[KEY_BACKWARD]);
+	controllabelw[KEY_BACKWARD] = root->menutitlefont.getStringWidth(controllabeltext[KEY_BACKWARD]);
+	controllabelh[KEY_BACKWARD] = root->menutitlefont.getStringHeight(controllabeltext[KEY_BACKWARD]);
+	controllabelx[KEY_BACKWARD] = controllabelx[KEY_FORWARD];
+	controllabely[KEY_BACKWARD] = controllabely[KEY_FORWARD]  + containerh / 15 + controllabelh[KEY_BACKWARD];
+	controlw[KEY_BACKWARD] = root->menutitlefont.getStringWidth(controldisplaytext[KEY_BACKWARD]);
+	controlh[KEY_BACKWARD] = root->menutitlefont.getStringHeight(controldisplaytext[KEY_BACKWARD]);
+	controlx[KEY_BACKWARD] = containerx + (containerw / 2) - (containerw / 10) - controlw[KEY_BACKWARD];
+	controly[KEY_BACKWARD] = controllabely[KEY_BACKWARD];
+
+	controlbutton[KEY_BACKWARD].set(controlx[KEY_BACKWARD], controly[KEY_BACKWARD] - controlh[KEY_BACKWARD], controlx[KEY_BACKWARD] + controlw[KEY_BACKWARD], controly[KEY_BACKWARD]);
+
+	//right
+	controllabeltext[KEY_RIGHT] = root->localizeWord(root->rightkey);
+	controldisplaytext[KEY_RIGHT] = gCodepointToStr(keyboardcontrols[KEY_RIGHT]);
+	controllabelw[KEY_RIGHT] = root->menutitlefont.getStringWidth(controllabeltext[KEY_RIGHT]);
+	controllabelh[KEY_RIGHT] = root->menutitlefont.getStringHeight(controllabeltext[KEY_RIGHT]);
+	controllabelx[KEY_RIGHT] = controllabelx[KEY_FORWARD];
+	controllabely[KEY_RIGHT] = controllabely[KEY_BACKWARD]  + containerh / 15 + controllabelh[KEY_RIGHT];
+	controlw[KEY_RIGHT] = root->menutitlefont.getStringWidth(controldisplaytext[KEY_RIGHT]);
+	controlh[KEY_RIGHT] = root->menutitlefont.getStringHeight(controldisplaytext[KEY_RIGHT]);
+	controlx[KEY_RIGHT] = containerx + (containerw / 2) - (containerw / 10) - controlw[KEY_RIGHT];
+	controly[KEY_RIGHT] = controllabely[KEY_RIGHT];
+
+	controlbutton[KEY_RIGHT].set(controlx[KEY_RIGHT], controly[KEY_RIGHT] - controlh[KEY_RIGHT], controlx[KEY_RIGHT] + controlw[KEY_RIGHT], controly[KEY_RIGHT]);
+
+	//left
+	controllabeltext[KEY_LEFT] = root->localizeWord(root->leftkey);
+	controldisplaytext[KEY_LEFT] = gCodepointToStr(keyboardcontrols[KEY_LEFT]);
+	controllabelw[KEY_LEFT] = root->menutitlefont.getStringWidth(controllabeltext[KEY_LEFT]);
+	controllabelh[KEY_LEFT] = root->menutitlefont.getStringHeight(controllabeltext[KEY_LEFT]);
+	controllabelx[KEY_LEFT] = controllabelx[KEY_FORWARD];
+	controllabely[KEY_LEFT] = controllabely[KEY_RIGHT]  + containerh / 15 + controllabelh[KEY_LEFT];
+	controlw[KEY_LEFT] = root->menutitlefont.getStringWidth(controldisplaytext[KEY_LEFT]);
+	controlh[KEY_LEFT] = root->menutitlefont.getStringHeight(controldisplaytext[KEY_LEFT]);
+	controlx[KEY_LEFT] = containerx + (containerw / 2) - (containerw / 10) - controlw[KEY_LEFT];
+	controly[KEY_LEFT] = controllabely[KEY_LEFT];
+
+	controlbutton[KEY_LEFT].set(controlx[KEY_LEFT], controly[KEY_LEFT] - controlh[KEY_LEFT], controlx[KEY_LEFT] + controlw[KEY_LEFT], controly[KEY_LEFT]);
+
+	//run
+	controllabeltext[KEY_RUN] = root->localizeWord(root->runkey);
+	controldisplaytext[KEY_RUN] = gCodepointToStr(keyboardcontrols[KEY_RUN]);
+	controllabelw[KEY_RUN] = root->menutitlefont.getStringWidth(controllabeltext[KEY_RUN]);
+	controllabelh[KEY_RUN] = root->menutitlefont.getStringHeight(controllabeltext[KEY_RUN]);
+	controllabelx[KEY_RUN] = containerx + containerw / 2;
+	controllabely[KEY_RUN] = containery  + containerh / 15 + controllabelh[KEY_RUN];
+	controlw[KEY_RUN] = root->menutitlefont.getStringWidth(controldisplaytext[KEY_RUN]);
+	controlh[KEY_RUN] = root->menutitlefont.getStringHeight(controldisplaytext[KEY_RUN]);
+	controlx[KEY_RUN] = containerx + containerw - (containerw / 10) - controlw[KEY_RUN];
+	controly[KEY_RUN] = controllabely[KEY_RUN];
+
+	controlbutton[KEY_RUN].set(controlx[KEY_RUN], controly[KEY_RUN] - controlh[KEY_RUN], controlx[KEY_RUN] + controlw[KEY_RUN], controly[KEY_RUN]);
+
+	//fire
+	controllabeltext[KEY_FIRE] = root->localizeWord(root->firekey);
+	controldisplaytext[KEY_FIRE] = gCodepointToStr(keyboardcontrols[KEY_FIRE]);
+	controllabelw[KEY_FIRE] = root->menutitlefont.getStringWidth(controllabeltext[KEY_FIRE]);
+	controllabelh[KEY_FIRE] = root->menutitlefont.getStringHeight(controllabeltext[KEY_FIRE]);
+	controllabelx[KEY_FIRE] = controllabelx[KEY_RUN];
+	controllabely[KEY_FIRE] = controllabely[KEY_RUN]  + containerh / 15 + controllabelh[KEY_FIRE];
+	controlw[KEY_FIRE] = root->menutitlefont.getStringWidth(controldisplaytext[KEY_FIRE]);
+	controlh[KEY_FIRE] = root->menutitlefont.getStringHeight(controldisplaytext[KEY_FIRE]);
+	controlx[KEY_FIRE] = containerx + containerw - (containerw / 10) - controlw[KEY_FIRE];
+	controly[KEY_FIRE] = controllabely[KEY_FIRE];
+
+	controlbutton[KEY_FIRE].set(controlx[KEY_FIRE], controly[KEY_FIRE] - controlh[KEY_FIRE], controlx[KEY_FIRE] + controlw[KEY_FIRE], controly[KEY_FIRE]);
+
+	//interact
+	controllabeltext[KEY_INTERACT] = root->localizeWord(root->interactkey);
+	controldisplaytext[KEY_INTERACT] = gCodepointToStr(keyboardcontrols[KEY_INTERACT]);
+	controllabelw[KEY_INTERACT] = root->menutitlefont.getStringWidth(controllabeltext[KEY_INTERACT]);
+	controllabelh[KEY_INTERACT] = root->menutitlefont.getStringHeight(controllabeltext[KEY_INTERACT]);
+	controllabelx[KEY_INTERACT] = controllabelx[KEY_RUN];
+	controllabely[KEY_INTERACT] = controllabely[KEY_FIRE]  + containerh / 15 + controllabelh[KEY_INTERACT];
+	controlw[KEY_INTERACT] = root->menutitlefont.getStringWidth(controldisplaytext[KEY_INTERACT]);
+	controlh[KEY_INTERACT] = root->menutitlefont.getStringHeight(controldisplaytext[KEY_INTERACT]);
+	controlx[KEY_INTERACT] = containerx + containerw - (containerw / 10) - controlw[KEY_INTERACT];
+	controly[KEY_INTERACT] = controllabely[KEY_INTERACT];
+
+	controlbutton[KEY_INTERACT].set(controlx[KEY_INTERACT], controly[KEY_INTERACT] - controlh[KEY_INTERACT], controlx[KEY_INTERACT] + controlw[KEY_INTERACT], controly[KEY_INTERACT]);
+}
+
+void OptionsCanvas::sensitivitySetup() {
+	sensbackbutton.loadImage("PNG/Icons/ArrowsLeft3.png");
+	sensforwardbutton.loadImage("PNG/Icons/ArrowsRight3.png");
+	sensitivity = 50;
+	sensnumtext = gToStr(sensitivity);
+	senslabeltext = "Sensitivity";
+	senslabelh = root->menutitlefont.getStringHeight("y");
+	senslabelx = containerx + containerw / 10;
+	senslabely = containery + containerh / 15 + senslabelh;
+	sensw = root->menutitlefont.getStringWidth(sensnumtext);
+	sensx = senslabelx + root->menutitlefont.getStringWidth(senslabeltext) + 40;
+	sensh = root->menutitlefont.getStringHeight(sensnumtext);
+	sensbackbuttonw = sensbackbutton.getWidth() * 0.4;
+	sensbackbuttonh = sensbackbutton.getHeight() * 0.4;
+	sensbackbuttonx = sensx - sensbackbuttonw - 10;
+	sensbackbuttony = senslabely - (sensh / 2) - (sensbackbuttonh / 2) + 303;
+	sensforwardbuttonx = sensx + sensw + 10;
+	sensbackbuttonhitbox.set(sensbackbuttonx, sensbackbuttony, sensbackbuttonx + sensbackbuttonw, sensbackbuttony + sensbackbuttonh);
+	sensforwardbuttonhitbox.set(sensforwardbuttonx, sensbackbuttony, sensforwardbuttonx + sensbackbuttonw, sensbackbuttony + sensbackbuttonh);
+}
+
+void OptionsCanvas::controlButtonsDraw() {
+	setColor(0, 0, 0);
+	root->menutitlefont.drawText(controllabeltext[KEY_FORWARD], controllabelx[KEY_FORWARD], controllabely[KEY_FORWARD] );
+	setColor(normalcolor);
+	if(controlbuttonstate[KEY_FORWARD] == BUTTON_FOCUS) setColor(focuscolor);
+	if(controlbuttonstate[KEY_FORWARD] == BUTTON_PRESSED || controlbuttonstate[KEY_FORWARD] == BUTTON_PERFORMED) setColor(pressedcolor);
+	root->menutitlefont.drawText(controldisplaytext[KEY_FORWARD], controlx[KEY_FORWARD], controly[KEY_FORWARD]);
+
+	setColor(0, 0, 0);
+	root->menutitlefont.drawText(controllabeltext[KEY_BACKWARD], controllabelx[KEY_BACKWARD], controllabely[KEY_BACKWARD] );
+	setColor(normalcolor);
+	if(controlbuttonstate[KEY_BACKWARD] == BUTTON_FOCUS) setColor(focuscolor);
+	if(controlbuttonstate[KEY_BACKWARD] == BUTTON_PRESSED || controlbuttonstate[KEY_BACKWARD] == BUTTON_PERFORMED) setColor(pressedcolor);
+	root->menutitlefont.drawText(controldisplaytext[KEY_BACKWARD], controlx[KEY_BACKWARD], controly[KEY_BACKWARD]);
+
+	setColor(0, 0, 0);
+	root->menutitlefont.drawText(controllabeltext[KEY_RIGHT], controllabelx[KEY_RIGHT], controllabely[KEY_RIGHT] );
+	setColor(normalcolor);
+	if(controlbuttonstate[KEY_RIGHT] == BUTTON_FOCUS) setColor(focuscolor);
+	if(controlbuttonstate[KEY_RIGHT] == BUTTON_PRESSED || controlbuttonstate[KEY_RIGHT] == BUTTON_PERFORMED) setColor(pressedcolor);
+	root->menutitlefont.drawText(controldisplaytext[KEY_RIGHT], controlx[KEY_RIGHT], controly[KEY_RIGHT]);
+
+	setColor(0, 0, 0);
+	root->menutitlefont.drawText(controllabeltext[KEY_LEFT], controllabelx[KEY_LEFT], controllabely[KEY_LEFT] );
+	setColor(normalcolor);
+	if(controlbuttonstate[KEY_LEFT] == BUTTON_FOCUS) setColor(focuscolor);
+	if(controlbuttonstate[KEY_LEFT] == BUTTON_PRESSED || controlbuttonstate[KEY_LEFT] == BUTTON_PERFORMED) setColor(pressedcolor);
+	root->menutitlefont.drawText(controldisplaytext[KEY_LEFT], controlx[KEY_LEFT], controly[KEY_LEFT]);
+
+	setColor(0, 0, 0);
+	root->menutitlefont.drawText(controllabeltext[KEY_RUN], controllabelx[KEY_RUN], controllabely[KEY_RUN] );
+	setColor(normalcolor);
+	if(controlbuttonstate[KEY_RUN] == BUTTON_FOCUS) setColor(focuscolor);
+	if(controlbuttonstate[KEY_RUN] == BUTTON_PRESSED || controlbuttonstate[KEY_RUN] == BUTTON_PERFORMED) setColor(pressedcolor);
+	root->menutitlefont.drawText(controldisplaytext[KEY_RUN], controlx[KEY_RUN], controly[KEY_RUN]);
+
+	setColor(0, 0, 0);
+	root->menutitlefont.drawText(controllabeltext[KEY_FIRE], controllabelx[KEY_FIRE], controllabely[KEY_FIRE] );
+	setColor(normalcolor);
+	if(controlbuttonstate[KEY_FIRE] == BUTTON_FOCUS) setColor(focuscolor);
+	if(controlbuttonstate[KEY_FIRE] == BUTTON_PRESSED || controlbuttonstate[KEY_FIRE] == BUTTON_PERFORMED) setColor(pressedcolor);
+	root->menutitlefont.drawText(controldisplaytext[KEY_FIRE], controlx[KEY_FIRE], controly[KEY_FIRE]);
+
+	setColor(0, 0, 0);
+	root->menutitlefont.drawText(controllabeltext[KEY_INTERACT], controllabelx[KEY_INTERACT], controllabely[KEY_INTERACT] );
+	setColor(normalcolor);
+	if(controlbuttonstate[KEY_INTERACT] == BUTTON_FOCUS) setColor(focuscolor);
+	if(controlbuttonstate[KEY_INTERACT] == BUTTON_PRESSED || controlbuttonstate[KEY_INTERACT] == BUTTON_PERFORMED) setColor(pressedcolor);
+	root->menutitlefont.drawText(controldisplaytext[KEY_INTERACT], controlx[KEY_INTERACT], controly[KEY_INTERACT]);
+}
+
+void OptionsCanvas::sensitivityDraw() {
+	setColor(0, 0, 0);
+	root->menutitlefont.drawText(senslabeltext, senslabelx, senslabely + 300);
+
+	if(sensbackstate == BUTTON_FOCUS) setColor(focuscolor);
+	if(sensbackstate == BUTTON_PRESSED || sensbackstate == BUTTON_PERFORMED) setColor(pressedcolor);
+	sensbackbutton.draw(sensbackbuttonx, sensbackbuttony, sensbackbuttonw, sensbackbuttonh);
+
+	setColor(0, 0, 0);
+	if(sensfwstate == BUTTON_FOCUS) setColor(focuscolor);
+	if(sensfwstate == BUTTON_PRESSED || sensfwstate == BUTTON_PERFORMED) setColor(pressedcolor);
+	sensforwardbutton.draw(sensforwardbuttonx, sensbackbuttony, sensbackbuttonw, sensbackbuttonh);
+
+	setColor(0, 0, 0);
+	root->menutitlefont.drawText(sensnumtext, sensx, senslabely + 300);
+}
+
+void OptionsCanvas::brightnessSetup() {
+	brightbackbutton.loadImage("PNG/Icons/ArrowsLeft3.png");
+	brightforwardbutton.loadImage("PNG/Icons/ArrowsRight3.png");
+
+	brightness = 50;
+	brightnumtext = gToStr(brightness);
+	brightlabeltext = "Brightness";
+	brightlabelh = root->menutitlefont.getStringHeight("y");
+	brightlabelx = containerx + containerw / 10;
+	brightlabely = containery + containerh / 15 + brightlabelh;
+	brightw = root->menutitlefont.getStringWidth(brightnumtext);
+	brightx = brightlabelx + root->menutitlefont.getStringWidth(brightlabeltext) + 40;
+	brighth = root->menutitlefont.getStringHeight(brightnumtext);
+	brightbackbuttonw = brightbackbutton.getWidth() * 0.4;
+	brightbackbuttonh = brightbackbutton.getHeight() * 0.4;
+	brightbackbuttonx = brightx - brightbackbuttonw - 10;
+	brightbackbuttony = brightlabely - (brighth / 2) - (brightbackbuttonh / 2) +  3;
+	brightforwardbuttonx = brightx + brightw + 10;
+	brightbackbuttonhitbox.set(brightbackbuttonx, brightbackbuttony, brightbackbuttonx + brightbackbuttonw, brightbackbuttony + brightbackbuttonh);
+	brightforwardbuttonhitbox.set(brightforwardbuttonx, brightbackbuttony, brightforwardbuttonx + brightbackbuttonw, brightbackbuttony + brightbackbuttonh);
+}
+
+void OptionsCanvas::qualitySetup() {
+	qualitylabeltext = "Quality: ";
+	qualities[0] = "High";
+	qualities[1] = "Normal";
+	qualities[2] = "Low";
+	quabackbutton.loadImage("PNG/Icons/ArrowsLeft3.png");
+	quaforwardbutton.loadImage("PNG/Icons/ArrowsRight3.png");
+
+	selectedquality = 1;
+	qualabelh = root->menutitlefont.getStringHeight("y");
+	qualabelx = containerx + containerw / 10;
+	qualabely = (containery + containerh / 15 + qualabelh) + 100;
+	qualitiesw = root->menutitlefont.getStringWidth(qualities[selectedquality]);
+	qualitiesx = qualabelx + qualitiesw * 2;
+	qualitiesh = root->menutitlefont.getStringHeight(qualities[selectedquality]);
+	quabackbuttonw = quabackbutton.getWidth() * 0.4;
+	quabackbuttonh = quabackbutton.getHeight() * 0.4;
+	quabackbuttonx = qualitiesx - quabackbuttonw;
+	quabackbuttony = qualabely - (qualitiesh / 2) - (quabackbuttonh / 2) + 3;
+	quaforwardbuttonx = qualitiesx + qualitiesw + (quabackbuttonw / 2);
+	quabackbuttonhitbox.set(quabackbuttonx, quabackbuttony, quabackbuttonx + quabackbuttonw, quabackbuttony + quabackbuttonh);
+	quaforwardbuttonhitbox.set(quaforwardbuttonx, quabackbuttony, quaforwardbuttonx + quabackbuttonw, quabackbuttony + quabackbuttonh);
+}
+
+void OptionsCanvas::windowmodeSetup() {
+	windowmodelabeltext = "Window Mode: ";
+	windowmodes[0] = "FullScreen";
+	windowmodes[1] = "Borderless";
+	windowmodes[2] = "Windowed";
+	winbackbutton.loadImage("PNG/Icons/ArrowsLeft3.png");
+	winforwardbutton.loadImage("PNG/Icons/ArrowsRight3.png");
+
+	selectedwindowmode = 2;
+	winlabelh = root->menutitlefont.getStringHeight("y");
+	winlabelx = containerx + containerw / 10;
+	winlabely = (containery + containerh / 15 + winlabelh) + 200;
+	windowmodesw = root->menutitlefont.getStringWidth(windowmodes[selectedwindowmode]);
+	windowmodesx = winlabelx + windowmodesw * 2;
+	windowmodesh = root->menutitlefont.getStringHeight(windowmodes[selectedwindowmode]);
+	winbackbuttonw = winbackbutton.getWidth() * 0.4;
+	winbackbuttonh = winbackbutton.getHeight() * 0.4;
+	winbackbuttonx = windowmodesx - winbackbuttonw;
+	winbackbuttony = winlabely - (windowmodesh / 2) - (winbackbuttonh / 2) + 3;
+	winforwardbuttonx = windowmodesx + windowmodesw + (winbackbuttonw / 2);
+	winbackbuttonhitbox.set(winbackbuttonx, winbackbuttony, winbackbuttonx + winbackbuttonw, winbackbuttony + winbackbuttonh);
+	winforwardbuttonhitbox.set(winforwardbuttonx, winbackbuttony, winforwardbuttonx + winbackbuttonw, winbackbuttony + winbackbuttonh);
+}
+
+void OptionsCanvas::resolutionSetup() {
+	resolutionlabeltext = "Resolution: ";
+	resolutions[0] = "1920x1200";
+	resolutions[1] = "1920x1080";
+	resolutions[2] = "1600x900";
+	resbackbutton.loadImage("PNG/Icons/ArrowsLeft3.png");
+	resforwardbutton.loadImage("PNG/Icons/ArrowsRight3.png");
+
+	selectedresolution= 1;
+	reslabelh = root->menutitlefont.getStringHeight("y");
+	reslabelx = containerx + containerw / 10;
+	reslabely = (containery + containerh / 15 + reslabelh) + 300;
+	resolutionsw = root->menutitlefont.getStringWidth(resolutions[selectedresolution]);
+	resolutionsx = reslabelx + resolutionsw * 2;
+	resolutionsh = root->menutitlefont.getStringHeight(resolutions[selectedresolution]);
+	resbackbuttonw = resbackbutton.getWidth() * 0.4;
+	resbackbuttonh = resbackbutton.getHeight() * 0.4;
+	resbackbuttonx = resolutionsx - resbackbuttonw;
+	resbackbuttony = reslabely - (resolutionsh / 2) - (resbackbuttonh / 2) + 3;
+	resforwardbuttonx = resolutionsx + resolutionsw + (resbackbuttonw / 2);
+	resbackbuttonhitbox.set(resbackbuttonx, resbackbuttony, resbackbuttonx + resbackbuttonw, resbackbuttony + resbackbuttonh);
+	resforwardbuttonhitbox.set(resforwardbuttonx, resbackbuttony, resforwardbuttonx + resbackbuttonw, resbackbuttony + resbackbuttonh);
+}
+
+void OptionsCanvas::brightnessDraw() {
+	setColor(0, 0, 0);
+	root->menutitlefont.drawText(brightlabeltext, brightlabelx, brightlabely);
+
+	if(brightbackstate == BUTTON_FOCUS) setColor(focuscolor);
+	if(brightbackstate == BUTTON_PRESSED || brightbackstate == BUTTON_PERFORMED) setColor(pressedcolor);
+	brightbackbutton.draw(brightbackbuttonx, brightbackbuttony, brightbackbuttonw, brightbackbuttonh);
+
+	setColor(0, 0, 0);
+	if(brightfwstate == BUTTON_FOCUS) setColor(focuscolor);
+	if(brightfwstate == BUTTON_PRESSED || brightfwstate == BUTTON_PERFORMED) setColor(pressedcolor);
+	brightforwardbutton.draw(brightforwardbuttonx, brightbackbuttony, brightbackbuttonw, brightbackbuttonh);
+
+	setColor(0, 0, 0);
+	root->menutitlefont.drawText(brightnumtext, brightx, brightlabely);
+}
+
+void OptionsCanvas::qualityDraw() {
+
+	setColor(0, 0, 0);
+	root->menutitlefont.drawText(qualitylabeltext, qualabelx, qualabely);
+	root->menutitlefont.drawText(qualities[selectedquality], qualitiesx, qualabely);
+	quabackbutton.draw(quabackbuttonx, quabackbuttony, quabackbuttonw, quabackbuttonh);
+	quaforwardbutton.draw(quaforwardbuttonx, quabackbuttony, quabackbuttonw, quabackbuttonh);
+
+	if(quabackstate == BUTTON_FOCUS) setColor(focuscolor);
+	if(quabackstate == BUTTON_PRESSED || quabackstate == BUTTON_PERFORMED) setColor(pressedcolor);
+
+	if(quafwstate == BUTTON_FOCUS) setColor(focuscolor);
+	if(quafwstate == BUTTON_PRESSED || quafwstate == BUTTON_PERFORMED) setColor(pressedcolor);
+}
+
+void OptionsCanvas::windowmodeDraw() {
+	setColor(0, 0, 0);
+	root->menutitlefont.drawText(windowmodelabeltext, winlabelx, winlabely);
+	root->menutitlefont.drawText(windowmodes[selectedwindowmode], windowmodesx, winlabely);
+	winbackbutton.draw(winbackbuttonx, winbackbuttony, winbackbuttonw, winbackbuttonh);
+	winforwardbutton.draw(winforwardbuttonx, winbackbuttony, winbackbuttonw, winbackbuttonh);
+
+	if(winbackstate == BUTTON_FOCUS) setColor(focuscolor);
+	if(winbackstate == BUTTON_PRESSED || winbackstate == BUTTON_PERFORMED) setColor(pressedcolor);
+
+	if(winfwstate == BUTTON_FOCUS) setColor(focuscolor);
+	if(winfwstate == BUTTON_PRESSED || winfwstate == BUTTON_PERFORMED) setColor(pressedcolor);
+}
+
+void OptionsCanvas::resolutionDraw() {
+	setColor(0, 0, 0);
+	root->menutitlefont.drawText(resolutionlabeltext, reslabelx, reslabely);
+	root->menutitlefont.drawText(resolutions[selectedresolution], resolutionsx, reslabely);
+	resbackbutton.draw(resbackbuttonx, resbackbuttony, resbackbuttonw, resbackbuttonh);
+	resforwardbutton.draw(resforwardbuttonx, resbackbuttony, resbackbuttonw, resbackbuttonh);
+
+	if(resbackstate == BUTTON_FOCUS) setColor(focuscolor);
+	if(resbackstate == BUTTON_PRESSED || winbackstate == BUTTON_PERFORMED) setColor(pressedcolor);
+
+	if(resfwstate == BUTTON_FOCUS) setColor(focuscolor);
+	if(resfwstate == BUTTON_PRESSED || resfwstate == BUTTON_PERFORMED) setColor(pressedcolor);
 }
