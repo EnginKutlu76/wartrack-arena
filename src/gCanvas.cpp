@@ -148,6 +148,10 @@ void gCanvas::setup() {
 	scorex = dialoguex + dialoguewidthhalf - namefont.getStringWidth("0") / 2;
 	scoretitley = scorey - namefont.getSize() * 9 / 8;
 	scoretitlex = dialoguex + dialoguewidthhalf - namefont.getStringWidth("SCORE") / 2;
+
+	fpscounterx = minimapx + 20.0f;
+	fpscountery = minimapy + minimaph + 30.0f;
+
 }
 
 void gCanvas::update() {
@@ -179,6 +183,11 @@ void gCanvas::draw() {
 	//namefont.drawText(gToStr(bulletamt), gbbbx, gbbby);
 	drawGui();
 	drawDialogues();
+
+	char fpsBuffer[32];
+	sprintf(fpsBuffer, "%d FPS", root->getFramerate());
+	root->menutitlefont.drawText(fpsBuffer, fpscounterx, fpscountery);
+
 }
 
 void gCanvas::moveCharacter() {

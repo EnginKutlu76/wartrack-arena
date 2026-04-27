@@ -164,6 +164,9 @@ private:
 	int dialoguewidthhalf, dialogueheighthalf;
 	int scorex, scorey;
 	int scoretitlex, scoretitley;
+
+	float fpscounterx, fpscountery;
+
 };
 
 #endif /* GCANVAS_H_ */
