@@ -12,7 +12,6 @@
 #include "CreditsCanvas.h"
 #include "HelpMenu.h"
 #include "OptionsCanvas.h"
-#include "TankCanvas.h"
 
 mainMenu::mainMenu(gApp* root) : gBaseCanvas(root) {
 	this->root = root;
@@ -27,7 +26,6 @@ void mainMenu::setup() {
 	startSetup();
 	offlineSetup();
 	shopSetup();
-	tankSetup();
 	optionSetup();
 	helpSetup();
 	creditSetup();
@@ -44,7 +42,6 @@ void mainMenu::draw() {
 	startDraw();
 	offlineDraw();
 	shopDraw();
-	tankDraw();
 	optionDraw();
 	helpDraw();
 	creditDraw();
@@ -128,7 +125,7 @@ void mainMenu::startSetup() {
 	starttext = root->localizeWord(root->startkey);
 	startw = root->menutitlefont.getStringWidth(starttext);
 	starth = root->menutitlefont.getStringHeight(starttext);
-	startx = getWidth() / 5;
+	startx = getWidth() / 4;
 	starty = getHeight() + 120;
 	starthitbox.set(startx, starty - starth, startx + startw, starty);
 	startstate = BUTTON_NONE;
@@ -154,21 +151,11 @@ void mainMenu::shopSetup(){
 	shopstate = BUTTON_NONE;
 }
 
-void mainMenu::tankSetup() {
-	tanktext = root->localizeWord(root->tankkey);
-	tankw = root->menutitlefont.getStringWidth(tanktext);
-	tankh = root->menutitlefont.getStringHeight(tanktext);
-	tankx = shopx + (shopw + 60);
-	tanky = starty;
-	tankhitbox.set(tankx, tanky - tankh, tankx + tankw, tanky);
-	tankstate = BUTTON_NONE;
-}
-
 void mainMenu::optionSetup() {
 	optiontext = root->localizeWord(root->optionskey);
 	optionw = root->menutitlefont.getStringWidth(optiontext);
 	optionh = root->menutitlefont.getStringHeight(optiontext);
-	optionx = tankx + (tankw + 60);
+	optionx = shopx + (shopw + 60);
 	optiony = starty;
 	optionhitbox.set(optionx, optiony - optionh, optionx + optionw, optiony);
 	optionstate = BUTTON_NONE;
@@ -240,16 +227,6 @@ void mainMenu::shopDraw(){
 	if(shopstate == BUTTON_FOCUS) setColor(focuscolor);
 	if(shopstate == BUTTON_PRESSED) setColor(pressedcolor);
 	root->menutitlefont.drawText(shoptext, shopx, shopy);
-	setColor(normalcolor);
-}
-
-void mainMenu::tankDraw() {
-	if(tankstate == BUTTON_FOCUS) setColor(focuscolor);
-	if(tankstate == BUTTON_PRESSED) {
-		setColor(pressedcolor);
-	}
-	//root->menutitlefont.drawText(soldiertext, soldierx, soldiery);
-	root->menutitlefont.drawText(tanktext, tankx, tanky);
 	setColor(normalcolor);
 }
 
@@ -345,14 +322,6 @@ void mainMenu::updateButtonState(int x, int y) {
             helpstate = BUTTON_NONE;
         }
     }
-	if(tankstate != BUTTON_PRESSED) {
-		if(tankhitbox.contains(x, y)) {
-			tankstate = BUTTON_FOCUS;
-		}
-		else {
-			tankstate = BUTTON_NONE;
-		}
-	}
 }
 
 void mainMenu::checkButtonPressed(int x, int y, int button) {
@@ -390,11 +359,6 @@ void mainMenu::checkButtonPressed(int x, int y, int button) {
 		helpstate = BUTTON_PRESSED;
 		helpy += 2;
 	}
-
-	if(tankhitbox.contains(x, y)) {
-        tankstate = BUTTON_PRESSED;
-        tanky += 2;
-		}
 }
 
 void mainMenu::checkButtonReleased(int x, int y, int button) {
@@ -442,12 +406,6 @@ void mainMenu::checkButtonReleased(int x, int y, int button) {
 		}
 	}
 
-	else if(tankhitbox.contains(x, y) && tankstate == BUTTON_PRESSED) {
-		tankstate = BUTTON_PERFORMED;
-		tanky -= 2;
-		root->setCurrentCanvas(new TankCanvas(root));
-	}
-
 	else {
 		startstate = BUTTON_CANCELED;
 		offlinestate = BUTTON_CANCELED;
@@ -456,6 +414,5 @@ void mainMenu::checkButtonReleased(int x, int y, int button) {
 		creditstate = BUTTON_CANCELED;
 		exitstate = BUTTON_CANCELED;
 		helpstate = BUTTON_CANCELED;
-		tankstate = BUTTON_CANCELED;
 	}
 }

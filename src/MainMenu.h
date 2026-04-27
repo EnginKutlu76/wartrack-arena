@@ -57,7 +57,6 @@ private:
 	void startSetup();
 	void offlineSetup();
 	void optionSetup();
-	void tankSetup();
 	void shopSetup();
 	void helpSetup();
 	void creditSetup();
@@ -78,24 +77,22 @@ private:
 	void helpDraw();
 	void exitDraw();
 	void fadeEffectDraw();
-	void tankDraw();
 
 	gImage background;
-	std::string starttext, offlinetext, shoptext, optiontext, credittext, exittext, helptext, tanktext;
+	std::string starttext, offlinetext, shoptext, optiontext, credittext, exittext, helptext;
 	gImage glistlogo;
 	int glistlogox, glistlogoy, glistlogow, glistlogoh;
 	int nitralogox, nitralogoy, nitralogow, nitralogoh;
 	int startx, starty, startw, starth;
 	int offlinex, offliney, offlinew, offlineh;
 	int shopx, shopy, shopw, shoph;
-	int tankx, tanky, tankw, tankh;
 	int optionx, optiony, optionw, optionh;
 	int helpx, helpy, helpw, helph;
 	int creditx, credity, creditw, credith;
 	int exitx, exity, exitw, exith;
 	int titlex, titley;
-	gRect starthitbox, offlinehitbox, shophitbox, optionhitbox, credithitbox, exithitbox, helphitbox, tankhitbox;
-	int startstate, offlinestate, shopstate, optionstate, creditstate, exitstate, helpstate, tankstate;
+	gRect starthitbox, offlinehitbox, shophitbox, optionhitbox, credithitbox, exithitbox, helphitbox;
+	int startstate, offlinestate, shopstate, optionstate, creditstate, exitstate, helpstate;
 	gColor pressedcolor, normalcolor, focuscolor;
 	//std::unique_ptr<Fade> fadeeffect;
 };
