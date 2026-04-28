@@ -64,6 +64,7 @@ private:
 	void languageSetup();
 	void minimapSetup();
 	void fpsSetup();
+	void vsyncSetup();
 	void gameSettingsPressed(int x, int y);
 	void gameSettingsReleased(int x, int y);
 	void gameSettingsFocus(int x, int y);
@@ -71,6 +72,7 @@ private:
 	void languageDraw();
 	void minimapDraw();
 	void fpsDraw();
+	void vsyncDraw();
 
 	//control funcs
 	void controlsTabButtonSetup();
@@ -179,6 +181,15 @@ private:
 	int fpscheckw, fpscheckh;
 	int fpstickstate;
 	bool isfpsenabled;
+
+	gImage vsyncuncheck, vsynccheck;
+	gRect vsyncbuttonhitbox;
+	std::string vsynctext;
+	int vsynctextx, vsynctexty, vsynctextw, vsynctexth;
+	int vsyncuncheckx, vsyncunchecky, vsyncuncheckw, vsyncuncheckh;
+	int vsynccheckw, vsynccheckh;
+	int vsynctickstate;
+	bool isvsyncenabled;
 
 	//controls settings
 	bool ischangingkey;

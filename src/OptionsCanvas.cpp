@@ -298,6 +298,7 @@ void OptionsCanvas::gameSettingsSetup() {
 	languageSetup();
 	minimapSetup();
 	fpsSetup();
+	vsyncSetup();
 }
 
 void OptionsCanvas::controlsSettingsSetup() {
@@ -335,6 +336,7 @@ void OptionsCanvas::gameSettingsDraw() {
 	languageDraw();
 	minimapDraw();
 	fpsDraw();
+	vsyncDraw();
 }
 
 void OptionsCanvas::controlsSettingsDraw() {
@@ -418,6 +420,10 @@ void OptionsCanvas::gameSettingsPressed(int x, int y) {
 	if(fpsbuttonhitbox.contains(x, y)) {
 		fpstickstate = BUTTON_PRESSED;
 	}
+
+	if(vsyncbuttonhitbox.contains(x, y)) {
+		vsynctickstate = BUTTON_PRESSED;
+	}
 }
 
 void OptionsCanvas::gameSettingsReleased(int x, int y) {
@@ -443,11 +449,17 @@ void OptionsCanvas::gameSettingsReleased(int x, int y) {
 	    isfpsenabled = !isfpsenabled;
 	}
 
+	else if(vsyncbuttonhitbox.contains(x, y) && vsynctickstate == BUTTON_PRESSED) {
+		vsynctickstate = BUTTON_PERFORMED;
+	    isvsyncenabled = !isvsyncenabled;
+	}
+
 	else {
 		langbackstate = BUTTON_CANCELED;
 		langfwstate = BUTTON_CANCELED;
 		maptickstate = BUTTON_CANCELED;
 		fpstickstate = BUTTON_CANCELED;
+		vsynctickstate = BUTTON_CANCELED;
 	}
 
 }
@@ -490,6 +502,16 @@ void OptionsCanvas::gameSettingsFocus(int x, int y) {
 
 		else {
 			fpstickstate = BUTTON_NONE;
+		}
+	}
+
+	if(vsynctickstate != BUTTON_PRESSED) {
+		if(vsyncbuttonhitbox.contains(x, y)) {
+			vsynctickstate = BUTTON_FOCUS;
+		}
+
+		else {
+			vsynctickstate = BUTTON_NONE;
 		}
 	}
 }
@@ -1086,6 +1108,24 @@ void OptionsCanvas::fpsSetup() {
 	isfpsenabled = true;
 }
 
+void OptionsCanvas::vsyncSetup() {
+	vsynctext = "VSync";
+	vsyncuncheck.loadImage("PNG/inactivecolor.png");
+	vsynccheck.loadImage("PNG/check-markred.png");
+	vsynctextw = root->menutitlefont.getStringWidth(vsynctext);
+	vsynctexth = root->menutitlefont.getStringHeight(vsynctext);
+	vsynctextx = languagelabelx;
+	vsynctexty = fpstexty + vsynctexth + languagesw;
+	vsyncuncheckw = vsyncuncheck.getWidth();
+	vsyncuncheckh = vsyncuncheck.getHeight();
+	vsyncuncheckx = muncheckx;
+	vsyncunchecky = vsynctexty - (vsynctexth / 2) - (vsyncuncheckh / 2) + 3;
+	vsynccheckw = vsynccheck.getWidth() * 0.06;
+	vsynccheckh = vsynccheck.getHeight() * 0.06;
+	vsyncbuttonhitbox.set(vsyncuncheckx, vsyncunchecky, vsyncuncheckx + vsyncuncheckw, vsyncunchecky + vsyncuncheckh);
+	isvsyncenabled = true;
+}
+
 void OptionsCanvas::languageDraw() {
 	setColor(0, 0, 0);
 
@@ -1118,6 +1158,17 @@ void OptionsCanvas::fpsDraw() {
 	if(isfpsenabled) {
 		setColor(255, 255, 255);
 	    fpscheck.draw(fpsuncheckx, fpsunchecky, fpscheckw, fpscheckh);
+	}
+	setColor(0, 0, 0);
+}
+
+void OptionsCanvas::vsyncDraw() {
+	setColor(0, 0, 0);
+	root->menutitlefont.drawText(vsynctext, vsynctextx, vsynctexty);
+	vsyncuncheck.draw(vsyncuncheckx, vsyncunchecky);
+	if(isvsyncenabled) {
+		setColor(255, 255, 255);
+		vsynccheck.draw(vsyncuncheckx, vsyncunchecky, vsynccheckw, vsynccheckh);
 	}
 	setColor(0, 0, 0);
 }
