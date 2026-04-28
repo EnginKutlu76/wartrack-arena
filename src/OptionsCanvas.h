@@ -127,6 +127,9 @@ private:
 	void applyTabButtonDraw();
 	void resetTabButtonDraw();
 
+	void applyGameSettings();
+	void resetGameSettings();
+
 	//return funcs
 	void returnSetup();
 	void returnDraw();

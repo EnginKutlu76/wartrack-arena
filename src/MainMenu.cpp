@@ -126,7 +126,7 @@ void mainMenu::startSetup() {
 	startw = root->menutitlefont.getStringWidth(starttext);
 	starth = root->menutitlefont.getStringHeight(starttext);
 	startx = getWidth() / 4;
-	starty = getHeight() + 120;
+	starty = getHeight();
 	starthitbox.set(startx, starty - starth, startx + startw, starty);
 	startstate = BUTTON_NONE;
 }

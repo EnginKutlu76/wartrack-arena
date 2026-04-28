@@ -10,7 +10,6 @@
 #include "MainMenu.h"
 #include "gImage.h"
 
-
 gApp::gApp() {
 }
 
@@ -34,24 +33,58 @@ void gApp::drawMenuBackground(int w, int h) {
 }
 
 std::string gApp::localizeWord(std::string word) {
-	std::string str = localization.localizeWord(word);
-	str = str.substr(0, str.size());
-	return str;
+	return localization.localizeWord(word);
 }
 
 void gApp::loadAssets() {
 	menutitlefont.loadFont("StrongStitch-Regular.otf", 18);
+
 	background = new gImage();
 	background->loadImage("black.png");
 
-/*	intromusic.loadSound("intro.wav");
+	// OPTIONS DB
 	optionsdb.loadDatabase("options.db");
+	optionsdb.execute("CREATE TABLE IF NOT EXISTS options (key TEXT PRIMARY KEY, value TEXT)");
+
+	// DEFAULTS
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('language','0')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('sensivity','50')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('brightness','50')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('invert','0')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('showfps','0')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('vsync','1')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('resolution','0')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('windowmode','0')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('quality','1')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('fov','90')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('forwardkey','0')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('backwardkey','0')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('rightkey','0')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('leftkey','0')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('runkey','0')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('firekey','0')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('interactkey','0')");
+
+	// LOCALIZATION DB
+	gDatabase locdb;
+	locdb.loadDatabase("localization.db");
+	locdb.execute("CREATE TABLE IF NOT EXISTS WORDS (Key TEXT PRIMARY KEY, en TEXT, tr TEXT)");
+	locdb.execute("INSERT OR IGNORE INTO WORDS VALUES ('play','Play','Oyna')");
+	locdb.execute("INSERT OR IGNORE INTO WORDS VALUES ('exit','Exit','Çýkýþ')");
+	locdb.close();
+
 	localization.loadDatabase("localization.db", "WORDS");
-*/
+
 	loadGeneralSettings();
 	loadVideoSettings();
 	loadAudioSettings();
 	loadControlsSettings();
+}
+
+int safeGetInt(std::string data) {
+	auto parts = gSplitString(data, "|");
+	if(parts.size() > 1) return gToInt(parts[1]);
+	return 0;
 }
 
 void gApp::saveGeneralSettings(int language, int sensivity, int brightness, int invertmouse, int showfps) {
@@ -60,12 +93,13 @@ void gApp::saveGeneralSettings(int language, int sensivity, int brightness, int 
 	this->brightness = brightness;
 	this->invertmouse = invertmouse;
 	this->showfps = showfps;
-/*	optionsdb.execute("UPDATE OPTIONS SET language=" + gToStr(this->language));
-	optionsdb.execute("UPDATE OPTIONS SET sensivity=" + gToStr(this->sensivity));
-	optionsdb.execute("UPDATE OPTIONS SET brightness=" + gToStr(this->brightness));
-	optionsdb.execute("UPDATE OPTIONS SET invert=" + gToStr(this->invertmouse));
-	optionsdb.execute("UPDATE OPTIONS SET showfps=" + gToStr(this->showfps));
-*/}
+
+	optionsdb.execute("UPDATE options SET value=" + gToStr(language) + " WHERE key='language'");
+	optionsdb.execute("UPDATE options SET value=" + gToStr(sensivity) + " WHERE key='sensivity'");
+	optionsdb.execute("UPDATE options SET value=" + gToStr(brightness) + " WHERE key='brightness'");
+	optionsdb.execute("UPDATE options SET value=" + gToStr(invertmouse) + " WHERE key='invert'");
+	optionsdb.execute("UPDATE options SET value=" + gToStr(showfps) + " WHERE key='showfps'");
+}
 
 void gApp::saveVideoSettings(int resolution, int windowmode, int quality, int fov, int vsync) {
 	this->resolution = resolution;
@@ -73,159 +107,78 @@ void gApp::saveVideoSettings(int resolution, int windowmode, int quality, int fo
 	this->quality = quality;
 	this->fov = fov;
 	this->vsync = vsync;
-/*	optionsdb.execute("UPDATE OPTIONS SET resolution=" + gToStr(this->resolution));
-	optionsdb.execute("UPDATE OPTIONS SET windowmode=" + gToStr(this->windowmode));
-	optionsdb.execute("UPDATE OPTIONS SET quality=" + gToStr(this->quality));
-	optionsdb.execute("UPDATE OPTIONS SET fov=" + gToStr(this->fov));
-	optionsdb.execute("UPDATE OPTIONS SET vsync=" + gToStr(this->vsync));
-*/
-}
 
-void gApp::saveAudioSettings(int soundvolume, int musicvolume, int sound, int music) {
-	this->soundvolume = soundvolume;
-	this->musicvolume = musicvolume;
-	this->sound = sound;
-	this->music = music;
-//	optionsdb.execute("UPDATE OPTIONS SET soundvolume=" + gToStr(this->soundvolume));
-//	optionsdb.execute("UPDATE OPTIONS SET musicvolume=" + gToStr(this->musicvolume));
-//	optionsdb.execute("UPDATE OPTIONS SET sound=" + gToStr(this->sound));
-//	optionsdb.execute("UPDATE OPTIONS SET music=" + gToStr(this->music));
-}
-
-void gApp::saveControlsSettings(int forward, int backward, int right, int left, int run, int fire, int interact) {
-	this->forward = forward;
-	this->backward = backward;
-	this->right = right;
-	this->left = left;
-	this->run = run;
-	this->fire = fire;
-	this->interact = interact;
-//	optionsdb.execute("UPDATE OPTIONS SET forwardkey=" + gToStr(this->forward));
-//	optionsdb.execute("UPDATE OPTIONS SET backwardkey=" + gToStr(this->backward));
-//	optionsdb.execute("UPDATE OPTIONS SET rightkey=" + gToStr(this->right));
-//	optionsdb.execute("UPDATE OPTIONS SET leftkey=" + gToStr(this->left));
-//	optionsdb.execute("UPDATE OPTIONS SET runkey=" + gToStr(this->run));
-//	optionsdb.execute("UPDATE OPTIONS SET firekey=" + gToStr(this->fire));
-//	optionsdb.execute("UPDATE OPTIONS SET interactkey=" + gToStr(this->interact));
+	optionsdb.execute("UPDATE options SET value=" + gToStr(resolution) + " WHERE key='resolution'");
+	optionsdb.execute("UPDATE options SET value=" + gToStr(windowmode) + " WHERE key='windowmode'");
+	optionsdb.execute("UPDATE options SET value=" + gToStr(quality) + " WHERE key='quality'");
+	optionsdb.execute("UPDATE options SET value=" + gToStr(fov) + " WHERE key='fov'");
+	optionsdb.execute("UPDATE options SET value=" + gToStr(vsync) + " WHERE key='vsync'");
 }
 
 void gApp::loadGeneralSettings() {
-/*	optionsdb.execute("SELECT language FROM OPTIONS");
-	temp = optionsdb.getSelectData();
-	temp = temp.substr(2, temp.size() - 1);
-	language = gToInt(temp);
-//	localization.setCurrentLanguage(language);
+	optionsdb.execute("SELECT value FROM options WHERE key='language'");
+	language = safeGetInt(optionsdb.getSelectData());
+	if(language < 0 || language >= localization.getAvailableLanguages().size()) language = 0;
+	localization.setCurrentLanguage(language);
 
-//	optionsdb.execute("SELECT sensivity FROM OPTIONS");
-	temp = optionsdb.getSelectData();
-	temp = temp.substr(2, temp.size()- 1);
-	sensivity = gToInt(temp);
+	optionsdb.execute("SELECT value FROM options WHERE key='sensivity'");
+	sensivity = safeGetInt(optionsdb.getSelectData());
 
-//	optionsdb.execute("SELECT brightness FROM OPTIONS");
-	temp = optionsdb.getSelectData();
-	temp = temp.substr(2, temp.size() - 1);
-	brightness = gToInt(temp);
+	optionsdb.execute("SELECT value FROM options WHERE key='brightness'");
+	brightness = safeGetInt(optionsdb.getSelectData());
 
-	optionsdb.execute("SELECT invert FROM OPTIONS");
-	temp = optionsdb.getSelectData();
-	temp = temp.substr(2, temp.size() - 1);
-	invertmouse = gToInt(temp);
+	optionsdb.execute("SELECT value FROM options WHERE key='invert'");
+	invertmouse = safeGetInt(optionsdb.getSelectData());
 
-	optionsdb.execute("SELECT showfps FROM OPTIONS");
-	temp = optionsdb.getSelectData();
-	temp = temp.substr(2, temp.size() - 1);
-	showfps = gToInt(temp);
-*/}
+	optionsdb.execute("SELECT value FROM options WHERE key='showfps'");
+	showfps = safeGetInt(optionsdb.getSelectData());
+}
 
 void gApp::loadVideoSettings() {
-	/*optionsdb.execute("SELECT resolution FROM OPTIONS");
-	temp = optionsdb.getSelectData();
-	temp = temp.substr(2, temp.size() - 1);
-	resolution = gToInt(temp);
+	optionsdb.execute("SELECT value FROM options WHERE key='resolution'");
+	resolution = safeGetInt(optionsdb.getSelectData());
 
-	optionsdb.execute("SELECT windowmode FROM OPTIONS");
-	temp = optionsdb.getSelectData();
-	temp = temp.substr(2, temp.size() - 1);
-	windowmode = gToInt(temp);
+	optionsdb.execute("SELECT value FROM options WHERE key='windowmode'");
+	windowmode = safeGetInt(optionsdb.getSelectData());
 
-	optionsdb.execute("SELECT quality FROM OPTIONS");
-	temp = optionsdb.getSelectData();
-	temp = temp.substr(2, temp.size() - 1);
-	quality = gToInt(temp);
+	optionsdb.execute("SELECT value FROM options WHERE key='quality'");
+	quality = safeGetInt(optionsdb.getSelectData());
 
-	optionsdb.execute("SELECT fov FROM OPTIONS");
-	temp = optionsdb.getSelectData();
-	temp = temp.substr(2, temp.size() - 1);
-	fov = gToInt(temp);
+	optionsdb.execute("SELECT value FROM options WHERE key='fov'");
+	fov = safeGetInt(optionsdb.getSelectData());
 
-	optionsdb.execute("SELECT vsync FROM OPTIONS");
-	temp = optionsdb.getSelectData();
-	temp = temp.substr(2, temp.size() - 1);
-	vsync = gToInt(temp);
-*/}
+	optionsdb.execute("SELECT value FROM options WHERE key='vsync'");
+	vsync = safeGetInt(optionsdb.getSelectData());
+}
 
 void gApp::loadAudioSettings() {
-/*	optionsdb.execute("SELECT soundvolume FROM OPTIONS");
-	temp = optionsdb.getSelectData();
-	temp = temp.substr(2, temp.size() - 1);
-	soundvolume = gToInt(temp);
-
-	optionsdb.execute("SELECT musicvolume FROM OPTIONS");
-	temp = optionsdb.getSelectData();
-	temp = temp.substr(2, temp.size() - 1);
-	musicvolume = gToInt(temp);
-
-	optionsdb.execute("SELECT sound FROM OPTIONS");
-	temp = optionsdb.getSelectData();
-	temp = temp.substr(2, temp.size() - 1);
-	sound = gToInt(temp);
-
-	optionsdb.execute("SELECT music FROM OPTIONS");
-	temp = optionsdb.getSelectData();
-	temp = temp.substr(2, temp.size() - 1);
-	music = gToInt(temp);
-*/}
+}
 
 void gApp::loadControlsSettings() {
-/*	optionsdb.execute("SELECT forwardkey FROM OPTIONS");
-	temp = optionsdb.getSelectData();
-	temp = temp.substr(2, temp.size() - 1);
-	forward = gToInt(temp);
+	optionsdb.execute("SELECT value FROM options WHERE key='forwardkey'");
+	forward = safeGetInt(optionsdb.getSelectData());
 
-	optionsdb.execute("SELECT backwardkey FROM OPTIONS");
-	temp = optionsdb.getSelectData();
-	temp = temp.substr(2, temp.size() - 1);
-	backward = gToInt(temp);
+	optionsdb.execute("SELECT value FROM options WHERE key='backwardkey'");
+	backward = safeGetInt(optionsdb.getSelectData());
 
-	optionsdb.execute("SELECT rightkey FROM OPTIONS");
-	temp = optionsdb.getSelectData();
-	temp = temp.substr(2, temp.size() - 1);
-	right = gToInt(temp);
+	optionsdb.execute("SELECT value FROM options WHERE key='rightkey'");
+	right = safeGetInt(optionsdb.getSelectData());
 
-	optionsdb.execute("SELECT leftkey FROM OPTIONS");
-	temp = optionsdb.getSelectData();
-	temp = temp.substr(2, temp.size() - 1);
-	left = gToInt(temp);
+	optionsdb.execute("SELECT value FROM options WHERE key='leftkey'");
+	left = safeGetInt(optionsdb.getSelectData());
 
-	optionsdb.execute("SELECT runkey FROM OPTIONS");
-	temp = optionsdb.getSelectData();
-	temp = temp.substr(2, temp.size() - 1);
-	run = gToInt(temp);
+	optionsdb.execute("SELECT value FROM options WHERE key='runkey'");
+	run = safeGetInt(optionsdb.getSelectData());
 
-	optionsdb.execute("SELECT firekey FROM OPTIONS");
-	temp = optionsdb.getSelectData();
-	temp = temp.substr(2, temp.size() - 1);
-	fire = gToInt(temp);
+	optionsdb.execute("SELECT value FROM options WHERE key='firekey'");
+	fire = safeGetInt(optionsdb.getSelectData());
 
-	optionsdb.execute("SELECT interactkey FROM OPTIONS");
-	temp = optionsdb.getSelectData();
-	temp = temp.substr(2, temp.size() - 1);
-	interact = gToInt(temp);
-*/
+	optionsdb.execute("SELECT value FROM options WHERE key='interactkey'");
+	interact = safeGetInt(optionsdb.getSelectData());
 }
 
 void gApp::applyGeneralSettings() {
-//	localization.setCurrentLanguage(language);
+	localization.setCurrentLanguage(language);
 }
 
 void gApp::applyVideoSettings() {

@@ -100,7 +100,7 @@ private:
 	bool musicenabled = true;
 
 	gImage* background;
-//	gDatabase optionsdb;
+	gDatabase optionsdb;
 	int language, sensivity, brightness, invertmouse, showfps, resolution, windowmode, quality, fov, vsync, soundvolume,
 	musicvolume, sound, music, forward, backward, right, left, run, fire, interact;
 	std::string temp;

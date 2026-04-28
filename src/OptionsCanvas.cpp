@@ -24,6 +24,7 @@ void OptionsCanvas::setup() {
 	sectiontitle = "OPTIONS";
 	titlex = (containerw + gametabbuttonw) / 2;
 	titley = tabh;
+	std::cout << "LANG ON START: " << root->getLanguage() << std::endl;
 }
 
 void OptionsCanvas::update() {
@@ -191,12 +192,12 @@ void OptionsCanvas::tabButtonReleased(int x, int y) {
 
 	else if(applytabbutton.contains(x, y) && applytabbuttonstate == BUTTON_PRESSED) {
 		applytabbuttonstate = BUTTON_PERFORMED;
-		activetab = TAB_APPLY;
+		applyGameSettings();
 	}
 
 	else if(resettabbutton.contains(x, y) && resettabbuttonstate == BUTTON_PRESSED) {
 		resettabbuttonstate = BUTTON_PERFORMED;
-		activetab = TAB_RESET;
+		resetGameSettings();
 	}
 
 	else if(returnhitbox.contains(x, y) && returnbuttonstate == BUTTON_PRESSED) {
@@ -1055,7 +1056,7 @@ void OptionsCanvas::languageSetup() {
 	langbackbutton.loadImage("PNG/Icons/ArrowsLeft3.png");
 	langforwardbutton.loadImage("PNG/Icons/ArrowsRight3.png");
 
-	selectedlanguage = 0;
+	selectedlanguage = root->getLanguage();
 	languagelabelh = root->menutitlefont.getStringHeight("y");
 	languagelabelx = containerx + containerw / 10;
 	languagelabely = containery + containerh / 15 + languagelabelh;
@@ -1661,4 +1662,20 @@ void OptionsCanvas::fxtickDraw() {
 		fxcheck.draw(fxuncheckx, fxunchecky, fxcheckw, fxcheckh);
 	}
 	setColor(0, 0, 0);
+}
+
+void OptionsCanvas::applyGameSettings() {
+	root->saveGeneralSettings(selectedlanguage, 0, brightness, 0, 0);
+	root->applyGeneralSettings();
+	tabSetup();
+	containerSetup();
+}
+
+void OptionsCanvas::resetGameSettings() {
+	root->resetGeneralSettings();
+	selectedlanguage = root->getLanguage();
+	//sensivity = root->getSensivity();
+	brightness = root->getBrightness();
+	//invertmouse = root->getInvertMouse();
+	//showfps = root->getShowFps();
 }
