@@ -45,25 +45,25 @@ public:
 	void drawMenuBackground(int w, int h);
 	std::string localizeWord(std::string word);
 
-	void saveGeneralSettings(int language, int sensivity, int brightness, int invertmouse, int showfps);
-	void saveVideoSettings(int resolution, int windowmode, int quality, int fov, int vsync);
-	void saveAudioSettings(int soundvolume, int musicvolume, int sound, int music);
+	void saveGameSettings(int language, int minimap, int vsync, int showfps);
 	void saveControlsSettings(int forward, int backward, int right, int left, int run, int fire, int interact);
+	void saveGraphicsSettings(int brightness, int resolution, int windowmode, int quality);
+	void saveAudioSettings(int soundvolume, int musicvolume, int sound, int music);
 
-	void loadGeneralSettings();
-	void loadVideoSettings();
-	void loadAudioSettings();
+	void loadGameSettings();
 	void loadControlsSettings();
+	void loadGraphicsSettings();
+	void loadAudioSettings();
 
-	void applyGeneralSettings();
-	void applyVideoSettings();
-	void applyAudioSettings();
+	void applyGameSettings();
 	void applyControlsSettings();
+	void applyGraphicsSettings();
+	void applyAudioSettings();
 
-	void resetGeneralSettings();
-	void resetVideoSettings();
-	void resetAudioSettings();
+	void resetGameSettings();
 	void resetControlsSettings();
+	void resetGraphicsSettings();
+	void resetAudioSettings();
 
 	void playMenuMusic();
 	void stopMenuMusic();
@@ -72,15 +72,16 @@ public:
 	bool getMusicEnabled() const { return musicenabled; }
 
 	int getLanguage();
+	int getMinimap();
+	int getShowFps();
+	int getVsync();
+	int getResolution();
 	int getSensivity();
 	int getBrightness();
-	int getInvertMouse();
-	int getShowFps();
-	int getResolution();
 	int getWindowMode();
+	int getInvertMouse();
 	int getQuality();
 	int getFov();
-	int getVsync();
 	int getSoundVolume();
 	int getMusicVolume();
 	int getSound();
@@ -101,7 +102,7 @@ private:
 
 	gImage* background;
 	gDatabase optionsdb;
-	int language, sensivity, brightness, invertmouse, showfps, resolution, windowmode, quality, fov, vsync, soundvolume,
+	int language, sensivity, brightness, invertmouse, minimap, showfps, vsync, resolution, windowmode, quality, fov, soundvolume,
 	musicvolume, sound, music, forward, backward, right, left, run, fire, interact;
 	std::string temp;
 	gLocalization localization;

@@ -130,6 +130,15 @@ private:
 	void applyGameSettings();
 	void resetGameSettings();
 
+	void applyControlsSettings();
+	void resetControlsSettings();
+
+	void applyGraphicsSettings();
+	void resetGraphicsSettings();
+
+	void applyAudioSettings();
+	void resetAudioSettings();
+
 	//return funcs
 	void returnSetup();
 	void returnDraw();
@@ -266,6 +275,16 @@ private:
 	int brightbackbuttonx, brightbackbuttony, brightbackbuttonw, brightbackbuttonh, brightforwardbuttonx;
 	int brightbackstate, brightfwstate;
 
+	gImage resbackbutton, resforwardbutton;
+	gRect resbackbuttonhitbox, resforwardbuttonhitbox;
+	std::string resolutionlabeltext;
+	std::string resolutions[3];
+	int reslabelx, reslabely, reslabelw, reslabelh;
+	int resolutionsx, resolutionsw, resolutionsh;
+	int resbackbuttonx, resbackbuttony, resbackbuttonw, resbackbuttonh, resforwardbuttonx;
+	int resbackstate, resfwstate;
+	int selectedresolution;
+
 	gImage quabackbutton, quaforwardbutton;
 	gRect quabackbuttonhitbox, quaforwardbuttonhitbox;
 	std::string qualitylabeltext;
@@ -285,16 +304,6 @@ private:
 	int winbackbuttonx, winbackbuttony, winbackbuttonw, winbackbuttonh, winforwardbuttonx;
 	int winbackstate, winfwstate;
 	int selectedwindowmode;
-
-	gImage resbackbutton, resforwardbutton;
-	gRect resbackbuttonhitbox, resforwardbuttonhitbox;
-	std::string resolutionlabeltext;
-	std::string resolutions[3];
-	int reslabelx, reslabely, reslabelw, reslabelh;
-	int resolutionsx, resolutionsw, resolutionsh;
-	int resbackbuttonx, resbackbuttony, resbackbuttonw, resbackbuttonh, resforwardbuttonx;
-	int resbackstate, resfwstate;
-	int selectedresolution;
 
 	//audio settings
 	gImage musicbackbutton, musicforwardbutton;

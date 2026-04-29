@@ -47,15 +47,19 @@ void gApp::loadAssets() {
 	optionsdb.execute("CREATE TABLE IF NOT EXISTS options (key TEXT PRIMARY KEY, value TEXT)");
 
 	// DEFAULTS
-	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('language','0')");
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('sensivity','50')");
-	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('brightness','50')");
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('invert','0')");
+
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('language','0')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('minimap','0')");
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('showfps','0')");
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('vsync','1')");
+
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('brightness','50')");
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('resolution','0')");
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('windowmode','0')");
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('quality','1')");
+
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('fov','90')");
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('forwardkey','0')");
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('backwardkey','0')");
@@ -64,6 +68,12 @@ void gApp::loadAssets() {
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('runkey','0')");
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('firekey','0')");
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('interactkey','0')");
+
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('soundvolume','50')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('musicvolume','50')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('sound','1')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('music','1')");
+
 
 	// LOCALIZATION DB
 	gDatabase locdb;
@@ -75,8 +85,8 @@ void gApp::loadAssets() {
 
 	localization.loadDatabase("localization.db", "WORDS");
 
-	loadGeneralSettings();
-	loadVideoSettings();
+	loadGameSettings();
+	loadGraphicsSettings();
 	loadAudioSettings();
 	loadControlsSettings();
 }
@@ -87,54 +97,67 @@ int safeGetInt(std::string data) {
 	return 0;
 }
 
-void gApp::saveGeneralSettings(int language, int sensivity, int brightness, int invertmouse, int showfps) {
+void gApp::saveGameSettings(int language, int minimap, int showfps, int vsync) {
 	this->language = language;
-	this->sensivity = sensivity;
-	this->brightness = brightness;
-	this->invertmouse = invertmouse;
+	this->minimap = minimap;
+	//this->sensivity = sensivity;
 	this->showfps = showfps;
-
-	optionsdb.execute("UPDATE options SET value=" + gToStr(language) + " WHERE key='language'");
-	optionsdb.execute("UPDATE options SET value=" + gToStr(sensivity) + " WHERE key='sensivity'");
-	optionsdb.execute("UPDATE options SET value=" + gToStr(brightness) + " WHERE key='brightness'");
-	optionsdb.execute("UPDATE options SET value=" + gToStr(invertmouse) + " WHERE key='invert'");
-	optionsdb.execute("UPDATE options SET value=" + gToStr(showfps) + " WHERE key='showfps'");
-}
-
-void gApp::saveVideoSettings(int resolution, int windowmode, int quality, int fov, int vsync) {
-	this->resolution = resolution;
-	this->windowmode = windowmode;
-	this->quality = quality;
-	this->fov = fov;
 	this->vsync = vsync;
 
-	optionsdb.execute("UPDATE options SET value=" + gToStr(resolution) + " WHERE key='resolution'");
-	optionsdb.execute("UPDATE options SET value=" + gToStr(windowmode) + " WHERE key='windowmode'");
-	optionsdb.execute("UPDATE options SET value=" + gToStr(quality) + " WHERE key='quality'");
-	optionsdb.execute("UPDATE options SET value=" + gToStr(fov) + " WHERE key='fov'");
+	optionsdb.execute("UPDATE options SET value=" + gToStr(language) + " WHERE key='language'");
+	optionsdb.execute("UPDATE options SET value=" + gToStr(minimap) + " WHERE key='minimap'");
+	//optionsdb.execute("UPDATE options SET value=" + gToStr(sensivity) + " WHERE key='sensivity'");
+	optionsdb.execute("UPDATE options SET value=" + gToStr(showfps) + " WHERE key='showfps'");
 	optionsdb.execute("UPDATE options SET value=" + gToStr(vsync) + " WHERE key='vsync'");
 }
 
-void gApp::loadGeneralSettings() {
+void gApp::saveGraphicsSettings(int brightness, int resolution, int windowmode, int quality) {
+	this->brightness = brightness;
+	this->resolution = resolution;
+	this->windowmode = windowmode;
+	this->quality = quality;
+
+	optionsdb.execute("UPDATE options SET value=" + gToStr(brightness) + " WHERE key='brightness'");
+	optionsdb.execute("UPDATE options SET value=" + gToStr(resolution) + " WHERE key='resolution'");
+	optionsdb.execute("UPDATE options SET value=" + gToStr(windowmode) + " WHERE key='windowmode'");
+	optionsdb.execute("UPDATE options SET value=" + gToStr(quality) + " WHERE key='quality'");
+}
+
+void gApp::saveAudioSettings(int soundvolume, int musicvolume, int sound, int music) {
+	this->soundvolume = soundvolume;
+	this->musicvolume = musicvolume;
+	this->sound = sound;
+	this->music = music;
+
+	optionsdb.execute("UPDATE options SET value=" + gToStr(soundvolume) + " WHERE key='soundvolume'");
+	optionsdb.execute("UPDATE options SET value=" + gToStr(musicvolume) + " WHERE key='musicvolume'");
+	optionsdb.execute("UPDATE options SET value=" + gToStr(sound) + " WHERE key='sound'");
+	optionsdb.execute("UPDATE options SET value=" + gToStr(music) + " WHERE key='music'");
+}
+
+void gApp::loadGameSettings() {
 	optionsdb.execute("SELECT value FROM options WHERE key='language'");
 	language = safeGetInt(optionsdb.getSelectData());
 	if(language < 0 || language >= localization.getAvailableLanguages().size()) language = 0;
 	localization.setCurrentLanguage(language);
 
-	optionsdb.execute("SELECT value FROM options WHERE key='sensivity'");
-	sensivity = safeGetInt(optionsdb.getSelectData());
+//	optionsdb.execute("SELECT value FROM options WHERE key='sensivity'");
+//	sensivity = safeGetInt(optionsdb.getSelectData());
 
-	optionsdb.execute("SELECT value FROM options WHERE key='brightness'");
-	brightness = safeGetInt(optionsdb.getSelectData());
-
-	optionsdb.execute("SELECT value FROM options WHERE key='invert'");
-	invertmouse = safeGetInt(optionsdb.getSelectData());
+	optionsdb.execute("SELECT value FROM options WHERE key='minimap'");
+	minimap = safeGetInt(optionsdb.getSelectData());
 
 	optionsdb.execute("SELECT value FROM options WHERE key='showfps'");
 	showfps = safeGetInt(optionsdb.getSelectData());
+
+	optionsdb.execute("SELECT value FROM options WHERE key='vsync'");
+	vsync = safeGetInt(optionsdb.getSelectData());
 }
 
-void gApp::loadVideoSettings() {
+void gApp::loadGraphicsSettings() {
+	optionsdb.execute("SELECT value FROM options WHERE key='brightness'");
+	brightness = safeGetInt(optionsdb.getSelectData());
+
 	optionsdb.execute("SELECT value FROM options WHERE key='resolution'");
 	resolution = safeGetInt(optionsdb.getSelectData());
 
@@ -143,15 +166,20 @@ void gApp::loadVideoSettings() {
 
 	optionsdb.execute("SELECT value FROM options WHERE key='quality'");
 	quality = safeGetInt(optionsdb.getSelectData());
-
-	optionsdb.execute("SELECT value FROM options WHERE key='fov'");
-	fov = safeGetInt(optionsdb.getSelectData());
-
-	optionsdb.execute("SELECT value FROM options WHERE key='vsync'");
-	vsync = safeGetInt(optionsdb.getSelectData());
 }
 
 void gApp::loadAudioSettings() {
+	optionsdb.execute("SELECT value FROM options WHERE key='soundvolume'");
+	soundvolume = safeGetInt(optionsdb.getSelectData());
+
+	optionsdb.execute("SELECT value FROM options WHERE key='musicvolume'");
+	musicvolume = safeGetInt(optionsdb.getSelectData());
+
+	optionsdb.execute("SELECT value FROM options WHERE key='sound'");
+	sound = safeGetInt(optionsdb.getSelectData());
+
+	optionsdb.execute("SELECT value FROM options WHERE key='music'");
+	music = safeGetInt(optionsdb.getSelectData());
 }
 
 void gApp::loadControlsSettings() {
@@ -177,11 +205,11 @@ void gApp::loadControlsSettings() {
 	interact = safeGetInt(optionsdb.getSelectData());
 }
 
-void gApp::applyGeneralSettings() {
+void gApp::applyGameSettings() {
 	localization.setCurrentLanguage(language);
 }
 
-void gApp::applyVideoSettings() {
+void gApp::applyGraphicsSettings() {
 }
 
 void gApp::applyAudioSettings() {
@@ -192,10 +220,10 @@ void gApp::applyControlsSettings() {
 
 }
 
-void gApp::resetGeneralSettings() {
+void gApp::resetGameSettings() {
 }
 
-void gApp::resetVideoSettings() {
+void gApp::resetGraphicsSettings() {
 }
 
 void gApp::resetAudioSettings() {
@@ -239,6 +267,18 @@ int gApp::getLanguage() {
 	return language;
 }
 
+int gApp::getMinimap() {
+	return minimap;
+}
+
+int gApp::getShowFps() {
+	return showfps;
+}
+
+int gApp::getVsync() {
+	return vsync;
+}
+
 int gApp::getSensivity() {
 	return sensivity;
 }
@@ -251,9 +291,6 @@ int gApp::getInvertMouse() {
 	return invertmouse;
 }
 
-int gApp::getShowFps() {
-	return showfps;
-}
 
 int gApp::getResolution() {
 	return resolution;
@@ -271,9 +308,6 @@ int gApp::getFov() {
 	return fov;
 }
 
-int gApp::getVsync() {
-	return vsync;
-}
 
 int gApp::getSoundVolume() {
 	return soundvolume;

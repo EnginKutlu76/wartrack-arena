@@ -192,12 +192,16 @@ void OptionsCanvas::tabButtonReleased(int x, int y) {
 
 	else if(applytabbutton.contains(x, y) && applytabbuttonstate == BUTTON_PRESSED) {
 		applytabbuttonstate = BUTTON_PERFORMED;
-		applyGameSettings();
+		if(activetab == TAB_GAME) applyGameSettings();
+		if(activetab == TAB_GRAPHICS) applyGraphicsSettings();
+		if(activetab == TAB_AUDIO) applyAudioSettings();
 	}
 
 	else if(resettabbutton.contains(x, y) && resettabbuttonstate == BUTTON_PRESSED) {
 		resettabbuttonstate = BUTTON_PERFORMED;
-		resetGameSettings();
+		if(activetab == TAB_GAME) resetGameSettings();
+		if(activetab == TAB_GRAPHICS) resetGraphicsSettings();
+		if(activetab == TAB_AUDIO) resetAudioSettings();
 	}
 
 	else if(returnhitbox.contains(x, y) && returnbuttonstate == BUTTON_PRESSED) {
@@ -1088,7 +1092,7 @@ void OptionsCanvas::minimapSetup() {
 	mcheckw = mcheck.getWidth() * 0.06;
 	mcheckh = mcheck.getHeight() * 0.06;
 	mapbuttonhitbox.set(muncheckx, munchecky, muncheckx + muncheckw, munchecky + muncheckh);
-	isminimapenabled = true;
+	isminimapenabled = root->getMinimap();
 }
 
 void OptionsCanvas::fpsSetup() {
@@ -1106,7 +1110,7 @@ void OptionsCanvas::fpsSetup() {
 	fpscheckw = fpscheck.getWidth() * 0.06;
 	fpscheckh = fpscheck.getHeight() * 0.06;
 	fpsbuttonhitbox.set(fpsuncheckx, fpsunchecky, fpsuncheckx + fpsuncheckw, fpsunchecky + fpsuncheckh);
-	isfpsenabled = true;
+	isfpsenabled = root->getShowFps();
 }
 
 void OptionsCanvas::vsyncSetup() {
@@ -1124,7 +1128,7 @@ void OptionsCanvas::vsyncSetup() {
 	vsynccheckw = vsynccheck.getWidth() * 0.06;
 	vsynccheckh = vsynccheck.getHeight() * 0.06;
 	vsyncbuttonhitbox.set(vsyncuncheckx, vsyncunchecky, vsyncuncheckx + vsyncuncheckw, vsyncunchecky + vsyncuncheckh);
-	isvsyncenabled = true;
+	isvsyncenabled = root->getVsync();
 }
 
 void OptionsCanvas::languageDraw() {
@@ -1378,7 +1382,7 @@ void OptionsCanvas::brightnessSetup() {
 	brightbackbutton.loadImage("PNG/Icons/ArrowsLeft3.png");
 	brightforwardbutton.loadImage("PNG/Icons/ArrowsRight3.png");
 
-	brightness = 50;
+	brightness = root->getBrightness();
 	brightnumtext = gToStr(brightness);
 	brightlabeltext = "Brightness";
 	brightlabelh = root->menutitlefont.getStringHeight("y");
@@ -1404,7 +1408,7 @@ void OptionsCanvas::qualitySetup() {
 	quabackbutton.loadImage("PNG/Icons/ArrowsLeft3.png");
 	quaforwardbutton.loadImage("PNG/Icons/ArrowsRight3.png");
 
-	selectedquality = 1;
+	selectedquality = root->getQuality();
 	qualabelh = root->menutitlefont.getStringHeight("y");
 	qualabelx = containerx + containerw / 10;
 	qualabely = (containery + containerh / 15 + qualabelh) + 100;
@@ -1428,7 +1432,7 @@ void OptionsCanvas::windowmodeSetup() {
 	winbackbutton.loadImage("PNG/Icons/ArrowsLeft3.png");
 	winforwardbutton.loadImage("PNG/Icons/ArrowsRight3.png");
 
-	selectedwindowmode = 2;
+	selectedwindowmode = root->getWindowMode();
 	winlabelh = root->menutitlefont.getStringHeight("y");
 	winlabelx = containerx + containerw / 10;
 	winlabely = (containery + containerh / 15 + winlabelh) + 200;
@@ -1452,7 +1456,7 @@ void OptionsCanvas::resolutionSetup() {
 	resbackbutton.loadImage("PNG/Icons/ArrowsLeft3.png");
 	resforwardbutton.loadImage("PNG/Icons/ArrowsRight3.png");
 
-	selectedresolution= 1;
+	selectedresolution = root->getResolution();
 	reslabelh = root->menutitlefont.getStringHeight("y");
 	reslabelx = containerx + containerw / 10;
 	reslabely = (containery + containerh / 15 + reslabelh) + 300;
@@ -1532,7 +1536,7 @@ void OptionsCanvas::musicSetup() {
 	musicbackbutton.loadImage("PNG/Icons/ArrowsLeft3.png");
 	musicforwardbutton.loadImage("PNG/Icons/ArrowsRight3.png");
 
-	musicvalue = 50;
+	musicvalue = root->getMusicVolume();
 	musicnumtext = gToStr(musicvalue);
 	musiclabeltext = "Music Value";
 	musiclabelh = root->menutitlefont.getStringHeight("y");
@@ -1554,7 +1558,7 @@ void OptionsCanvas::fxSetup() {
 	fxbackbutton.loadImage("PNG/Icons/ArrowsLeft3.png");
 	fxforwardbutton.loadImage("PNG/Icons/ArrowsRight3.png");
 
-	effectvalue = 50;
+	effectvalue = root->getSoundVolume();
 	fxnumtext = gToStr(effectvalue);
 	fxlabeltext = "Effect Value";
 	fxlabelh = root->menutitlefont.getStringHeight("y");
@@ -1621,7 +1625,7 @@ void OptionsCanvas::musictickSetup() {
 	musiccheckw = musiccheck.getWidth() * 0.06;
 	musiccheckh = musiccheck.getHeight() * 0.06;
 	musicbuttonhitbox.set(musicuncheckx, musicunchecky, musicuncheckx + musicuncheckw, musicunchecky + musicuncheckh);
-	ismusicenabled = true;
+	ismusicenabled = root->getMusic();
 }
 
 void OptionsCanvas::fxtickSetup() {
@@ -1639,7 +1643,7 @@ void OptionsCanvas::fxtickSetup() {
 	fxcheckw = fxcheck.getWidth() * 0.06;
 	fxcheckh = fxcheck.getHeight() * 0.06;
 	fxbuttonhitbox.set(fxuncheckx, fxunchecky, fxuncheckx + fxuncheckw, fxunchecky + fxuncheckh);
-	isfxenabled = true;
+	isfxenabled = root->getSound();
 }
 
 void OptionsCanvas::musictickDraw() {
@@ -1665,17 +1669,62 @@ void OptionsCanvas::fxtickDraw() {
 }
 
 void OptionsCanvas::applyGameSettings() {
-	root->saveGeneralSettings(selectedlanguage, 0, brightness, 0, 0);
-	root->applyGeneralSettings();
+	root->saveGameSettings(selectedlanguage, isminimapenabled, isfpsenabled, isvsyncenabled);
+	root->applyGameSettings();
 	tabSetup();
 	containerSetup();
 }
 
 void OptionsCanvas::resetGameSettings() {
-	root->resetGeneralSettings();
+	root->resetGameSettings();
 	selectedlanguage = root->getLanguage();
-	//sensivity = root->getSensivity();
-	brightness = root->getBrightness();
-	//invertmouse = root->getInvertMouse();
-	//showfps = root->getShowFps();
+	isminimapenabled = root->getMinimap();
+	isfpsenabled = root->getShowFps();
+	isvsyncenabled = root->getVsync();
 }
+
+void OptionsCanvas::applyControlsSettings() {
+//	root->saveControlsSettings(keyboardcontrols[KEY_FORWARD], keyboardcontrols[KEY_BACKWARD], keyboardcontrols[KEY_RIGHT],
+//			keyboardcontrols[KEY_LEFT], keyboardcontrols[KEY_RUN], keyboardcontrols[KEY_FIRE], keyboardcontrols[KEY_INTERACT]);
+//	root->applyControlsSettings();
+}
+
+void OptionsCanvas::resetControlsSettings() {
+/*	root->resetControlsSettings();
+	keyboardcontrols[KEY_FORWARD] = root->getForwardKey();
+	keyboardcontrols[KEY_BACKWARD] = root->getBackwardKey() ;
+	keyboardcontrols[KEY_RIGHT] = root->getRightKey();
+	keyboardcontrols[KEY_LEFT] = root->getLeftKey();
+	keyboardcontrols[KEY_RUN] = root->getRunKey();
+	keyboardcontrols[KEY_FIRE] = root->getFireKey();
+	keyboardcontrols[KEY_INTERACT] = root->getInteractKey();
+*/}
+
+void OptionsCanvas::applyGraphicsSettings() {
+	root->saveGraphicsSettings(brightness, selectedresolution, selectedwindowmode, selectedquality);
+	root->applyGraphicsSettings();
+	tabSetup();
+	containerSetup();
+}
+
+void OptionsCanvas::resetGraphicsSettings() {
+	root->resetGraphicsSettings();
+	brightness = root->getBrightness();
+	selectedresolution = root->getResolution();
+	selectedwindowmode = root->getWindowMode();
+	selectedquality = root->getQuality();
+}
+
+void OptionsCanvas::applyAudioSettings() {
+	root->saveAudioSettings(effectvalue, musicvalue, isfxenabled, ismusicenabled);
+	root->applyAudioSettings();
+}
+
+void OptionsCanvas::resetAudioSettings() {
+	root->resetAudioSettings();
+	effectvalue = root->getSoundVolume();
+	musicvalue = root->getMusicVolume();
+	isfxenabled = root->getSound();
+	ismusicenabled = root->getMusic();
+}
+
