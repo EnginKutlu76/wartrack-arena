@@ -47,7 +47,6 @@ void gApp::loadAssets() {
 	optionsdb.execute("CREATE TABLE IF NOT EXISTS options (key TEXT PRIMARY KEY, value TEXT)");
 
 	// DEFAULTS
-	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('sensivity','50')");
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('invert','0')");
 
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('language','0')");
@@ -67,7 +66,9 @@ void gApp::loadAssets() {
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('leftkey','0')");
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('runkey','0')");
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('firekey','0')");
-	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('interactkey','0')");
+	//optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('interactkey','0')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('interactkey','87')"); // W
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('sensitivity','50')");
 
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('soundvolume','50')");
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('musicvolume','50')");
@@ -100,15 +101,35 @@ int safeGetInt(std::string data) {
 void gApp::saveGameSettings(int language, int minimap, int showfps, int vsync) {
 	this->language = language;
 	this->minimap = minimap;
-	//this->sensivity = sensivity;
 	this->showfps = showfps;
 	this->vsync = vsync;
 
 	optionsdb.execute("UPDATE options SET value=" + gToStr(language) + " WHERE key='language'");
 	optionsdb.execute("UPDATE options SET value=" + gToStr(minimap) + " WHERE key='minimap'");
-	//optionsdb.execute("UPDATE options SET value=" + gToStr(sensivity) + " WHERE key='sensivity'");
 	optionsdb.execute("UPDATE options SET value=" + gToStr(showfps) + " WHERE key='showfps'");
 	optionsdb.execute("UPDATE options SET value=" + gToStr(vsync) + " WHERE key='vsync'");
+}
+
+void gApp::saveControlsSettings(int forward, int backward, int right, int left, int run, int fire, int interact, int sensitivity) {
+	this->forward = forward;
+	this->backward = backward;
+	this->right = right;
+	this->left = left;
+	this->run = run;
+	this->fire = fire;
+	this->interact = interact;
+	this->sensitivity = sensitivity;
+
+	optionsdb.execute("UPDATE options SET value=" + gToStr(forward) + " WHERE key='forwardkey'");
+	optionsdb.execute("UPDATE options SET value=" + gToStr(backward) + " WHERE key='backwardkey'");
+	optionsdb.execute("UPDATE options SET value=" + gToStr(right) + " WHERE key='rightkey'");
+	optionsdb.execute("UPDATE options SET value=" + gToStr(left) + " WHERE key='leftkey'");
+	optionsdb.execute("UPDATE options SET value=" + gToStr(run) + " WHERE key='runkey'");
+	optionsdb.execute("UPDATE options SET value=" + gToStr(fire) + " WHERE key='firekey'");
+	//optionsdb.execute("UPDATE OPTIONS SET interactkey=" + gToStr(this->interact));
+	optionsdb.execute("UPDATE options SET value=" + gToStr(interact) + " WHERE key='interactkey'");
+	optionsdb.execute("UPDATE options SET value=" + gToStr(sensitivity) + " WHERE key='sensitivity'");
+
 }
 
 void gApp::saveGraphicsSettings(int brightness, int resolution, int windowmode, int quality) {
@@ -140,9 +161,6 @@ void gApp::loadGameSettings() {
 	language = safeGetInt(optionsdb.getSelectData());
 	if(language < 0 || language >= localization.getAvailableLanguages().size()) language = 0;
 	localization.setCurrentLanguage(language);
-
-//	optionsdb.execute("SELECT value FROM options WHERE key='sensivity'");
-//	sensivity = safeGetInt(optionsdb.getSelectData());
 
 	optionsdb.execute("SELECT value FROM options WHERE key='minimap'");
 	minimap = safeGetInt(optionsdb.getSelectData());
@@ -185,24 +203,34 @@ void gApp::loadAudioSettings() {
 void gApp::loadControlsSettings() {
 	optionsdb.execute("SELECT value FROM options WHERE key='forwardkey'");
 	forward = safeGetInt(optionsdb.getSelectData());
+	if(forward == 0) forward = 87;
 
 	optionsdb.execute("SELECT value FROM options WHERE key='backwardkey'");
 	backward = safeGetInt(optionsdb.getSelectData());
+	if(backward == 0) backward = 83;
 
 	optionsdb.execute("SELECT value FROM options WHERE key='rightkey'");
 	right = safeGetInt(optionsdb.getSelectData());
+	if(right == 0) right = 68;
 
 	optionsdb.execute("SELECT value FROM options WHERE key='leftkey'");
 	left = safeGetInt(optionsdb.getSelectData());
+	if(left == 0) left = 65;
 
 	optionsdb.execute("SELECT value FROM options WHERE key='runkey'");
 	run = safeGetInt(optionsdb.getSelectData());
+	if(run == 0) run = 69;
 
 	optionsdb.execute("SELECT value FROM options WHERE key='firekey'");
 	fire = safeGetInt(optionsdb.getSelectData());
+	if(fire == 0) fire = 70;
 
 	optionsdb.execute("SELECT value FROM options WHERE key='interactkey'");
 	interact = safeGetInt(optionsdb.getSelectData());
+	if(interact == 0) interact = 90;
+
+	optionsdb.execute("SELECT value FROM options WHERE key='sensitivity'");
+	sensitivity = safeGetInt(optionsdb.getSelectData());
 }
 
 void gApp::applyGameSettings() {
@@ -279,8 +307,8 @@ int gApp::getVsync() {
 	return vsync;
 }
 
-int gApp::getSensivity() {
-	return sensivity;
+int gApp::getSensitivity() {
+	return sensitivity;
 }
 
 int gApp::getBrightness() {

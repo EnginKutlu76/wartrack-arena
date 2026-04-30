@@ -46,7 +46,7 @@ public:
 	std::string localizeWord(std::string word);
 
 	void saveGameSettings(int language, int minimap, int vsync, int showfps);
-	void saveControlsSettings(int forward, int backward, int right, int left, int run, int fire, int interact);
+	void saveControlsSettings(int forward, int backward, int right, int left, int run, int fire, int interact, int sensitivity);
 	void saveGraphicsSettings(int brightness, int resolution, int windowmode, int quality);
 	void saveAudioSettings(int soundvolume, int musicvolume, int sound, int music);
 
@@ -76,7 +76,7 @@ public:
 	int getShowFps();
 	int getVsync();
 	int getResolution();
-	int getSensivity();
+	int getSensitivity();
 	int getBrightness();
 	int getWindowMode();
 	int getInvertMouse();
@@ -102,7 +102,7 @@ private:
 
 	gImage* background;
 	gDatabase optionsdb;
-	int language, sensivity, brightness, invertmouse, minimap, showfps, vsync, resolution, windowmode, quality, fov, soundvolume,
+	int language, sensitivity, brightness, invertmouse, minimap, showfps, vsync, resolution, windowmode, quality, fov, soundvolume,
 	musicvolume, sound, music, forward, backward, right, left, run, fire, interact;
 	std::string temp;
 	gLocalization localization;

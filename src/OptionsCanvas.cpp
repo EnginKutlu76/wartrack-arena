@@ -24,7 +24,6 @@ void OptionsCanvas::setup() {
 	sectiontitle = "OPTIONS";
 	titlex = (containerw + gametabbuttonw) / 2;
 	titley = tabh;
-	std::cout << "LANG ON START: " << root->getLanguage() << std::endl;
 }
 
 void OptionsCanvas::update() {
@@ -193,6 +192,7 @@ void OptionsCanvas::tabButtonReleased(int x, int y) {
 	else if(applytabbutton.contains(x, y) && applytabbuttonstate == BUTTON_PRESSED) {
 		applytabbuttonstate = BUTTON_PERFORMED;
 		if(activetab == TAB_GAME) applyGameSettings();
+		if(activetab == TAB_CONTROLS) applyControlsSettings();
 		if(activetab == TAB_GRAPHICS) applyGraphicsSettings();
 		if(activetab == TAB_AUDIO) applyAudioSettings();
 	}
@@ -200,6 +200,7 @@ void OptionsCanvas::tabButtonReleased(int x, int y) {
 	else if(resettabbutton.contains(x, y) && resettabbuttonstate == BUTTON_PRESSED) {
 		resettabbuttonstate = BUTTON_PERFORMED;
 		if(activetab == TAB_GAME) resetGameSettings();
+		if(activetab == TAB_CONTROLS) resetControlsSettings();
 		if(activetab == TAB_GRAPHICS) resetGraphicsSettings();
 		if(activetab == TAB_AUDIO) resetAudioSettings();
 	}
@@ -333,7 +334,6 @@ void OptionsCanvas::containerDraw() {
 	else if(activetab == TAB_CONTROLS) controlsSettingsDraw();
 	else if(activetab == TAB_GRAPHICS) graphicsSettingsDraw();
 	else if(activetab == TAB_AUDIO) audioSettingsDraw();
-	setColor(255, 255, 255);
 	setColor(255, 255, 255);
 }
 
@@ -522,6 +522,34 @@ void OptionsCanvas::gameSettingsFocus(int x, int y) {
 }
 
 void OptionsCanvas::controlsSettingsPressed(int x, int y) {
+	if(controlsbutton[KEY_FORWARD].contains(x, y)) {
+		controlsbuttonstate[KEY_FORWARD] = BUTTON_PRESSED;
+	}
+
+	if(controlsbutton[KEY_BACKWARD].contains(x, y)) {
+		controlsbuttonstate[KEY_BACKWARD] = BUTTON_PRESSED;
+	}
+
+	if(controlsbutton[KEY_RIGHT].contains(x, y)) {
+		controlsbuttonstate[KEY_RIGHT] = BUTTON_PRESSED;
+	}
+
+	if(controlsbutton[KEY_LEFT].contains(x, y)) {
+		controlsbuttonstate[KEY_LEFT] = BUTTON_PRESSED;
+	}
+
+	if(controlsbutton[KEY_RUN].contains(x, y)) {
+		controlsbuttonstate[KEY_RUN] = BUTTON_PRESSED;
+	}
+
+	if(controlsbutton[KEY_FIRE].contains(x, y)) {
+		controlsbuttonstate[KEY_FIRE] = BUTTON_PRESSED;
+	}
+
+	if(controlsbutton[KEY_INTERACT].contains(x, y)) {
+		controlsbuttonstate[KEY_INTERACT] = BUTTON_PRESSED;
+	}
+
 	if(sensbackstate != BUTTON_PRESSED) {
 		if(sensbackbuttonhitbox.contains(x, y)) {
 			sensbackstate = BUTTON_PRESSED;
@@ -542,7 +570,50 @@ void OptionsCanvas::controlsSettingsPressed(int x, int y) {
 }
 
 void OptionsCanvas::controlsSettingsReleased(int x, int y) {
-	if(sensbackbuttonhitbox.contains(x, y) && sensbackstate == BUTTON_PRESSED) {
+	if(controlsbutton[KEY_FORWARD].contains(x, y) && controlsbuttonstate[KEY_FORWARD] == BUTTON_PRESSED) {
+		controlsbuttonstate[KEY_FORWARD] = BUTTON_PERFORMED;
+		selectedkey = KEY_FORWARD;
+		ischangingkey = true;
+
+	}
+
+	else if(controlsbutton[KEY_BACKWARD].contains(x, y) && controlsbuttonstate[KEY_BACKWARD] == BUTTON_PRESSED) {
+		controlsbuttonstate[KEY_BACKWARD] = BUTTON_PERFORMED;
+		selectedkey = KEY_BACKWARD;
+		ischangingkey = true;
+	}
+
+	else if(controlsbutton[KEY_RIGHT].contains(x, y) && controlsbuttonstate[KEY_RIGHT] == BUTTON_PRESSED) {
+		controlsbuttonstate[KEY_RIGHT] = BUTTON_PERFORMED;
+		selectedkey = KEY_RIGHT;
+		ischangingkey = true;
+	}
+
+	else if(controlsbutton[KEY_LEFT].contains(x, y) && controlsbuttonstate[KEY_LEFT] == BUTTON_PRESSED) {
+		controlsbuttonstate[KEY_LEFT] = BUTTON_PERFORMED;
+		selectedkey = KEY_LEFT;
+		ischangingkey = true;
+	}
+
+	else if(controlsbutton[KEY_RUN].contains(x, y) && controlsbuttonstate[KEY_RUN] == BUTTON_PRESSED) {
+		controlsbuttonstate[KEY_RUN] = BUTTON_PERFORMED;
+		selectedkey = KEY_RUN;
+		ischangingkey = true;
+	}
+
+	else if(controlsbutton[KEY_FIRE].contains(x, y) && controlsbuttonstate[KEY_FIRE] == BUTTON_PRESSED) {
+		controlsbuttonstate[KEY_FIRE] = BUTTON_PERFORMED;
+		selectedkey = KEY_FIRE;
+		ischangingkey = true;
+	}
+
+	else if(controlsbutton[KEY_INTERACT].contains(x, y) && controlsbuttonstate[KEY_INTERACT] == BUTTON_PRESSED) {
+		controlsbuttonstate[KEY_INTERACT] = BUTTON_PERFORMED;
+		selectedkey = KEY_INTERACT;
+		ischangingkey = true;
+	}
+
+	else if(sensbackbuttonhitbox.contains(x, y) && sensbackstate == BUTTON_PRESSED) {
 		sensbackstate = BUTTON_PERFORMED;
 		if(sensitivity >= 5) sensitivity -= 5;
 		sensnumtext = gToStr(sensitivity);
@@ -552,13 +623,91 @@ void OptionsCanvas::controlsSettingsReleased(int x, int y) {
 		if(sensitivity < 100) sensitivity += 5;
 		sensnumtext = gToStr(sensitivity);
 	}
+
 	else {
+		controlsbuttonstate[KEY_FORWARD] = BUTTON_CANCELED;
+		controlsbuttonstate[KEY_BACKWARD] = BUTTON_CANCELED;
+		controlsbuttonstate[KEY_RIGHT] = BUTTON_CANCELED;
+		controlsbuttonstate[KEY_LEFT] = BUTTON_CANCELED;
+		controlsbuttonstate[KEY_RUN] = BUTTON_CANCELED;
+		controlsbuttonstate[KEY_FIRE] = BUTTON_CANCELED;
+		controlsbuttonstate[KEY_INTERACT] = BUTTON_CANCELED;
 		sensbackstate = BUTTON_CANCELED;
 		sensfwstate = BUTTON_CANCELED;
 	}
 }
 
 void OptionsCanvas::controlsSettingsFocus(int x, int y) {
+	if(controlsbuttonstate[KEY_FORWARD] != BUTTON_PRESSED) {
+		if(controlsbutton[KEY_FORWARD].contains(x, y)) {
+			controlsbuttonstate[KEY_FORWARD] = BUTTON_FOCUS;
+		}
+
+		else {
+			controlsbuttonstate[KEY_FORWARD] = BUTTON_NONE;
+		}
+	}
+
+	if(controlsbuttonstate[KEY_BACKWARD] != BUTTON_PRESSED) {
+		if(controlsbutton[KEY_BACKWARD].contains(x, y)) {
+			controlsbuttonstate[KEY_BACKWARD] = BUTTON_FOCUS;
+		}
+
+		else {
+			controlsbuttonstate[KEY_BACKWARD] = BUTTON_NONE;
+		}
+	}
+
+	if(controlsbuttonstate[KEY_RIGHT] != BUTTON_PRESSED) {
+		if(controlsbutton[KEY_RIGHT].contains(x, y)) {
+			controlsbuttonstate[KEY_RIGHT] = BUTTON_FOCUS;
+		}
+
+		else {
+			controlsbuttonstate[KEY_RIGHT] = BUTTON_NONE;
+		}
+	}
+
+	if(controlsbuttonstate[KEY_LEFT] != BUTTON_PRESSED) {
+		if(controlsbutton[KEY_LEFT].contains(x, y)) {
+			controlsbuttonstate[KEY_LEFT] = BUTTON_FOCUS;
+		}
+
+		else {
+			controlsbuttonstate[KEY_LEFT] = BUTTON_NONE;
+		}
+	}
+
+	if(controlsbuttonstate[KEY_RUN] != BUTTON_PRESSED) {
+		if(controlsbutton[KEY_RUN].contains(x, y)) {
+			controlsbuttonstate[KEY_RUN] = BUTTON_FOCUS;
+		}
+
+		else {
+			controlsbuttonstate[KEY_RUN] = BUTTON_NONE;
+		}
+	}
+
+	if(controlsbuttonstate[KEY_FIRE] != BUTTON_PRESSED) {
+		if(controlsbutton[KEY_FIRE].contains(x, y)) {
+			controlsbuttonstate[KEY_FIRE] = BUTTON_FOCUS;
+		}
+
+		else {
+			controlsbuttonstate[KEY_FIRE] = BUTTON_NONE;
+		}
+	}
+
+	if(controlsbuttonstate[KEY_INTERACT] != BUTTON_PRESSED) {
+		if(controlsbutton[KEY_INTERACT].contains(x, y)) {
+			controlsbuttonstate[KEY_INTERACT] = BUTTON_FOCUS;
+		}
+
+		else {
+			controlsbuttonstate[KEY_INTERACT] = BUTTON_NONE;
+		}
+	}
+
 	if(sensbackstate != BUTTON_PRESSED) {
 		if(sensbackbuttonhitbox.contains(x, y)) {
 			sensbackstate = BUTTON_FOCUS;
@@ -1191,7 +1340,14 @@ void OptionsCanvas::controlButtonsSetup() {
 	keyboardcontrols[KEY_INTERACT] = root->getInteractKey();
 
 	//forward
-	controllabeltext[KEY_FORWARD] = root->localizeWord(root->forwardkey);
+	controllabeltext[KEY_FORWARD] = root->localizeWord("forward");   // "Forward" veya "Ýleri" vs.
+	int key1 = keyboardcontrols[KEY_FORWARD];
+
+	if(key1 == 0) {
+	    controldisplaytext[KEY_FORWARD] = "-";
+	} else {
+	    controldisplaytext[KEY_FORWARD] = gCodepointToStr(key1);
+	}
 	controldisplaytext[KEY_FORWARD] = gCodepointToStr(keyboardcontrols[KEY_FORWARD]);
 	controllabelw[KEY_FORWARD] = root->menutitlefont.getStringWidth(controllabeltext[KEY_FORWARD]);
 	controllabelh[KEY_FORWARD] = root->menutitlefont.getStringHeight(controllabeltext[KEY_FORWARD]);
@@ -1202,10 +1358,17 @@ void OptionsCanvas::controlButtonsSetup() {
 	controlx[KEY_FORWARD] = containerx + (containerw / 2) - (containerw / 10) - controlw[KEY_FORWARD];
 	controly[KEY_FORWARD] = controllabely[KEY_FORWARD];
 
-	controlbutton[KEY_FORWARD].set(controlx[KEY_FORWARD], controly[KEY_FORWARD] - controlh[KEY_FORWARD], controlx[KEY_FORWARD] + controlw[KEY_FORWARD], controly[KEY_FORWARD]);
+	controlsbutton[KEY_FORWARD].set(controlx[KEY_FORWARD], controly[KEY_FORWARD] - controlh[KEY_FORWARD], controlx[KEY_FORWARD] + controlw[KEY_FORWARD], controly[KEY_FORWARD]);
 
 	//backward
 	controllabeltext[KEY_BACKWARD] = root->localizeWord(root->backwardkey);
+	int key2 = keyboardcontrols[KEY_BACKWARD];
+
+	if(key2 == 0) {
+	    controldisplaytext[KEY_BACKWARD] = "-";
+	} else {
+	    controldisplaytext[KEY_BACKWARD] = gCodepointToStr(key2);
+	}
 	controldisplaytext[KEY_BACKWARD] = gCodepointToStr(keyboardcontrols[KEY_BACKWARD]);
 	controllabelw[KEY_BACKWARD] = root->menutitlefont.getStringWidth(controllabeltext[KEY_BACKWARD]);
 	controllabelh[KEY_BACKWARD] = root->menutitlefont.getStringHeight(controllabeltext[KEY_BACKWARD]);
@@ -1216,10 +1379,17 @@ void OptionsCanvas::controlButtonsSetup() {
 	controlx[KEY_BACKWARD] = containerx + (containerw / 2) - (containerw / 10) - controlw[KEY_BACKWARD];
 	controly[KEY_BACKWARD] = controllabely[KEY_BACKWARD];
 
-	controlbutton[KEY_BACKWARD].set(controlx[KEY_BACKWARD], controly[KEY_BACKWARD] - controlh[KEY_BACKWARD], controlx[KEY_BACKWARD] + controlw[KEY_BACKWARD], controly[KEY_BACKWARD]);
+	controlsbutton[KEY_BACKWARD].set(controlx[KEY_BACKWARD], controly[KEY_BACKWARD] - controlh[KEY_BACKWARD], controlx[KEY_BACKWARD] + controlw[KEY_BACKWARD], controly[KEY_BACKWARD]);
 
 	//right
 	controllabeltext[KEY_RIGHT] = root->localizeWord(root->rightkey);
+	int key3 = keyboardcontrols[KEY_RIGHT];
+
+	if(key3 == 0) {
+	    controldisplaytext[KEY_RIGHT] = "-";
+	} else {
+	    controldisplaytext[KEY_RIGHT] = gCodepointToStr(key3);
+	}
 	controldisplaytext[KEY_RIGHT] = gCodepointToStr(keyboardcontrols[KEY_RIGHT]);
 	controllabelw[KEY_RIGHT] = root->menutitlefont.getStringWidth(controllabeltext[KEY_RIGHT]);
 	controllabelh[KEY_RIGHT] = root->menutitlefont.getStringHeight(controllabeltext[KEY_RIGHT]);
@@ -1230,10 +1400,17 @@ void OptionsCanvas::controlButtonsSetup() {
 	controlx[KEY_RIGHT] = containerx + (containerw / 2) - (containerw / 10) - controlw[KEY_RIGHT];
 	controly[KEY_RIGHT] = controllabely[KEY_RIGHT];
 
-	controlbutton[KEY_RIGHT].set(controlx[KEY_RIGHT], controly[KEY_RIGHT] - controlh[KEY_RIGHT], controlx[KEY_RIGHT] + controlw[KEY_RIGHT], controly[KEY_RIGHT]);
+	controlsbutton[KEY_RIGHT].set(controlx[KEY_RIGHT], controly[KEY_RIGHT] - controlh[KEY_RIGHT], controlx[KEY_RIGHT] + controlw[KEY_RIGHT], controly[KEY_RIGHT]);
 
 	//left
 	controllabeltext[KEY_LEFT] = root->localizeWord(root->leftkey);
+	int key4 = keyboardcontrols[KEY_LEFT];
+
+	if(key4 == 0) {
+	    controldisplaytext[KEY_LEFT] = "-";
+	} else {
+	    controldisplaytext[KEY_LEFT] = gCodepointToStr(key4);
+	}
 	controldisplaytext[KEY_LEFT] = gCodepointToStr(keyboardcontrols[KEY_LEFT]);
 	controllabelw[KEY_LEFT] = root->menutitlefont.getStringWidth(controllabeltext[KEY_LEFT]);
 	controllabelh[KEY_LEFT] = root->menutitlefont.getStringHeight(controllabeltext[KEY_LEFT]);
@@ -1244,10 +1421,17 @@ void OptionsCanvas::controlButtonsSetup() {
 	controlx[KEY_LEFT] = containerx + (containerw / 2) - (containerw / 10) - controlw[KEY_LEFT];
 	controly[KEY_LEFT] = controllabely[KEY_LEFT];
 
-	controlbutton[KEY_LEFT].set(controlx[KEY_LEFT], controly[KEY_LEFT] - controlh[KEY_LEFT], controlx[KEY_LEFT] + controlw[KEY_LEFT], controly[KEY_LEFT]);
+	controlsbutton[KEY_LEFT].set(controlx[KEY_LEFT], controly[KEY_LEFT] - controlh[KEY_LEFT], controlx[KEY_LEFT] + controlw[KEY_LEFT], controly[KEY_LEFT]);
 
 	//run
 	controllabeltext[KEY_RUN] = root->localizeWord(root->runkey);
+	int key5 = keyboardcontrols[KEY_RUN];
+
+	if(key5 == 0) {
+	    controldisplaytext[KEY_RUN] = "-";
+	} else {
+	    controldisplaytext[KEY_RUN] = gCodepointToStr(key5);
+	}
 	controldisplaytext[KEY_RUN] = gCodepointToStr(keyboardcontrols[KEY_RUN]);
 	controllabelw[KEY_RUN] = root->menutitlefont.getStringWidth(controllabeltext[KEY_RUN]);
 	controllabelh[KEY_RUN] = root->menutitlefont.getStringHeight(controllabeltext[KEY_RUN]);
@@ -1258,10 +1442,17 @@ void OptionsCanvas::controlButtonsSetup() {
 	controlx[KEY_RUN] = containerx + containerw - (containerw / 10) - controlw[KEY_RUN];
 	controly[KEY_RUN] = controllabely[KEY_RUN];
 
-	controlbutton[KEY_RUN].set(controlx[KEY_RUN], controly[KEY_RUN] - controlh[KEY_RUN], controlx[KEY_RUN] + controlw[KEY_RUN], controly[KEY_RUN]);
+	controlsbutton[KEY_RUN].set(controlx[KEY_RUN], controly[KEY_RUN] - controlh[KEY_RUN], controlx[KEY_RUN] + controlw[KEY_RUN], controly[KEY_RUN]);
 
 	//fire
 	controllabeltext[KEY_FIRE] = root->localizeWord(root->firekey);
+	int key6 = keyboardcontrols[KEY_FIRE];
+
+	if(key6 == 0) {
+	    controldisplaytext[KEY_FIRE] = "-";
+	} else {
+	    controldisplaytext[KEY_FIRE] = gCodepointToStr(key6);
+	}
 	controldisplaytext[KEY_FIRE] = gCodepointToStr(keyboardcontrols[KEY_FIRE]);
 	controllabelw[KEY_FIRE] = root->menutitlefont.getStringWidth(controllabeltext[KEY_FIRE]);
 	controllabelh[KEY_FIRE] = root->menutitlefont.getStringHeight(controllabeltext[KEY_FIRE]);
@@ -1272,11 +1463,17 @@ void OptionsCanvas::controlButtonsSetup() {
 	controlx[KEY_FIRE] = containerx + containerw - (containerw / 10) - controlw[KEY_FIRE];
 	controly[KEY_FIRE] = controllabely[KEY_FIRE];
 
-	controlbutton[KEY_FIRE].set(controlx[KEY_FIRE], controly[KEY_FIRE] - controlh[KEY_FIRE], controlx[KEY_FIRE] + controlw[KEY_FIRE], controly[KEY_FIRE]);
+	controlsbutton[KEY_FIRE].set(controlx[KEY_FIRE], controly[KEY_FIRE] - controlh[KEY_FIRE], controlx[KEY_FIRE] + controlw[KEY_FIRE], controly[KEY_FIRE]);
 
 	//interact
 	controllabeltext[KEY_INTERACT] = root->localizeWord(root->interactkey);
-	controldisplaytext[KEY_INTERACT] = gCodepointToStr(keyboardcontrols[KEY_INTERACT]);
+	int key7 = keyboardcontrols[KEY_INTERACT];
+
+	if(key7 == 0) {
+	    controldisplaytext[KEY_INTERACT] = "-";
+	} else {
+	    controldisplaytext[KEY_INTERACT] = gCodepointToStr(key7);
+	}
 	controllabelw[KEY_INTERACT] = root->menutitlefont.getStringWidth(controllabeltext[KEY_INTERACT]);
 	controllabelh[KEY_INTERACT] = root->menutitlefont.getStringHeight(controllabeltext[KEY_INTERACT]);
 	controllabelx[KEY_INTERACT] = controllabelx[KEY_RUN];
@@ -1286,13 +1483,13 @@ void OptionsCanvas::controlButtonsSetup() {
 	controlx[KEY_INTERACT] = containerx + containerw - (containerw / 10) - controlw[KEY_INTERACT];
 	controly[KEY_INTERACT] = controllabely[KEY_INTERACT];
 
-	controlbutton[KEY_INTERACT].set(controlx[KEY_INTERACT], controly[KEY_INTERACT] - controlh[KEY_INTERACT], controlx[KEY_INTERACT] + controlw[KEY_INTERACT], controly[KEY_INTERACT]);
+	controlsbutton[KEY_INTERACT].set(controlx[KEY_INTERACT], controly[KEY_INTERACT] - controlh[KEY_INTERACT], controlx[KEY_INTERACT] + controlw[KEY_INTERACT], controly[KEY_INTERACT]);
 }
 
 void OptionsCanvas::sensitivitySetup() {
 	sensbackbutton.loadImage("PNG/Icons/ArrowsLeft3.png");
 	sensforwardbutton.loadImage("PNG/Icons/ArrowsRight3.png");
-	sensitivity = 50;
+	sensitivity = root->getSensitivity();
 	sensnumtext = gToStr(sensitivity);
 	senslabeltext = "Sensitivity";
 	senslabelh = root->menutitlefont.getStringHeight("y");
@@ -1314,50 +1511,50 @@ void OptionsCanvas::controlButtonsDraw() {
 	setColor(0, 0, 0);
 	root->menutitlefont.drawText(controllabeltext[KEY_FORWARD], controllabelx[KEY_FORWARD], controllabely[KEY_FORWARD] );
 	setColor(normalcolor);
-	if(controlbuttonstate[KEY_FORWARD] == BUTTON_FOCUS) setColor(focuscolor);
-	if(controlbuttonstate[KEY_FORWARD] == BUTTON_PRESSED || controlbuttonstate[KEY_FORWARD] == BUTTON_PERFORMED) setColor(pressedcolor);
+	if(controlsbuttonstate[KEY_FORWARD] == BUTTON_FOCUS) setColor(focuscolor);
+	if(controlsbuttonstate[KEY_FORWARD] == BUTTON_PRESSED || controlsbuttonstate[KEY_FORWARD] == BUTTON_PERFORMED) setColor(pressedcolor);
 	root->menutitlefont.drawText(controldisplaytext[KEY_FORWARD], controlx[KEY_FORWARD], controly[KEY_FORWARD]);
 
 	setColor(0, 0, 0);
 	root->menutitlefont.drawText(controllabeltext[KEY_BACKWARD], controllabelx[KEY_BACKWARD], controllabely[KEY_BACKWARD] );
 	setColor(normalcolor);
-	if(controlbuttonstate[KEY_BACKWARD] == BUTTON_FOCUS) setColor(focuscolor);
-	if(controlbuttonstate[KEY_BACKWARD] == BUTTON_PRESSED || controlbuttonstate[KEY_BACKWARD] == BUTTON_PERFORMED) setColor(pressedcolor);
+	if(controlsbuttonstate[KEY_BACKWARD] == BUTTON_FOCUS) setColor(focuscolor);
+	if(controlsbuttonstate[KEY_BACKWARD] == BUTTON_PRESSED || controlsbuttonstate[KEY_BACKWARD] == BUTTON_PERFORMED) setColor(pressedcolor);
 	root->menutitlefont.drawText(controldisplaytext[KEY_BACKWARD], controlx[KEY_BACKWARD], controly[KEY_BACKWARD]);
 
 	setColor(0, 0, 0);
 	root->menutitlefont.drawText(controllabeltext[KEY_RIGHT], controllabelx[KEY_RIGHT], controllabely[KEY_RIGHT] );
 	setColor(normalcolor);
-	if(controlbuttonstate[KEY_RIGHT] == BUTTON_FOCUS) setColor(focuscolor);
-	if(controlbuttonstate[KEY_RIGHT] == BUTTON_PRESSED || controlbuttonstate[KEY_RIGHT] == BUTTON_PERFORMED) setColor(pressedcolor);
+	if(controlsbuttonstate[KEY_RIGHT] == BUTTON_FOCUS) setColor(focuscolor);
+	if(controlsbuttonstate[KEY_RIGHT] == BUTTON_PRESSED || controlsbuttonstate[KEY_RIGHT] == BUTTON_PERFORMED) setColor(pressedcolor);
 	root->menutitlefont.drawText(controldisplaytext[KEY_RIGHT], controlx[KEY_RIGHT], controly[KEY_RIGHT]);
 
 	setColor(0, 0, 0);
 	root->menutitlefont.drawText(controllabeltext[KEY_LEFT], controllabelx[KEY_LEFT], controllabely[KEY_LEFT] );
 	setColor(normalcolor);
-	if(controlbuttonstate[KEY_LEFT] == BUTTON_FOCUS) setColor(focuscolor);
-	if(controlbuttonstate[KEY_LEFT] == BUTTON_PRESSED || controlbuttonstate[KEY_LEFT] == BUTTON_PERFORMED) setColor(pressedcolor);
+	if(controlsbuttonstate[KEY_LEFT] == BUTTON_FOCUS) setColor(focuscolor);
+	if(controlsbuttonstate[KEY_LEFT] == BUTTON_PRESSED || controlsbuttonstate[KEY_LEFT] == BUTTON_PERFORMED) setColor(pressedcolor);
 	root->menutitlefont.drawText(controldisplaytext[KEY_LEFT], controlx[KEY_LEFT], controly[KEY_LEFT]);
 
 	setColor(0, 0, 0);
 	root->menutitlefont.drawText(controllabeltext[KEY_RUN], controllabelx[KEY_RUN], controllabely[KEY_RUN] );
 	setColor(normalcolor);
-	if(controlbuttonstate[KEY_RUN] == BUTTON_FOCUS) setColor(focuscolor);
-	if(controlbuttonstate[KEY_RUN] == BUTTON_PRESSED || controlbuttonstate[KEY_RUN] == BUTTON_PERFORMED) setColor(pressedcolor);
+	if(controlsbuttonstate[KEY_RUN] == BUTTON_FOCUS) setColor(focuscolor);
+	if(controlsbuttonstate[KEY_RUN] == BUTTON_PRESSED || controlsbuttonstate[KEY_RUN] == BUTTON_PERFORMED) setColor(pressedcolor);
 	root->menutitlefont.drawText(controldisplaytext[KEY_RUN], controlx[KEY_RUN], controly[KEY_RUN]);
 
 	setColor(0, 0, 0);
 	root->menutitlefont.drawText(controllabeltext[KEY_FIRE], controllabelx[KEY_FIRE], controllabely[KEY_FIRE] );
 	setColor(normalcolor);
-	if(controlbuttonstate[KEY_FIRE] == BUTTON_FOCUS) setColor(focuscolor);
-	if(controlbuttonstate[KEY_FIRE] == BUTTON_PRESSED || controlbuttonstate[KEY_FIRE] == BUTTON_PERFORMED) setColor(pressedcolor);
+	if(controlsbuttonstate[KEY_FIRE] == BUTTON_FOCUS) setColor(focuscolor);
+	if(controlsbuttonstate[KEY_FIRE] == BUTTON_PRESSED || controlsbuttonstate[KEY_FIRE] == BUTTON_PERFORMED) setColor(pressedcolor);
 	root->menutitlefont.drawText(controldisplaytext[KEY_FIRE], controlx[KEY_FIRE], controly[KEY_FIRE]);
 
 	setColor(0, 0, 0);
 	root->menutitlefont.drawText(controllabeltext[KEY_INTERACT], controllabelx[KEY_INTERACT], controllabely[KEY_INTERACT] );
 	setColor(normalcolor);
-	if(controlbuttonstate[KEY_INTERACT] == BUTTON_FOCUS) setColor(focuscolor);
-	if(controlbuttonstate[KEY_INTERACT] == BUTTON_PRESSED || controlbuttonstate[KEY_INTERACT] == BUTTON_PERFORMED) setColor(pressedcolor);
+	if(controlsbuttonstate[KEY_INTERACT] == BUTTON_FOCUS) setColor(focuscolor);
+	if(controlsbuttonstate[KEY_INTERACT] == BUTTON_PRESSED || controlsbuttonstate[KEY_INTERACT] == BUTTON_PERFORMED) setColor(pressedcolor);
 	root->menutitlefont.drawText(controldisplaytext[KEY_INTERACT], controlx[KEY_INTERACT], controly[KEY_INTERACT]);
 }
 
@@ -1684,13 +1881,13 @@ void OptionsCanvas::resetGameSettings() {
 }
 
 void OptionsCanvas::applyControlsSettings() {
-//	root->saveControlsSettings(keyboardcontrols[KEY_FORWARD], keyboardcontrols[KEY_BACKWARD], keyboardcontrols[KEY_RIGHT],
-//			keyboardcontrols[KEY_LEFT], keyboardcontrols[KEY_RUN], keyboardcontrols[KEY_FIRE], keyboardcontrols[KEY_INTERACT]);
-//	root->applyControlsSettings();
+	root->saveControlsSettings(keyboardcontrols[KEY_FORWARD], keyboardcontrols[KEY_BACKWARD], keyboardcontrols[KEY_RIGHT],
+	keyboardcontrols[KEY_LEFT], keyboardcontrols[KEY_RUN], keyboardcontrols[KEY_FIRE], keyboardcontrols[KEY_INTERACT], sensitivity);
+	root->applyControlsSettings();
 }
 
 void OptionsCanvas::resetControlsSettings() {
-/*	root->resetControlsSettings();
+	root->resetControlsSettings();
 	keyboardcontrols[KEY_FORWARD] = root->getForwardKey();
 	keyboardcontrols[KEY_BACKWARD] = root->getBackwardKey() ;
 	keyboardcontrols[KEY_RIGHT] = root->getRightKey();
@@ -1698,7 +1895,8 @@ void OptionsCanvas::resetControlsSettings() {
 	keyboardcontrols[KEY_RUN] = root->getRunKey();
 	keyboardcontrols[KEY_FIRE] = root->getFireKey();
 	keyboardcontrols[KEY_INTERACT] = root->getInteractKey();
-*/}
+	sensitivity = root->getSensitivity();
+}
 
 void OptionsCanvas::applyGraphicsSettings() {
 	root->saveGraphicsSettings(brightness, selectedresolution, selectedwindowmode, selectedquality);

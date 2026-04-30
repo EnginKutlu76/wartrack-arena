@@ -208,9 +208,9 @@ private:
 	int selectedkey;
 	int keyboardcontrols[keynum];
 
-	gRect controlbutton[keynum];
+	gRect controlsbutton[keynum];
 	std::string controllabeltext[keynum], controldisplaytext[keynum];
-	int controlbuttonstate[keynum];
+	int controlsbuttonstate[keynum];
 	int controllabelx[keynum], controllabely[keynum], controllabelw[keynum], controllabelh[keynum];
 	int controlx[keynum], controly[keynum], controlw[keynum], controlh[keynum];
 
