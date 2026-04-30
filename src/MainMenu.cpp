@@ -116,8 +116,8 @@ void mainMenu::logoSetup() {
 
 	glistlogow = glistlogo.getWidth() / glistlogosizer;
 	glistlogoh = glistlogo.getHeight() / glistlogosizer;
-	glistlogox = (getWidth() - glistlogow) - padding;
-	glistlogoy = (getHeight() - glistlogoh) - padding;
+	glistlogox = 1300;
+	glistlogoy = 840;
 
 }
 
@@ -125,8 +125,8 @@ void mainMenu::startSetup() {
 	starttext = root->localizeWord(root->startkey);
 	startw = root->menutitlefont.getStringWidth(starttext);
 	starth = root->menutitlefont.getStringHeight(starttext);
-	startx = getWidth() / 4;
-	starty = getHeight();
+	startx = 200;
+	starty = 800;
 	starthitbox.set(startx, starty - starth, startx + startw, starty);
 	startstate = BUTTON_NONE;
 }

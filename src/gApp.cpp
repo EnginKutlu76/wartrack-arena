@@ -80,8 +80,13 @@ void gApp::loadAssets() {
 	gDatabase locdb;
 	locdb.loadDatabase("localization.db");
 	locdb.execute("CREATE TABLE IF NOT EXISTS WORDS (Key TEXT PRIMARY KEY, en TEXT, tr TEXT)");
-	locdb.execute("INSERT OR IGNORE INTO WORDS VALUES ('play','Play','Oyna')");
-	locdb.execute("INSERT OR IGNORE INTO WORDS VALUES ('exit','Exit','Çýkýþ')");
+	locdb.execute("INSERT OR IGNORE INTO WORDS VALUES ('start','Start','Basla')");
+	locdb.execute("INSERT OR IGNORE INTO WORDS VALUES ('offline','Offline','Cevrimdisi')");
+	locdb.execute("INSERT OR IGNORE INTO WORDS VALUES ('store','Store','Magaza')");
+	locdb.execute("INSERT OR IGNORE INTO WORDS VALUES ('options','Options','Ayarlar')");
+	locdb.execute("INSERT OR IGNORE INTO WORDS VALUES ('help','Help','Yardim')");
+	locdb.execute("INSERT OR IGNORE INTO WORDS VALUES ('credits','Credits','Emegi Gecenler')");
+	locdb.execute("INSERT OR IGNORE INTO WORDS VALUES ('exit','Exit','aaa')");
 	locdb.close();
 
 	localization.loadDatabase("localization.db", "WORDS");
