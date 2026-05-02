@@ -177,17 +177,18 @@ void gCanvas::draw() {
 	drawBullets();
 	drawCharacter();
 	setColor(255, 255, 255);
-	drawMinimap();
+	if(root->getMinimap() == 1) drawMinimap();
 	//drawEnemies();
 	namefont.drawText("Name", cx + cwh, cy + chh);
 	//namefont.drawText(gToStr(bulletamt), gbbbx, gbbby);
 	drawGui();
 	drawDialogues();
 
+	if(root->getShowFps() == 1) {
 	char fpsBuffer[32];
 	sprintf(fpsBuffer, "%d FPS", root->getFramerate());
 	root->menutitlefont.drawText(fpsBuffer, fpscounterx, fpscountery);
-
+	}
 }
 
 void gCanvas::moveCharacter() {
