@@ -1610,13 +1610,13 @@ void OptionsCanvas::qualitySetup() {
 	qualabelx = containerx + containerw / 10;
 	qualabely = (containery + containerh / 15 + qualabelh) + 100;
 	qualitiesw = root->menutitlefont.getStringWidth(qualities[selectedquality]);
-	qualitiesx = qualabelx + qualitiesw * 2;
+	qualitiesx = qualabelx + qualitiesw * 2.5;
 	qualitiesh = root->menutitlefont.getStringHeight(qualities[selectedquality]);
 	quabackbuttonw = quabackbutton.getWidth() * 0.4;
 	quabackbuttonh = quabackbutton.getHeight() * 0.4;
 	quabackbuttonx = qualitiesx - quabackbuttonw;
 	quabackbuttony = qualabely - (qualitiesh / 2) - (quabackbuttonh / 2) + 3;
-	quaforwardbuttonx = qualitiesx + qualitiesw + (quabackbuttonw / 2);
+	quaforwardbuttonx = qualitiesx + qualitiesw + quabackbuttonw + 25;
 	quabackbuttonhitbox.set(quabackbuttonx, quabackbuttony, quabackbuttonx + quabackbuttonw, quabackbuttony + quabackbuttonh);
 	quaforwardbuttonhitbox.set(quaforwardbuttonx, quabackbuttony, quaforwardbuttonx + quabackbuttonw, quabackbuttony + quabackbuttonh);
 }
