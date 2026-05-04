@@ -137,13 +137,12 @@ void gApp::saveControlsSettings(int forward, int backward, int right, int left, 
 
 }
 
-void gApp::saveGraphicsSettings(int brightness, int resolution, int windowmode, int quality) {
-	this->brightness = brightness;
+void gApp::saveGraphicsSettings(int resolution, int windowmode, int quality) {
 	this->resolution = resolution;
 	this->windowmode = windowmode;
 	this->quality = quality;
 
-	optionsdb.execute("UPDATE options SET value=" + gToStr(brightness) + " WHERE key='brightness'");
+	//optionsdb.execute("UPDATE options SET value=" + gToStr(brightness) + " WHERE key='brightness'");
 	optionsdb.execute("UPDATE options SET value=" + gToStr(resolution) + " WHERE key='resolution'");
 	optionsdb.execute("UPDATE options SET value=" + gToStr(windowmode) + " WHERE key='windowmode'");
 	optionsdb.execute("UPDATE options SET value=" + gToStr(quality) + " WHERE key='quality'");
@@ -178,8 +177,7 @@ void gApp::loadGameSettings() {
 }
 
 void gApp::loadGraphicsSettings() {
-	optionsdb.execute("SELECT value FROM options WHERE key='brightness'");
-	brightness = safeGetInt(optionsdb.getSelectData());
+	//brightness = safeGetInt(optionsdb.getSelectData());
 
 	optionsdb.execute("SELECT value FROM options WHERE key='resolution'");
 	resolution = safeGetInt(optionsdb.getSelectData());
@@ -314,10 +312,6 @@ int gApp::getVsync() {
 
 int gApp::getSensitivity() {
 	return sensitivity;
-}
-
-int gApp::getBrightness() {
-	return brightness;
 }
 
 int gApp::getInvertMouse() {

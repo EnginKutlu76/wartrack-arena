@@ -430,6 +430,8 @@ void gCanvas::charPressed(unsigned int codepoint) {
 }
 
 void gCanvas::mouseMoved(int x, int y) {
+	//applySensitivity();
+
     canglegun = (int)(
         gRadToDeg(
             std::atan2(
@@ -509,5 +511,10 @@ void gCanvas::showNotify() {
 
 void gCanvas::hideNotify() {
 
+}
+
+void gCanvas::applySensitivity() {
+	if(root->getSensitivity() > 0)	applysensivity = (root->getSensitivity() * 0.25);
+	else applysensivity = 0.012;
 }
 

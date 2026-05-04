@@ -313,7 +313,6 @@ void OptionsCanvas::controlsSettingsSetup() {
 }
 
 void OptionsCanvas::graphicsSettingsSetup() {
-	brightnessSetup();
 	qualitySetup();
 	windowmodeSetup();
 	resolutionSetup();
@@ -351,7 +350,6 @@ void OptionsCanvas::controlsSettingsDraw() {
 
 
 void OptionsCanvas::graphicsSettingsDraw() {
-	brightnessDraw();
 	qualityDraw();
 	windowmodeDraw();
 	resolutionDraw();
@@ -730,24 +728,6 @@ void OptionsCanvas::controlsSettingsFocus(int x, int y) {
 }
 
 void OptionsCanvas::graphicsSettingsPressed(int x, int y) {
-	if(brightbackstate != BUTTON_PRESSED) {
-		if(brightbackbuttonhitbox.contains(x, y)) {
-			brightbackstate = BUTTON_PRESSED;
-		}
-		else {
-			brightbackstate = BUTTON_NONE;
-		}
-	}
-
-	if(brightfwstate != BUTTON_PRESSED) {
-		if(brightforwardbuttonhitbox.contains(x, y)) {
-			brightfwstate = BUTTON_PRESSED;
-		}
-		else {
-			brightfwstate = BUTTON_NONE;
-		}
-	}
-
 	if(quabackbuttonhitbox.contains(x, y)) {
 		quabackstate = BUTTON_PRESSED;
 	}
@@ -774,17 +754,7 @@ void OptionsCanvas::graphicsSettingsPressed(int x, int y) {
 }
 
 void OptionsCanvas::graphicsSettingsReleased(int x, int y) {
-	if(brightbackbuttonhitbox.contains(x, y) && brightbackstate == BUTTON_PRESSED) {
-		brightbackstate = BUTTON_PERFORMED;
-		if(brightness >= 5) brightness -= 5;
-		brightnumtext = gToStr(brightness);
-	}
-	else if(brightforwardbuttonhitbox.contains(x, y) && brightfwstate == BUTTON_PRESSED) {
-		brightfwstate = BUTTON_PERFORMED;
-		if(brightness < 100) brightness += 5;
-		brightnumtext = gToStr(brightness);
-	}
-	else if(quabackbuttonhitbox.contains(x, y) && quabackstate == BUTTON_PRESSED) {
+	if(quabackbuttonhitbox.contains(x, y) && quabackstate == BUTTON_PRESSED) {
 		quabackstate = BUTTON_PERFORMED;
 		selectedquality++;
 		if(selectedquality >= qualitynum) selectedquality = 0;
@@ -818,8 +788,6 @@ void OptionsCanvas::graphicsSettingsReleased(int x, int y) {
 		if(selectedresolution >= resolutionnum) selectedresolution = 0;
 	}
 	else {
-		brightbackstate = BUTTON_CANCELED;
-		brightfwstate = BUTTON_CANCELED;
 		quabackstate = BUTTON_CANCELED;
 		quafwstate = BUTTON_CANCELED;
 		winbackstate = BUTTON_CANCELED;
@@ -831,26 +799,6 @@ void OptionsCanvas::graphicsSettingsReleased(int x, int y) {
 }
 
 void OptionsCanvas::graphicsSettingsFocus(int x, int y) {
-	if(brightbackstate != BUTTON_PRESSED) {
-		if(brightbackbuttonhitbox.contains(x, y)) {
-			brightbackstate = BUTTON_FOCUS;
-		}
-
-		else {
-			brightbackstate = BUTTON_NONE;
-		}
-	}
-
-	if(brightfwstate != BUTTON_PRESSED) {
-		if(brightforwardbuttonhitbox.contains(x, y)) {
-			brightfwstate = BUTTON_FOCUS;
-		}
-
-		else {
-			brightfwstate = BUTTON_NONE;
-		}
-	}
-
 	if(quabackstate != BUTTON_PRESSED) {
 		if(quabackbuttonhitbox.contains(x, y)) {
 			quabackstate = BUTTON_FOCUS;
@@ -1575,28 +1523,6 @@ void OptionsCanvas::sensitivityDraw() {
 	root->menutitlefont.drawText(sensnumtext, sensx, senslabely + 300);
 }
 
-void OptionsCanvas::brightnessSetup() {
-	brightbackbutton.loadImage("PNG/Icons/ArrowsLeft3.png");
-	brightforwardbutton.loadImage("PNG/Icons/ArrowsRight3.png");
-
-	brightness = root->getBrightness();
-	brightnumtext = gToStr(brightness);
-	brightlabeltext = "Brightness";
-	brightlabelh = root->menutitlefont.getStringHeight("y");
-	brightlabelx = containerx + containerw / 10;
-	brightlabely = containery + containerh / 15 + brightlabelh;
-	brightw = root->menutitlefont.getStringWidth(brightnumtext);
-	brightx = brightlabelx + root->menutitlefont.getStringWidth(brightlabeltext) + 40;
-	brighth = root->menutitlefont.getStringHeight(brightnumtext);
-	brightbackbuttonw = brightbackbutton.getWidth() * 0.4;
-	brightbackbuttonh = brightbackbutton.getHeight() * 0.4;
-	brightbackbuttonx = brightx - brightbackbuttonw - 10;
-	brightbackbuttony = brightlabely - (brighth / 2) - (brightbackbuttonh / 2) +  3;
-	brightforwardbuttonx = brightx + brightw + 10;
-	brightbackbuttonhitbox.set(brightbackbuttonx, brightbackbuttony, brightbackbuttonx + brightbackbuttonw, brightbackbuttony + brightbackbuttonh);
-	brightforwardbuttonhitbox.set(brightforwardbuttonx, brightbackbuttony, brightforwardbuttonx + brightbackbuttonw, brightbackbuttony + brightbackbuttonh);
-}
-
 void OptionsCanvas::qualitySetup() {
 	qualitylabeltext = "Quality: ";
 	qualities[0] = "High";
@@ -1667,23 +1593,6 @@ void OptionsCanvas::resolutionSetup() {
 	resforwardbuttonx = resolutionsx + resolutionsw + (resbackbuttonw / 2);
 	resbackbuttonhitbox.set(resbackbuttonx, resbackbuttony, resbackbuttonx + resbackbuttonw, resbackbuttony + resbackbuttonh);
 	resforwardbuttonhitbox.set(resforwardbuttonx, resbackbuttony, resforwardbuttonx + resbackbuttonw, resbackbuttony + resbackbuttonh);
-}
-
-void OptionsCanvas::brightnessDraw() {
-	setColor(0, 0, 0);
-	root->menutitlefont.drawText(brightlabeltext, brightlabelx, brightlabely);
-
-	if(brightbackstate == BUTTON_FOCUS) setColor(focuscolor);
-	if(brightbackstate == BUTTON_PRESSED || brightbackstate == BUTTON_PERFORMED) setColor(pressedcolor);
-	brightbackbutton.draw(brightbackbuttonx, brightbackbuttony, brightbackbuttonw, brightbackbuttonh);
-
-	setColor(0, 0, 0);
-	if(brightfwstate == BUTTON_FOCUS) setColor(focuscolor);
-	if(brightfwstate == BUTTON_PRESSED || brightfwstate == BUTTON_PERFORMED) setColor(pressedcolor);
-	brightforwardbutton.draw(brightforwardbuttonx, brightbackbuttony, brightbackbuttonw, brightbackbuttonh);
-
-	setColor(0, 0, 0);
-	root->menutitlefont.drawText(brightnumtext, brightx, brightlabely);
 }
 
 void OptionsCanvas::qualityDraw() {
@@ -1899,7 +1808,7 @@ void OptionsCanvas::resetControlsSettings() {
 }
 
 void OptionsCanvas::applyGraphicsSettings() {
-	root->saveGraphicsSettings(brightness, selectedresolution, selectedwindowmode, selectedquality);
+	root->saveGraphicsSettings(selectedresolution, selectedwindowmode, selectedquality);
 	root->applyGraphicsSettings();
 	tabSetup();
 	containerSetup();
@@ -1907,7 +1816,6 @@ void OptionsCanvas::applyGraphicsSettings() {
 
 void OptionsCanvas::resetGraphicsSettings() {
 	root->resetGraphicsSettings();
-	brightness = root->getBrightness();
 	selectedresolution = root->getResolution();
 	selectedwindowmode = root->getWindowMode();
 	selectedquality = root->getQuality();

@@ -91,7 +91,6 @@ private:
 	void graphicsTabButtonSetup();
 	void graphicsTabButtonDraw();
 	void graphicsSettingsSetup();
-	void brightnessSetup();
 	void resolutionSetup();
 	void windowmodeSetup();
 	void qualitySetup();
@@ -99,7 +98,6 @@ private:
 	void graphicsSettingsReleased(int x, int y);
 	void graphicsSettingsFocus(int x, int y);
 	void graphicsSettingsDraw();
-	void brightnessDraw();
 	void resolutionDraw();
 	void windowmodeDraw();
 	void qualityDraw();
@@ -266,15 +264,6 @@ private:
 	int sensbackstate, sensfwstate;
 
 	//graphics settings
-	gImage brightbackbutton, brightforwardbutton;
-	gRect brightbackbuttonhitbox, brightforwardbuttonhitbox;
-	std::string brightlabeltext, brightnumtext;
-	int brightness;
-	int brightlabelx, brightlabely, brightlabelw, brightlabelh;
-	int brightx, brightw, brighth	;
-	int brightbackbuttonx, brightbackbuttony, brightbackbuttonw, brightbackbuttonh, brightforwardbuttonx;
-	int brightbackstate, brightfwstate;
-
 	gImage resbackbutton, resforwardbutton;
 	gRect resbackbuttonhitbox, resforwardbuttonhitbox;
 	std::string resolutionlabeltext;

@@ -62,6 +62,7 @@ private:
 	void drawEnemies();
 	void drawGui();
 	void drawDialogues();
+	void applySensitivity();
 
 	gApp* root;
 
@@ -167,6 +168,7 @@ private:
 
 	float fpscounterx, fpscountery;
 
+	float applysensivity;
 };
 
 #endif /* GCANVAS_H_ */

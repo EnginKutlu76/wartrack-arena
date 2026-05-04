@@ -47,7 +47,7 @@ public:
 
 	void saveGameSettings(int language, int minimap, int vsync, int showfps);
 	void saveControlsSettings(int forward, int backward, int right, int left, int run, int fire, int interact, int sensitivity);
-	void saveGraphicsSettings(int brightness, int resolution, int windowmode, int quality);
+	void saveGraphicsSettings(int resolution, int windowmode, int quality);
 	void saveAudioSettings(int soundvolume, int musicvolume, int sound, int music);
 
 	void loadGameSettings();
@@ -77,7 +77,6 @@ public:
 	int getVsync();
 	int getResolution();
 	int getSensitivity();
-	int getBrightness();
 	int getWindowMode();
 	int getInvertMouse();
 	int getQuality();
@@ -102,7 +101,7 @@ private:
 
 	gImage* background;
 	gDatabase optionsdb;
-	int language, sensitivity, brightness, invertmouse, minimap, showfps, vsync, resolution, windowmode, quality, fov, soundvolume,
+	int language, sensitivity, invertmouse, minimap, showfps, vsync, resolution, windowmode, quality, fov, soundvolume,
 	musicvolume, sound, music, forward, backward, right, left, run, fire, interact;
 	std::string temp;
 	gLocalization localization;
