@@ -183,6 +183,7 @@ void gApp::loadGraphicsSettings() {
 
 	optionsdb.execute("SELECT value FROM options WHERE key='windowmode'");
 	windowmode = safeGetInt(optionsdb.getSelectData());
+	if(windowmode == NULL) windowmode = 1;
 
 //	optionsdb.execute("SELECT value FROM options WHERE key='quality'");
 //	quality = safeGetInt(optionsdb.getSelectData());

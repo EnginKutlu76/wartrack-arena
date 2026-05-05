@@ -64,6 +64,13 @@ private:
 	void drawDialogues();
 	void applySensitivity();
 
+	void keyControls();
+	int fkey;
+	int backkey;
+	int leftkey;
+	int rightkey;
+	int runkey;
+
 	gApp* root;
 
 	int gamestate;

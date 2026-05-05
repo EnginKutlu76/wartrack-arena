@@ -152,6 +152,7 @@ void gCanvas::setup() {
 	fpscounterx = minimapx + 20.0f;
 	fpscountery = minimapy + minimaph + 30.0f;
 
+	keyControls();
 }
 
 void gCanvas::update() {
@@ -378,52 +379,64 @@ void gCanvas::drawDialogues() {
 void gCanvas::keyPressed(int key) {
 //	gLogi("gCanvas") << "keyPressed:" << key;
 	int pressedkey = KEY_NONE;
+
+	if(key == fkey)pressedkey = KEY_W;
+
+	if(key == backkey)pressedkey = KEY_S;
+
+	if(key == leftkey)pressedkey = KEY_A;
+
+	if(key == rightkey)pressedkey = KEY_D;
+
+	if(key == runkey){
+		gLogi("asd") << "asd";
+	}
+
 	switch(key) {
-		case G_KEY_W:
-			pressedkey = KEY_W;
-			break;
-		case G_KEY_S:
-			pressedkey = KEY_S;
-			break;
-		case G_KEY_D:
-			pressedkey = KEY_D;
-			break;
-		case G_KEY_A:
-			pressedkey = KEY_A;
-			break;
 		case G_KEY_ESC:
 			pressedkey = KEY_ESC;
+			root->gamestate = root->GAME_PAUSE;
 			break;
 		default:
 			break;
 	}
+
+	if(key == G_KEY_ESC) {
+		if(root->gamestate == root->GAME_PAUSE) {
+			root->gamestate = root->GAME_PLAY;
+//			root->getAppManager()->setCursorMode(CURSORMODE_DISABLED);
+		}
+		else if(root->gamestate == root->GAME_OPTION) {
+			root->gamestate = root->GAME_PAUSE;
+		}
+	}
+
 	keystate |= pressedkey;
 }
 
 void gCanvas::keyReleased(int key) {
 //	gLogi("gCanvas") << "keyReleased:" << key;
-	int pressedkey;
-	switch(key) {
-		case G_KEY_W:
-			pressedkey = KEY_W;
-			break;
-		case G_KEY_S:
-			pressedkey = KEY_S;
-			break;
-		case G_KEY_D:
-			pressedkey = KEY_D;
-			break;
-		case G_KEY_A:
-			pressedkey = KEY_A;
-			break;
-		case G_KEY_ESC:
-			pressedkey = KEY_ESC;
-			break;
-		default:
-			break;
+	int pressedkey = KEY_NONE;
+
+	if(key == fkey) pressedkey = KEY_W;
+
+	if(key == backkey) pressedkey = KEY_S;
+
+	if(key == leftkey)pressedkey = KEY_A;
+
+	if(key == rightkey)pressedkey = KEY_D;
+
+	if(key == runkey){
+			gLogi("bbb") << "aaa";
 	}
+
+	switch(key) {
+	case G_KEY_R:
+		break; }
+
 	keystate &= ~pressedkey;
 }
+
 
 void gCanvas::charPressed(unsigned int codepoint) {
 //	gLogi("gCanvas") << "charPressed:" << gCodepointToStr(codepoint);
@@ -518,3 +531,10 @@ void gCanvas::applySensitivity() {
 	else applysensivity = 0.012;
 }
 
+void gCanvas::keyControls() {
+	fkey = root->getForwardKey();
+	backkey = root->getBackwardKey();
+	rightkey = root->getRightKey();
+	leftkey = root->getLeftKey();
+	runkey = root->getRunKey();
+}
