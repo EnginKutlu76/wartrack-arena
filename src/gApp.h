@@ -33,8 +33,8 @@ public:
 	int gamestate;
 	int currentbackground;
 
-	std::string titlekey = "WarTrack: Arena", languagekey = "language", sensivitykey = "sensivity", brightnesskey = "brightness", invertmousekey = "invertmouse",
-			showfpskey = "showfps", resolutionkey = "resolution", windowmodekey = "windowmode", qualitykey = "quality", fovkey = "fov",
+	std::string titlekey = "WarTrack: Arena", languagekey = "language", sensivitykey = "sensivity", invertmousekey = "invertmouse",
+			showfpskey = "showfps", resolutionkey = "resolution", windowmodekey = "windowmode", fovkey = "fov",
 			vsynckey = "vsync", soundvolumekey = "soundvolume", musicvolumekey = "musicvolume", soundkey = "sound", musickey = "music",
 			forwardkey = "forward", backwardkey = "backward", rightkey = "right", leftkey = "left", runkey = "run", firekey = "fire", interactkey = "interact",
 			offlinekey = "offline", startkey = "start", shopkey = "store", optionskey = "options", creditskey = "credits", exitkey = "exit", tankkey = "tank",
@@ -47,7 +47,7 @@ public:
 
 	void saveGameSettings(int language, int minimap, int vsync, int showfps);
 	void saveControlsSettings(int forward, int backward, int right, int left, int run, int fire, int interact, int sensitivity);
-	void saveGraphicsSettings(int resolution, int windowmode, int quality);
+	void saveGraphicsSettings(int resolution, int windowmode);
 	void saveAudioSettings(int soundvolume, int musicvolume, int sound, int music);
 
 	void loadGameSettings();
@@ -79,7 +79,6 @@ public:
 	int getSensitivity();
 	int getWindowMode();
 	int getInvertMouse();
-	int getQuality();
 	int getFov();
 	int getSoundVolume();
 	int getMusicVolume();
@@ -101,7 +100,7 @@ private:
 
 	gImage* background;
 	gDatabase optionsdb;
-	int language, sensitivity, invertmouse, minimap, showfps, vsync, resolution, windowmode, quality, fov, soundvolume,
+	int language, sensitivity, invertmouse, minimap, showfps, vsync, resolution, windowmode, fov, soundvolume,
 	musicvolume, sound, music, forward, backward, right, left, run, fire, interact;
 	std::string temp;
 	gLocalization localization;

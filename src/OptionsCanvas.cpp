@@ -313,7 +313,6 @@ void OptionsCanvas::controlsSettingsSetup() {
 }
 
 void OptionsCanvas::graphicsSettingsSetup() {
-	qualitySetup();
 	windowmodeSetup();
 	resolutionSetup();
 }
@@ -350,7 +349,6 @@ void OptionsCanvas::controlsSettingsDraw() {
 
 
 void OptionsCanvas::graphicsSettingsDraw() {
-	qualityDraw();
 	windowmodeDraw();
 	resolutionDraw();
 }
@@ -728,14 +726,6 @@ void OptionsCanvas::controlsSettingsFocus(int x, int y) {
 }
 
 void OptionsCanvas::graphicsSettingsPressed(int x, int y) {
-	if(quabackbuttonhitbox.contains(x, y)) {
-		quabackstate = BUTTON_PRESSED;
-	}
-
-	if(quaforwardbuttonhitbox.contains(x, y)) {
-		quafwstate = BUTTON_PRESSED;
-	}
-
 	if(winbackbuttonhitbox.contains(x, y)) {
 		winbackstate = BUTTON_PRESSED;
 	}
@@ -754,18 +744,7 @@ void OptionsCanvas::graphicsSettingsPressed(int x, int y) {
 }
 
 void OptionsCanvas::graphicsSettingsReleased(int x, int y) {
-	if(quabackbuttonhitbox.contains(x, y) && quabackstate == BUTTON_PRESSED) {
-		quabackstate = BUTTON_PERFORMED;
-		selectedquality++;
-		if(selectedquality >= qualitynum) selectedquality = 0;
-	}
-
-	else if(quaforwardbuttonhitbox.contains(x, y) && quafwstate == BUTTON_PRESSED) {
-		quafwstate = BUTTON_PERFORMED;
-		selectedquality++;
-		if(selectedquality >= qualitynum) selectedquality = 0;
-	}
-	else if(winbackbuttonhitbox.contains(x, y) && winbackstate == BUTTON_PRESSED) {
+	if(winbackbuttonhitbox.contains(x, y) && winbackstate == BUTTON_PRESSED) {
 		winbackstate = BUTTON_PERFORMED;
 		selectedwindowmode++;
 		if(selectedwindowmode >= windowmodenum) selectedwindowmode = 0;
@@ -788,8 +767,6 @@ void OptionsCanvas::graphicsSettingsReleased(int x, int y) {
 		if(selectedresolution >= resolutionnum) selectedresolution = 0;
 	}
 	else {
-		quabackstate = BUTTON_CANCELED;
-		quafwstate = BUTTON_CANCELED;
 		winbackstate = BUTTON_CANCELED;
 		winfwstate = BUTTON_CANCELED;
 		resbackstate = BUTTON_CANCELED;
@@ -799,26 +776,6 @@ void OptionsCanvas::graphicsSettingsReleased(int x, int y) {
 }
 
 void OptionsCanvas::graphicsSettingsFocus(int x, int y) {
-	if(quabackstate != BUTTON_PRESSED) {
-		if(quabackbuttonhitbox.contains(x, y)) {
-			quabackstate = BUTTON_FOCUS;
-		}
-
-		else {
-			quabackstate = BUTTON_NONE;
-		}
-	}
-
-	if(quafwstate != BUTTON_PRESSED) {
-		if(quaforwardbuttonhitbox.contains(x, y)) {
-			quafwstate = BUTTON_FOCUS;
-		}
-
-		else {
-			quafwstate = BUTTON_NONE;
-		}
-	}
-
 	if(winbackstate != BUTTON_PRESSED) {
 		if(winbackbuttonhitbox.contains(x, y)) {
 			winbackstate = BUTTON_FOCUS;
@@ -1523,30 +1480,6 @@ void OptionsCanvas::sensitivityDraw() {
 	root->menutitlefont.drawText(sensnumtext, sensx, senslabely + 300);
 }
 
-void OptionsCanvas::qualitySetup() {
-	qualitylabeltext = "Quality: ";
-	qualities[0] = "High";
-	qualities[1] = "Normal";
-	qualities[2] = "Low";
-	quabackbutton.loadImage("PNG/Icons/ArrowsLeft3.png");
-	quaforwardbutton.loadImage("PNG/Icons/ArrowsRight3.png");
-
-	selectedquality = root->getQuality();
-	qualabelh = root->menutitlefont.getStringHeight("y");
-	qualabelx = containerx + containerw / 10;
-	qualabely = (containery + containerh / 15 + qualabelh) + 100;
-	qualitiesw = root->menutitlefont.getStringWidth(qualities[selectedquality]);
-	qualitiesx = qualabelx + qualitiesw * 2.5;
-	qualitiesh = root->menutitlefont.getStringHeight(qualities[selectedquality]);
-	quabackbuttonw = quabackbutton.getWidth() * 0.4;
-	quabackbuttonh = quabackbutton.getHeight() * 0.4;
-	quabackbuttonx = qualitiesx - quabackbuttonw;
-	quabackbuttony = qualabely - (qualitiesh / 2) - (quabackbuttonh / 2) + 3;
-	quaforwardbuttonx = qualitiesx + qualitiesw + quabackbuttonw + 25;
-	quabackbuttonhitbox.set(quabackbuttonx, quabackbuttony, quabackbuttonx + quabackbuttonw, quabackbuttony + quabackbuttonh);
-	quaforwardbuttonhitbox.set(quaforwardbuttonx, quabackbuttony, quaforwardbuttonx + quabackbuttonw, quabackbuttony + quabackbuttonh);
-}
-
 void OptionsCanvas::windowmodeSetup() {
 	windowmodelabeltext = "Window Mode: ";
 	windowmodes[0] = "FullScreen";
@@ -1558,7 +1491,7 @@ void OptionsCanvas::windowmodeSetup() {
 	selectedwindowmode = root->getWindowMode();
 	winlabelh = root->menutitlefont.getStringHeight("y");
 	winlabelx = containerx + containerw / 10;
-	winlabely = (containery + containerh / 15 + winlabelh) + 200;
+	winlabely = (containery + containerh / 15 + winlabelh);
 	windowmodesw = root->menutitlefont.getStringWidth(windowmodes[selectedwindowmode]);
 	windowmodesx = winlabelx + windowmodesw * 2;
 	windowmodesh = root->menutitlefont.getStringHeight(windowmodes[selectedwindowmode]);
@@ -1582,7 +1515,7 @@ void OptionsCanvas::resolutionSetup() {
 	selectedresolution = root->getResolution();
 	reslabelh = root->menutitlefont.getStringHeight("y");
 	reslabelx = containerx + containerw / 10;
-	reslabely = (containery + containerh / 15 + reslabelh) + 300;
+	reslabely = (containery + containerh / 15 + reslabelh) + 100;
 	resolutionsw = root->menutitlefont.getStringWidth(resolutions[selectedresolution]);
 	resolutionsx = reslabelx + resolutionsw * 2;
 	resolutionsh = root->menutitlefont.getStringHeight(resolutions[selectedresolution]);
@@ -1593,21 +1526,6 @@ void OptionsCanvas::resolutionSetup() {
 	resforwardbuttonx = resolutionsx + resolutionsw + (resbackbuttonw / 2);
 	resbackbuttonhitbox.set(resbackbuttonx, resbackbuttony, resbackbuttonx + resbackbuttonw, resbackbuttony + resbackbuttonh);
 	resforwardbuttonhitbox.set(resforwardbuttonx, resbackbuttony, resforwardbuttonx + resbackbuttonw, resbackbuttony + resbackbuttonh);
-}
-
-void OptionsCanvas::qualityDraw() {
-
-	setColor(0, 0, 0);
-	root->menutitlefont.drawText(qualitylabeltext, qualabelx, qualabely);
-	root->menutitlefont.drawText(qualities[selectedquality], qualitiesx, qualabely);
-	quabackbutton.draw(quabackbuttonx, quabackbuttony, quabackbuttonw, quabackbuttonh);
-	quaforwardbutton.draw(quaforwardbuttonx, quabackbuttony, quabackbuttonw, quabackbuttonh);
-
-	if(quabackstate == BUTTON_FOCUS) setColor(focuscolor);
-	if(quabackstate == BUTTON_PRESSED || quabackstate == BUTTON_PERFORMED) setColor(pressedcolor);
-
-	if(quafwstate == BUTTON_FOCUS) setColor(focuscolor);
-	if(quafwstate == BUTTON_PRESSED || quafwstate == BUTTON_PERFORMED) setColor(pressedcolor);
 }
 
 void OptionsCanvas::windowmodeDraw() {
@@ -1808,7 +1726,7 @@ void OptionsCanvas::resetControlsSettings() {
 }
 
 void OptionsCanvas::applyGraphicsSettings() {
-	root->saveGraphicsSettings(selectedresolution, selectedwindowmode, selectedquality);
+	root->saveGraphicsSettings(selectedresolution, selectedwindowmode);
 	root->applyGraphicsSettings();
 	tabSetup();
 	containerSetup();
@@ -1818,7 +1736,6 @@ void OptionsCanvas::resetGraphicsSettings() {
 	root->resetGraphicsSettings();
 	selectedresolution = root->getResolution();
 	selectedwindowmode = root->getWindowMode();
-	selectedquality = root->getQuality();
 }
 
 void OptionsCanvas::applyAudioSettings() {

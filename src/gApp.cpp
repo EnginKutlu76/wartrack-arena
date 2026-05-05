@@ -137,15 +137,14 @@ void gApp::saveControlsSettings(int forward, int backward, int right, int left, 
 
 }
 
-void gApp::saveGraphicsSettings(int resolution, int windowmode, int quality) {
+void gApp::saveGraphicsSettings(int resolution, int windowmode) {
 	this->resolution = resolution;
 	this->windowmode = windowmode;
-	this->quality = quality;
 
 	//optionsdb.execute("UPDATE options SET value=" + gToStr(brightness) + " WHERE key='brightness'");
 	optionsdb.execute("UPDATE options SET value=" + gToStr(resolution) + " WHERE key='resolution'");
 	optionsdb.execute("UPDATE options SET value=" + gToStr(windowmode) + " WHERE key='windowmode'");
-	optionsdb.execute("UPDATE options SET value=" + gToStr(quality) + " WHERE key='quality'");
+//	optionsdb.execute("UPDATE options SET value=" + gToStr(quality) + " WHERE key='quality'");
 }
 
 void gApp::saveAudioSettings(int soundvolume, int musicvolume, int sound, int music) {
@@ -185,8 +184,8 @@ void gApp::loadGraphicsSettings() {
 	optionsdb.execute("SELECT value FROM options WHERE key='windowmode'");
 	windowmode = safeGetInt(optionsdb.getSelectData());
 
-	optionsdb.execute("SELECT value FROM options WHERE key='quality'");
-	quality = safeGetInt(optionsdb.getSelectData());
+//	optionsdb.execute("SELECT value FROM options WHERE key='quality'");
+//	quality = safeGetInt(optionsdb.getSelectData());
 }
 
 void gApp::loadAudioSettings() {
@@ -325,10 +324,6 @@ int gApp::getResolution() {
 
 int gApp::getWindowMode() {
 	return windowmode;
-}
-
-int gApp::getQuality() {
-	return quality;
 }
 
 int gApp::getFov() {

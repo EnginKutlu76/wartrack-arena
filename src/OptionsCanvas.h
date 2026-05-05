@@ -93,14 +93,12 @@ private:
 	void graphicsSettingsSetup();
 	void resolutionSetup();
 	void windowmodeSetup();
-	void qualitySetup();
 	void graphicsSettingsPressed(int x, int y);
 	void graphicsSettingsReleased(int x, int y);
 	void graphicsSettingsFocus(int x, int y);
 	void graphicsSettingsDraw();
 	void resolutionDraw();
 	void windowmodeDraw();
-	void qualityDraw();
 
 	//audio funcs
 	void audioTabButtonSetup();
@@ -273,16 +271,6 @@ private:
 	int resbackbuttonx, resbackbuttony, resbackbuttonw, resbackbuttonh, resforwardbuttonx;
 	int resbackstate, resfwstate;
 	int selectedresolution;
-
-	gImage quabackbutton, quaforwardbutton;
-	gRect quabackbuttonhitbox, quaforwardbuttonhitbox;
-	std::string qualitylabeltext;
-	std::string qualities[3];
-	int qualabelx, qualabely, qualabelw, qualabelh;
-	int qualitiesx, qualitiesw, qualitiesh;
-	int quabackbuttonx, quabackbuttony, quabackbuttonw, quabackbuttonh, quaforwardbuttonx;
-	int quabackstate, quafwstate;
-	int selectedquality;
 
 	gImage winbackbutton, winforwardbutton;
 	gRect winbackbuttonhitbox, winforwardbuttonhitbox;
