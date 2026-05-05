@@ -22,7 +22,7 @@ void HelpMenu::setup() {
 	containerSetup();
 	forwardButtonSetup();
 	backButtonSetup();
-	leveltabtext = "HELLO WORLD";
+	modetabtext = "Modes";
 	activetab = TAB_GENERAL;
 }
 
@@ -221,44 +221,44 @@ void HelpMenu::containerSetup() {
 	activex = (containerx + containerw / 2) - 80;
 	activey = (containery + containerw / 1.25) - activeh;
 	activeposx = activex;
-	generalSettingsSetup();
-	levelSettingsSetup();
+	gameSettingsSetup();
+	modeSettingsSetup();
 	itemsSettingsSetup();
 	controlsSettingsSetup();
 }
 
-void HelpMenu::generalSettingsSetup() {
-	generallabeltext = root->localizeWord(root->generallabelkey);
-    generallabellines = root->menutitlefont.wrapSentenceByWidth(generallabeltext, containerw * 0.8f);
-    generallabelh = root->menutitlefont.getStringHeight("y");
-    generallabelx = containerx + containerw / 10;
-    generallabely = containery + containerh / 15 + generallabelh;
+void HelpMenu::gameSettingsSetup() {
+	gamelabeltext = root->localizeWord(root->generallabelkey);
+    gamelabellines = root->menutitlefont.wrapSentenceByWidth(gamelabeltext, containerw * 0.8f);
+    gamelabelh = root->menutitlefont.getStringHeight("y");
+    gamelabelx = containerx + containerw / 10;
+    gamelabely = containery + containerh / 15 + gamelabelh;
 }
 
-void HelpMenu::levelSettingsSetup() {
+void HelpMenu::modeSettingsSetup() {
 
-	levelonelabeltext = "Merkez";
-	level_picture[0].loadImage("levelonemap.png");
-	levelonelabelw = root->menutitlefont.getStringWidth(levelonelabeltext);
-	levelonelabelh = root->menutitlefont.getStringHeight(levelonelabeltext);
-	levelonelabelx = containerx + containerw / 10;
-	levelonelabely = containery + containerh / 10 + levelonelabelh;
+	modeonelabeltext = "Score Game";
+	mode_picture[0].loadImage("levelonemap.png");
+	modeonelabelw = root->menutitlefont.getStringWidth(modeonelabeltext);
+	modeonelabelh = root->menutitlefont.getStringHeight(modeonelabeltext);
+	modeonelabelx = containerx + containerw / 10;
+	modeonelabely = containery + containerh / 10 + modeonelabelh;
 
-	leveltwolabeltext = "Irak";
-	level_picture[1].loadImage("iraqmap.png");
-	leveltwolabelw = root->menutitlefont.getStringWidth(leveltwolabeltext);
-	leveltwolabelh = root->menutitlefont.getStringHeight(leveltwolabeltext);
-	leveltwolabelx = containerx + containerw / 10;
-	leveltwolabely = levelonelabely + 200;
+	modetwolabeltext = "Flag Game";
+	mode_picture[1].loadImage("iraqmap.png");
+	modetwolabelw = root->menutitlefont.getStringWidth(modetwolabeltext);
+	modetwolabelh = root->menutitlefont.getStringHeight(modetwolabeltext);
+	modetwolabelx = containerx + containerw / 10;
+	modetwolabely = modeonelabely + 200;
 
 }
 
 void HelpMenu::itemsSettingsSetup() {
-	logo[0].loadImage("armor.png");
-	logo[1].loadImage("heavyarmor.png");
-	logo[2].loadImage("helmet.png");
-	logo[3].loadImage("invisible.png");
-	logo[4].loadImage("strength.png");
+	logo[0].loadImage("PNG/Icons/sifa.png");
+	logo[1].loadImage("PNG/Icons/zehir.png");
+	logo[2].loadImage("PNG/Icons/arkabomba.png");
+	logo[3].loadImage("PNG/Icons/hizartis.png");
+	logo[4].loadImage("PNG/Icons/delicimermi.png");
 
 	logow[0] =  50; logoh[0] = 50; logox[0] = (containerx + containerw / 10) - 50; logoy[0] = (containery + containerh / 10) - 30;
 	logow[1] =  50;	logoh[1] = 50; logox[1] = (containerx + containerw / 10) - 50; logoy[1] = (containery + containerh / 10) + 28;
@@ -266,11 +266,11 @@ void HelpMenu::itemsSettingsSetup() {
 	logow[3] =  50;	logoh[3] = 50; logox[3] = (containerx + containerw / 10) - 50; logoy[3] = (containery + containerh / 10) + 148;
 	logow[4] =  50;	logoh[4] = 50; logox[4] = (containerx + containerw / 10) - 50; logoy[4] = (containery + containerh / 10) + 200;
 
-	 itemslabeltext[0] = "Zirh";
-	 itemslabeltext[1] = "Super Zirh";
-	 itemslabeltext[2] = "Kask";
-	 itemslabeltext[3] = "Gorunmezlik";
-	 itemslabeltext[4] = "Guc";
+	 itemslabeltext[0] = "Sifa";
+	 itemslabeltext[1] = "Zehir";
+	 itemslabeltext[2] = "Arkadan Bomba";
+	 itemslabeltext[3] = "Hiz Artis";
+	 itemslabeltext[4] = "Delici Mermi";
 
 	 for(int i = 0; i < 5; i++) {
 		 logo[i];
@@ -288,14 +288,14 @@ void HelpMenu::controlsSettingsSetup() {
 	ischangingkey = false;
 
 	selectedkey = KEY_NONE;
-/*	keyboardcontrols[KEY_FORWARD] = root->getForwardKey();
+	keyboardcontrols[KEY_FORWARD] = root->getForwardKey();
 	keyboardcontrols[KEY_BACKWARD] = root->getBackwardKey();
 	keyboardcontrols[KEY_RIGHT] = root->getRightKey();
 	keyboardcontrols[KEY_LEFT] = root->getLeftKey();
 	keyboardcontrols[KEY_RUN] = root->getRunKey();
 	keyboardcontrols[KEY_FIRE] = root->getFireKey();
 	keyboardcontrols[KEY_INTERACT] = root->getInteractKey();
-*/
+
 	//forward
 	controlslabeltext[KEY_FORWARD] = root->localizeWord(root->forwardkey);
 	controlsdisplaytext[KEY_FORWARD] = gCodepointToStr(keyboardcontrols[KEY_FORWARD]);
@@ -399,8 +399,8 @@ void HelpMenu::controlsSettingsSetup() {
 void HelpMenu::containerDraw() {
 	setColor(containercolor);
 	gDrawRectangle(containerx, containery, containerw, containerh, true);
-	if(activetab == TAB_GENERAL) generalSettingsDraw();
-	else if(activetab == TAB_LEVEL) levelSettingsDraw();
+	if(activetab == TAB_GENERAL) gameSettingsDraw();
+	else if(activetab == TAB_LEVEL) modeSettingsDraw();
 	else if(activetab == TAB_ITEMS) itemsSettingsDraw();
 	else if(activetab == TAB_CONTROLS) controlsSettingsDraw();
 	setColor(255, 255, 255);
@@ -412,39 +412,43 @@ void HelpMenu::containerDraw() {
 	setColor(255, 255, 255);
 }
 
-void HelpMenu::generalSettingsDraw() {
+void HelpMenu::gameSettingsDraw() {
 	setColor(0, 0, 0);
 
-	float y = generallabely;
+	float y = gamelabely;
 
-	for (const auto& line : generallabellines) {
-	    root->menutitlefont.drawText(line, generallabelx, y);
-	    y += generallabelh + 10.0f;
+	for (const auto& line : gamelabellines) {
+	    root->menutitlefont.drawText(line, gamelabelx, y);
+	    y += gamelabelh + 10.0f;
 	}
 }
 
-void HelpMenu::levelSettingsDraw() {
+void HelpMenu::modeSettingsDraw() {
 	setColor(0, 0, 0);
 
-	    level_picture[0].draw(levelonelabelx, levelonelabely, 255, 150);
-	    root->menutitlefont.drawText(levelonelabeltext, levelonelabelx + 270, levelonelabely + 75);
+	    mode_picture[0].draw(modeonelabelx, modeonelabely, 255, 150);
+	    root->menutitlefont.drawText(modeonelabeltext, modeonelabelx + 270, modeonelabely + 75);
 
-	    level_picture[1].draw(leveltwolabelx, leveltwolabely, 255, 150);
-	    root->menutitlefont.drawText(leveltwolabeltext, leveltwolabelx + 270, leveltwolabely + 75);
+	    mode_picture[1].draw(modetwolabelx, modetwolabely, 255, 150);
+	    root->menutitlefont.drawText(modetwolabeltext, modetwolabelx + 270, modetwolabely + 75);
 }
 
 
 void HelpMenu::itemsSettingsDraw() {
-	setColor(0, 0, 0);
-	    for(int i = 0; i < 5; i++) {
-	    	logo[0].draw(logox[0], logoy[0], logow[0], logoh[0]);
-	    	logo[1].draw(logox[1], logoy[1], logow[1], logoh[1]);
-	    	logo[2].draw(logox[2], logoy[2], logow[2], logoh[2]);
-	    	logo[3].draw(logox[3], logoy[3], logow[3], logoh[3]);
-	    	logo[4].draw(logox[4], logoy[4], logow[4], logoh[4]);
+	setColor(255, 255, 255);
 
-	        root->menutitlefont.drawText(itemslabeltext[i], itemslabelx[i], itemslabely[i]);
-	    }
+	for(int i = 0; i < 5; i++) {
+		logo[0].draw(logox[0], logoy[0], logow[0], logoh[0]);
+		logo[1].draw(logox[1], logoy[1], logow[1], logoh[1]);
+		logo[2].draw(logox[2], logoy[2], logow[2], logoh[2]);
+		logo[3].draw(logox[3], logoy[3], logow[3], logoh[3]);
+		logo[4].draw(logox[4], logoy[4], logow[4], logoh[4]);
+	}
+
+	for(int j = 0; j < 5; j++) {
+		setColor(0, 0, 0);
+		root->menutitlefont.drawText(itemslabeltext[j], itemslabelx[j], itemslabely[j]);
+	}
 }
 
 void HelpMenu::controlsSettingsDraw() {
@@ -500,10 +504,10 @@ void HelpMenu::controlsSettingsDraw() {
 
 void HelpMenu::containerButtonPressed(int x, int y) {
 	if(activetab == TAB_GENERAL) {
-		generalSettingsPressed(x, y);
+		gameSettingsPressed(x, y);
 	}
 	else if(activetab == TAB_LEVEL) {
-		levelSettingsPressed(x, y);
+		modeSettingsPressed(x, y);
 	}
 	else if(activetab == TAB_ITEMS) {
 		itemsSettingsPressed(x, y);
@@ -515,10 +519,10 @@ void HelpMenu::containerButtonPressed(int x, int y) {
 
 void HelpMenu::containerButtonReleased(int x, int y) {
 	if(activetab == TAB_GENERAL) {
-		generalSettingsReleased(x, y);
+		gameSettingsReleased(x, y);
 	}
 	else if(activetab == TAB_LEVEL) {
-		levelSettingsReleased(x, y);
+		modeSettingsReleased(x, y);
 	}
 	else if(activetab == TAB_ITEMS) {
 		itemsSettingsReleased(x, y);
@@ -530,10 +534,10 @@ void HelpMenu::containerButtonReleased(int x, int y) {
 
 void HelpMenu::containerButtonFocus(int x, int y) {
 	if(activetab == TAB_GENERAL) {
-		generalSettingsFocus(x, y);
+		gameSettingsFocus(x, y);
 	}
 	else if(activetab == TAB_LEVEL) {
-		levelSettingsFocus(x, y);
+		modeSettingsFocus(x, y);
 	}
 	else if(activetab == TAB_ITEMS) {
 		itemsSettingsFocus(x, y);
@@ -543,27 +547,27 @@ void HelpMenu::containerButtonFocus(int x, int y) {
 	}
 }
 
-void HelpMenu::generalSettingsPressed(int x, int y) {
+void HelpMenu::gameSettingsPressed(int x, int y) {
 
 }
 
-void HelpMenu::generalSettingsReleased(int x, int y) {
+void HelpMenu::gameSettingsReleased(int x, int y) {
 
 }
 
-void HelpMenu::generalSettingsFocus(int x, int y) {
+void HelpMenu::gameSettingsFocus(int x, int y) {
 
 }
 
-void HelpMenu::levelSettingsPressed(int x, int y) {
+void HelpMenu::modeSettingsPressed(int x, int y) {
 
 }
 
-void HelpMenu::levelSettingsReleased(int x, int y) {
+void HelpMenu::modeSettingsReleased(int x, int y) {
 
 }
 
-void HelpMenu::levelSettingsFocus(int x, int y) {
+void HelpMenu::modeSettingsFocus(int x, int y) {
 
 }
 
@@ -603,7 +607,7 @@ void HelpMenu::returnSetup() {
 }
 
 void HelpMenu::returnDraw() {
-	setColor(0, 0, 0);
+	setColor(255, 255, 255);
 	if(returnbuttonstate == BUTTON_FOCUS) setColor(focuscolor);
 	if(returnbuttonstate == BUTTON_PRESSED) setColor(pressedcolor);
 	root->menutitlefont.drawText(returntext, returnx, returny);
@@ -652,8 +656,8 @@ void HelpMenu::backButtonDraw() {
 }
 
 std::string HelpMenu::getTabTitle() const {
-	if(activetab == TAB_GENERAL) return "GENERAL";
-	if(activetab == TAB_LEVEL) return "LEVELS";
+	if(activetab == TAB_GENERAL) return "GAME";
+	if(activetab == TAB_LEVEL) return "MODES";
 	if(activetab == TAB_ITEMS) return "ITEMS";
 	if(activetab == TAB_CONTROLS) return "CONTROLS";
 	return "";

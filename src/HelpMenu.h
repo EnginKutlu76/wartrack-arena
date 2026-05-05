@@ -47,16 +47,16 @@ private:
 	void tabSetup();
 
 	void containerSetup();
-	void generalSettingsSetup();
-	void levelSettingsSetup();
+	void gameSettingsSetup();
+	void modeSettingsSetup();
 	void itemsSettingsSetup();
 	void controlsSettingsSetup();
 
 	void tabDraw();
 
 	void containerDraw();
-	void generalSettingsDraw();
-	void levelSettingsDraw();
+	void gameSettingsDraw();
+	void modeSettingsDraw();
 	void itemsSettingsDraw();
 	void controlsSettingsDraw();
 
@@ -68,12 +68,12 @@ private:
 	void containerButtonReleased(int x, int y);
 	void containerButtonFocus(int x, int y);
 
-	void generalSettingsPressed(int x, int y);
-	void generalSettingsReleased(int x, int y);
-	void generalSettingsFocus(int x, int y);
-	void levelSettingsPressed(int x, int y);
-	void levelSettingsReleased(int x, int y);
-	void levelSettingsFocus(int x, int y);
+	void gameSettingsPressed(int x, int y);
+	void gameSettingsReleased(int x, int y);
+	void gameSettingsFocus(int x, int y);
+	void modeSettingsPressed(int x, int y);
+	void modeSettingsReleased(int x, int y);
+	void modeSettingsFocus(int x, int y);
 	void itemsSettingsPressed(int x, int y);
 	void itemsSettingsReleased(int x, int y);
 	void itemsSettingsFocus(int x, int y);
@@ -96,8 +96,8 @@ private:
 	int forwardstate, backstate;
 
 	//tabs
-	gRect generaltabbutton, leveltabbutton, itemstabbutton, controlstabbutton;
-	std::string generaltabtext, leveltabtext, itemstabtext, controlstabtext;
+	gRect gametabbutton, modetabbutton, itemstabbutton, controlstabbutton;
+	std::string  modetabtext, itemstabtext, controlstabtext;
 
 	int tabfontx, tabfonty, tabfontw, tabfonth;
 	int tabx, taby, tabw, tabh;
@@ -109,21 +109,21 @@ private:
 	int containerx, containery, containerw, containerh;
 	gColor containercolor;
 
-	//general settings
-	std::string generallabeltext;
-	int generallabelx, generallabely, generallabelw, generallabelh;
-	int genearaldisplayx, generaldisplayy, genaraldisplayw, generaldisplayh;
+	//game settings
+	std::string gamelabeltext;
+	int gamelabelx, gamelabely, gamelabelw, gamelabelh;
+	int gamedisplayx, gamedisplayy, gamedisplayw, gamedisplayh;
 
 	//level settings
-	std::string levellabeltext, leveldisplaytext[resolutionnum];
-	std::string levelonelabeltext, levelonedisplaytext[resolutionnum];
-	std::string leveltwolabeltext, leveltwodisplaytext[resolutionnum];
-	gImage level_picture[2];
+	std::string modelabeltext, modedisplaytext[resolutionnum];
+	std::string modeonelabeltext, modeonedisplaytext[resolutionnum];
+	std::string modetwolabeltext, modetwodisplaytext[resolutionnum];
+	gImage mode_picture[2];
 	gRect resolutionprev, resolutionnext;
 	int resolutionprevstate, resolutionnextstate;
 	int resolution;
-	int levelonelabelx, levelonelabely, levelonelabelw, levelonelabelh;
-	int leveltwolabelx, leveltwolabely, leveltwolabelw, leveltwolabelh;
+	int modeonelabelx, modeonelabely, modeonelabelw, modeonelabelh;
+	int modetwolabelx, modetwolabely, modetwolabelw, modetwolabelh;
 	int resolutiondisplayx, resolutiondisplayy, resolutiondisplayw, resolutiondisplayh;
 	int resolutionprevx, resolutionprevy, resolutionprevw, resolutionprevh;
 	int resolutionnextx, resolutionnexty, resolutionnextw, resolutionnexth;
@@ -195,7 +195,7 @@ private:
 	gImage logo[5];
 	int logox[5], logoy[5], logow[5], logoh[5];
 
-	std::vector<std::string> generallabellines;
+	std::vector<std::string> gamelabellines;
 
 	//active color
 	gImage activepart, inactivepart;
