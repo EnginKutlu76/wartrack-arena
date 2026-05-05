@@ -238,14 +238,14 @@ void HelpMenu::gameSettingsSetup() {
 void HelpMenu::modeSettingsSetup() {
 
 	modeonelabeltext = "Score Game";
-	mode_picture[0].loadImage("levelonemap.png");
+	mode_picture[0].loadImage("PNG/Icons/scoregame.png");
 	modeonelabelw = root->menutitlefont.getStringWidth(modeonelabeltext);
 	modeonelabelh = root->menutitlefont.getStringHeight(modeonelabeltext);
 	modeonelabelx = containerx + containerw / 10;
 	modeonelabely = containery + containerh / 10 + modeonelabelh;
 
 	modetwolabeltext = "Flag Game";
-	mode_picture[1].loadImage("iraqmap.png");
+	mode_picture[1].loadImage("PNG/Icons/flaggame.png");
 	modetwolabelw = root->menutitlefont.getStringWidth(modetwolabeltext);
 	modetwolabelh = root->menutitlefont.getStringHeight(modetwolabeltext);
 	modetwolabelx = containerx + containerw / 10;
