@@ -47,6 +47,7 @@ private:
 	static const int HULL_ONE = 0, HULL_TWO = 1, HULL_THREE = 2, HULL_FOUR = 3, HULL_FIVE = 4, HULL_SIX = 5, HULL_SEVEN = 6, HULL_EIGHT = 7;
 	static const int WEAPON_ONE = 0, WEAPON_TWO = 1, WEAPON_THREE = 2, WEAPON_FOUR = 3, WEAPON_FIVE = 4, WEAPON_SIX = 5, WEAPON_SEVEN = 6, WEAPON_EIGHT = 7;
 	static const int TRACK_ONE = 0, TRACK_TWO = 1, TRACK_THREE = 2, TRACK_FOUR = 3;
+	static const int COLOR_ONE = 0, COLOR_TWO = 1, COLOR_THREE = 2, COLOR_FOUR = 3;
 
 	void returnSetup();
 	void fullTankSetup();
@@ -112,6 +113,9 @@ private:
 
 	void informationsSetup();
 	void informationsDraw();
+
+	void colorPickTextSetup();
+	void colorPickTextDraw();
 
 	void colorPickSetup();
 	void colorPickDraw();
@@ -194,9 +198,17 @@ private:
 
 	//colors
 	std::string colortext;
-	int colorx, colory, colorw, colorh;
+	int colortextx, colortexty, colortextw, colortexth;
 	gImage colorline;
 	int colorlinex, colorliney, colorlinew, colorlineh;
+	gImage colors[4];
+	int colorx, colory, colorw, colorh;
+	int colorspace;
+	gRect colorshitbox[4];
+	int colorstate[4];
+	int activecolor;
+	gImage* currentcolor;
+	std::string colorname;
 
 	//hulls images
 	gImage hulls[8];

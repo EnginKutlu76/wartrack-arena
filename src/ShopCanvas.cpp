@@ -25,18 +25,20 @@ void ShopCanvas::setup() {
 	currenthull = &hulls[activehull];
 	currentweapon = &weapons[activeweapon];
 	currenttrack = &tracks[activetrack];
+	currentcolor = &colors[activecolor];
 	fullTankSetup();
 	backgroundSetup();
 	tabSetup();
 	containerSetup();
 	informationsSetup();
-	colorPickSetup();
+	colorPickTextSetup();
 	buyEnabledSetup();
 	moneySetup();
+	colorPickSetup();
 }
 
 void ShopCanvas::update() {
-gLogi("assd") << activehull;
+
 }
 
 void ShopCanvas::draw() {
@@ -45,9 +47,12 @@ void ShopCanvas::draw() {
 	tabDraw();
 	containerDraw();
 	informationsDraw();
-	colorPickDraw();
+	colorPickTextDraw();
 	buyEnabledDraw();
 	moneyDraw();
+	colorPickDraw();
+
+	gLogi("activecolor") << activecolor;
 }
 
 void ShopCanvas::moneySetup() {
@@ -87,7 +92,7 @@ void ShopCanvas::buyEnabledDraw() {
 	setColor(255, 255, 255);
 }
 
-void ShopCanvas::colorPickSetup() {
+void ShopCanvas::colorPickTextSetup() {
     colortext = "Choose a color";
 
     colorline.loadImage("PNG/button.png");
@@ -98,16 +103,54 @@ void ShopCanvas::colorPickSetup() {
     colorlinex = tankx - 25;
     colorliney = tanky + tankh + 20;
 
-    colorw = root->menutitlefont.getStringWidth(colortext);
-    colorh = root->menutitlefont.getStringHeight(colortext);
+    colortextw = root->menutitlefont.getStringWidth(colortext);
+    colortexth = root->menutitlefont.getStringHeight(colortext);
 
-    colorx = colorlinex + (colorlinew / 2) - (colorw / 2);
-    colory = colorliney + (colorlineh / 2) - (colorh / 2);
+    colortextx = colorlinex + (colorlinew / 2) - (colortextw / 2);
+    colortexty = colorliney + (colorlineh / 2) - (colortexth / 2);
+}
+
+void ShopCanvas::colorPickTextDraw() {
+	root->menutitlefont.drawText(colortext, colortextx, colortexty + 50);
+	colorline.draw(colorlinex, colorliney + 50, colorlinew, colorlineh);
+}
+
+void ShopCanvas::colorPickSetup() {
+	colors[0].loadImage("PNG/color1.png");
+	colors[1].loadImage("PNG/color2.png");
+	colors[2].loadImage("PNG/color3.png");
+	colors[3].loadImage("PNG/color4.png");
+
+	colorw = colors[0].getWidth();
+	colorh = colors[0].getHeight();
+	colorx = colorlinex;
+	colory = colorliney + 100;
+	colorspace = colorw * 2;
+
+	colorshitbox[0].set(colorx + colorspace * 0, colory - colorh, colorx + colorw, colory);
+	colorshitbox[1].set(colorx + colorspace * 1, colory - colorh, colorx + colorspace * 1 + colorw, colory);
+	colorshitbox[2].set(colorx + colorspace * 2, colory - colorh, colorx + colorspace * 2 + colorw, colory);
+	colorshitbox[3].set(colorx + colorspace * 3, colory - colorh, colorx + colorspace * 3 + colorw, colory);
+
+	for(int i = 0; i < 4; i++) {
+	    colorstate[i] = BUTTON_NONE;
+	}
 }
 
 void ShopCanvas::colorPickDraw() {
-	root->menutitlefont.drawText(colortext, colorx, colory + 50);
-	colorline.draw(colorlinex, colorliney + 50, colorlinew, colorlineh);
+    for(int i = 0; i < 4; i++) {
+    	int x = colorshitbox[i].left();
+    	int y = colorshitbox[i].top();
+
+    	if(activecolor == i) setColor(200, 200, 255);
+    	else setColor(normalcolor);
+
+    	setColor(255, 255, 255);
+    	colors[i].draw(x, y, colorw, colorh);
+    }
+//	for(int i = 0; i < 4; i++) {
+//		colors[i].draw(colorx + (colorspace * i), colory);
+//	}
 }
 
 void ShopCanvas::informationsSetup() {
@@ -250,12 +293,64 @@ void ShopCanvas::updateButtonState(int x, int y) {
 			buystate = BUTTON_NONE;
 		}
 	}
+
+	if(colorstate[0] != BUTTON_PRESSED) {
+		if(colorshitbox[0].contains(x, y)) {
+			colorstate[0] = BUTTON_FOCUS;
+		}
+		else {
+			colorstate[0] = BUTTON_NONE;
+		}
+	}
+
+	if(colorstate[1] != BUTTON_PRESSED) {
+		if(colorshitbox[1].contains(x, y)) {
+			colorstate[1] = BUTTON_FOCUS;
+		}
+		else {
+			colorstate[1] = BUTTON_NONE;
+		}
+	}
+
+	if(colorstate[2] != BUTTON_PRESSED) {
+		if(colorshitbox[2].contains(x, y)) {
+			colorstate[2] = BUTTON_FOCUS;
+		}
+		else {
+			colorstate[2] = BUTTON_NONE;
+		}
+	}
+
+	if(colorstate[3] != BUTTON_PRESSED) {
+		if(colorshitbox[3].contains(x, y)) {
+			colorstate[3] = BUTTON_FOCUS;
+		}
+		else {
+			colorstate[3] = BUTTON_NONE;
+		}
+	}
 }
 
 void ShopCanvas::checkButtonPressed(int x, int y, int button) {
 	if(returnhitbox.contains(x, y)) {
 		returnbuttonstate = BUTTON_PRESSED;
 		returny += 2;
+	}
+
+	if(colorshitbox[0].contains(x, y)) {
+		colorstate[0] = BUTTON_PRESSED;
+	}
+
+	if(colorshitbox[1].contains(x, y)) {
+		colorstate[1] = BUTTON_PRESSED;
+	}
+
+	if(colorshitbox[2].contains(x, y)) {
+		colorstate[2] = BUTTON_PRESSED;
+	}
+
+	if(colorshitbox[3].contains(x, y)) {
+		colorstate[3] = BUTTON_PRESSED;
 	}
 }
 
@@ -265,6 +360,37 @@ void ShopCanvas::checkButtonReleased(int x, int y, int button) {
 		returny -= 2;
 		//root->gamestate = root->GAME_LOAD;
 		root->setCurrentCanvas(new mainMenu(root));
+	}
+
+	else if(colorshitbox[0].contains(x, y) && colorstate[0] == BUTTON_PRESSED) {
+		colorstate[0] = BUTTON_PERFORMED;
+		activecolor = COLOR_ONE;
+		gLogi("aktif") << 1;
+		//currentcolor = &colors[0];
+	}
+	else if(colorshitbox[1].contains(x, y) && colorstate[1] == BUTTON_PRESSED) {
+		colorstate[1] = BUTTON_PERFORMED;
+		activecolor = COLOR_TWO;
+		//currentcolor = &colors[1];
+		gLogi("aktif") << 2;
+	}
+	else if(colorshitbox[2].contains(x, y) && colorstate[2] == BUTTON_PRESSED) {
+		colorstate[2] = BUTTON_PERFORMED;
+		activecolor = COLOR_THREE;
+		//currentcolor = &colors[2];
+		gLogi("aktif") << 3;
+	}
+	else if(colorshitbox[3].contains(x, y) && colorstate[3] == BUTTON_PRESSED) {
+		colorstate[3] = BUTTON_PERFORMED;
+		activecolor = COLOR_FOUR;
+		//currentcolor = &colors[3];
+		gLogi("aktif") << 4;
+	}
+	else {
+		colorstate[0] = BUTTON_CANCELED;
+		colorstate[1] = BUTTON_CANCELED;
+		colorstate[2] = BUTTON_CANCELED;
+		colorstate[3] = BUTTON_CANCELED;
 	}
 }
 
