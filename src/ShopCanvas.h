@@ -119,6 +119,9 @@ private:
 	void buyEnabledSetup();
 	void buyEnabledDraw();
 
+	void moneySetup();
+	void moneyDraw();
+
 	//tabs
 	gRect hulltabbutton, weapontabbutton, tracktabbutton, effecttabbutton;
 	std::string hulltabtext, weapontabtext, tracktabtext, effecttabtext;
@@ -254,6 +257,14 @@ private:
 	int speedx, speedy;
 	float values[5];
 	std::string valuetxt[5];
+
+	//Money
+	gImage moneyimg;
+	int moneyamt;
+	std::string moneyamttxt;
+	int moneyx, moneyy;
+	int moneyh;
+	int moneytextx, moneytexty;
 
 	//Buy&enabled
 	std::string buy, enabled;

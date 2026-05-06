@@ -32,6 +32,7 @@ void ShopCanvas::setup() {
 	informationsSetup();
 	colorPickSetup();
 	buyEnabledSetup();
+	moneySetup();
 }
 
 void ShopCanvas::update() {
@@ -46,6 +47,25 @@ void ShopCanvas::draw() {
 	informationsDraw();
 	colorPickDraw();
 	buyEnabledDraw();
+	moneyDraw();
+}
+
+void ShopCanvas::moneySetup() {
+	moneyimg.loadImage("Png/Icons/money.png");
+	moneyamt = 100;
+	moneyamttxt = gToStr(moneyamt);
+	moneyh = moneyimg.getHeight();
+	moneyx = infolinex;
+	moneyy = infoliney + 350;
+	moneytextx = moneyx + 100;
+	moneytexty = infoliney + 400;
+}
+
+void ShopCanvas::moneyDraw() {
+	moneyimg.draw(moneyx, moneyy);
+	setColor(240, 240, 0);
+	root->menutitlefont.drawText(moneyamttxt, moneytextx, moneytexty);
+	setColor(255, 255, 255);
 }
 
 void ShopCanvas::buyEnabledSetup() {
@@ -54,7 +74,7 @@ void ShopCanvas::buyEnabledSetup() {
 	buyh = root->menutitlefont.getStringHeight(buy);
 	buyw = root->menutitlefont.getStringWidth(buy);
 	buyx = infolinex;
-	buyy = infoliney + 400;
+	buyy = infoliney + 800;
 	buyhitbox.set(buyx, buyy - buyh, buyx + buyw, buyy);
 	buystate = BUTTON_NONE;
 }
