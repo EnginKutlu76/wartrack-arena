@@ -88,7 +88,7 @@ void ShopCanvas::moneyDraw() {
 
 void ShopCanvas::buyEnabledSetup() {
 	buy = "BUY: ";
-	enabled = "ENABLED";
+	enabled = "Equipped";
 	buyh = root->menutitlefont.getStringHeight(buy);
 	buyw = root->menutitlefont.getStringWidth(buy);
 	buyx = infolinex;

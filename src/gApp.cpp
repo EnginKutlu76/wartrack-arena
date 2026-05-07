@@ -75,6 +75,10 @@ void gApp::loadAssets() {
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('sound','1')");
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('music','1')");
 
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('hull','0')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('weapon','0')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('track','0')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('tankcolor','0')");
 
 	// LOCALIZATION DB
 	gDatabase locdb;
@@ -159,6 +163,18 @@ void gApp::saveAudioSettings(int soundvolume, int musicvolume, int sound, int mu
 	optionsdb.execute("UPDATE options SET value=" + gToStr(music) + " WHERE key='music'");
 }
 
+void gApp::saveTankSettings(int hull, int weapon, int track, int tankcolor) {
+	this->hull = hull;
+	this->weapon = weapon;
+	this->track = track;
+	this->tankcolor = tankcolor;
+
+	optionsdb.execute("UPDATE options SET value=" + gToStr(hull) + " WHERE key='hull'");
+	optionsdb.execute("UPDATE options SET value=" + gToStr(weapon) + " WHERE key='weapon'");
+	optionsdb.execute("UPDATE options SET value=" + gToStr(track) + " WHERE key='track'");
+	optionsdb.execute("UPDATE options SET value=" + gToStr(tankcolor) + " WHERE key='tankcolor'");
+}
+
 void gApp::loadGameSettings() {
 	optionsdb.execute("SELECT value FROM options WHERE key='language'");
 	language = safeGetInt(optionsdb.getSelectData());
@@ -203,6 +219,20 @@ void gApp::loadAudioSettings() {
 	music = safeGetInt(optionsdb.getSelectData());
 }
 
+void gApp::loadTankSettings() {
+	optionsdb.execute("SELECT value FROM options WHERE key='hull'");
+	hull = safeGetInt(optionsdb.getSelectData());
+
+	optionsdb.execute("SELECT value FROM options WHERE key='weapon'");
+	weapon = safeGetInt(optionsdb.getSelectData());
+
+	optionsdb.execute("SELECT value FROM options WHERE key='track'");
+	track = safeGetInt(optionsdb.getSelectData());
+
+	optionsdb.execute("SELECT value FROM options WHERE key='tankcolor'");
+	tankcolor = safeGetInt(optionsdb.getSelectData());
+}
+
 void gApp::loadControlsSettings() {
 	optionsdb.execute("SELECT value FROM options WHERE key='forwardkey'");
 	forward = safeGetInt(optionsdb.getSelectData());
@@ -235,6 +265,8 @@ void gApp::loadControlsSettings() {
 	optionsdb.execute("SELECT value FROM options WHERE key='sensitivity'");
 	sensitivity = safeGetInt(optionsdb.getSelectData());
 }
+
+
 
 void gApp::applyGameSettings() {
 	localization.setCurrentLanguage(language);
@@ -374,4 +406,20 @@ int gApp::getFireKey() {
 
 int gApp::getInteractKey() {
 	return interact;
+}
+
+int gApp::getHull() {
+	return hull;
+}
+
+int gApp::getWeapon() {
+	return weapon;
+}
+
+int gApp::getTrack() {
+	return track;
+}
+
+int gApp::getTankColor() {
+	return tankcolor;
 }
