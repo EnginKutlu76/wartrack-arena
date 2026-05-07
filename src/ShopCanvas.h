@@ -269,6 +269,7 @@ private:
 	int speedx, speedy;
 	float values[5];
 	std::string valuetxt[5];
+	int infogapx, infogapy;
 
 	//Money
 	gImage moneyimg;

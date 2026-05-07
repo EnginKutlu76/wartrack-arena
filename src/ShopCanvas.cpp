@@ -79,7 +79,7 @@ void ShopCanvas::buyEnabledSetup() {
 	buyh = root->menutitlefont.getStringHeight(buy);
 	buyw = root->menutitlefont.getStringWidth(buy);
 	buyx = infolinex;
-	buyy = infoliney + 800;
+	buyy = infoliney + 600;
 	buyhitbox.set(buyx, buyy - buyh, buyx + buyw, buyy);
 	buystate = BUTTON_NONE;
 }
@@ -183,6 +183,8 @@ void ShopCanvas::informationsSetup() {
 	valuetxt[2] = gToStr(values[2]);
 	valuetxt[3] = gToStr(values[3]);
 	valuetxt[4] = gToStr(values[4]);
+	infogapy = 50;
+	infogapx = infolinex + root->menutitlefont.getStringWidth(bulletspeedtxt) + 50;
 }
 
 void ShopCanvas::informationsDraw() {
@@ -193,6 +195,10 @@ void ShopCanvas::informationsDraw() {
 	root->menutitlefont.drawText(healthtxt, speedx, speedy + 100);
 	root->menutitlefont.drawText(attacktxt, speedx, speedy + 150);
 	root->menutitlefont.drawText(bulletspeedtxt, speedx, speedy + 200);
+
+    for(int i = 0; i < 5; i++) {
+    	root->menutitlefont.drawText(valuetxt[i], infogapx, speedy + (i * infogapy));
+    }
 }
 
 void ShopCanvas::backgroundSetup() {
@@ -539,7 +545,7 @@ void ShopCanvas::hullSettingsDraw() {
 
     	hulls[i].draw(x, y, hullimgw, hullimgh);
     	setColor(255, 255, 255);
-    	root->menutitlefont.drawText(valuetxt[0], speedx + 150, speedy);
+    	//root->menutitlefont.drawText(valuetxt[0], speedx + 150, speedy);
     	root->menutitlefont.drawText(hulltexts[i], hx[i] + hullbuttons[i].getWidth() / 1.15f, hy[i] + hullbuttons[i].getHeight() / 4);
     }
 }
