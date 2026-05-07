@@ -293,6 +293,11 @@ private:
 	int buyw, buyh;
 	int buystate;
 	gRect buyhitbox;
+	bool buyed;
+	int pricehull[8];
+	int priceweapon[8];
+	int pricetrack[4];
+	std::string pricetxt;
 };
 
 #endif /* SRC_SHOPCANVAS_H_ */

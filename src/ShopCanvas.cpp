@@ -95,6 +95,10 @@ void ShopCanvas::buyEnabledSetup() {
 	buyy = infoliney + 600;
 	buyhitbox.set(buyx, buyy - buyh, buyx + buyw, buyy);
 	buystate = BUTTON_NONE;
+	//databaseden veri al
+	buyed = false;
+	pricehull[0] = 100;
+	pricetxt = gToStr(pricehull[0]);
 }
 
 void ShopCanvas::buyEnabledDraw() {
@@ -102,6 +106,8 @@ void ShopCanvas::buyEnabledDraw() {
 	if(buystate == BUTTON_FOCUS) setColor(focuscolor);
 	if(buystate == BUTTON_PRESSED) setColor(pressedcolor);
 	root->menutitlefont.drawText(buy, buyx, buyy);
+	if(buyed == true) root->menutitlefont.drawText(enabled, buyx + 60, buyy);
+	else root->menutitlefont.drawText(pricetxt, buyx + 60, buyy);
 	setColor(255, 255, 255);
 }
 
@@ -304,6 +310,11 @@ void ShopCanvas::fullTankDraw() {
 	weaponx = tankx + (currenthull->getWidth() - currentweapon->getWidth()) / 2;
 	weapony = tanky;
 
+	if(activeweapon == WEAPON_THREE ||
+	   activeweapon == WEAPON_SIX ||
+	   activeweapon == WEAPON_EIGHT) {
+		weapony += 40;
+	}
 	currenttrack->draw(trackx, tracky, currenttrack->getWidth(), currenttrack->getHeight());
 	currenttrack->draw(trackx + (tankw / 2) + 2, tracky, currenttrack->getWidth(), currenttrack->getHeight());
 
@@ -625,14 +636,14 @@ void ShopCanvas::weaponSettingsSetup() {
     weapontexts[6] = "Gun 7";
     weapontexts[7] = "Gun 8";
 
-    weaponimgw = weapons[0].getWidth();
-    weaponimgh = weapons[0].getHeight();
+    weaponimgw = weapons[0].getWidth() * 0.9;
+    weaponimgh = weapons[0].getHeight() * 0.9;
  	wlabelw = root->menutitlefont.getStringWidth(weapontexts[0]);
 	wlabelh = root->menutitlefont.getStringHeight("y");
-	wlabelx = containerx ;
+	wlabelx = containerx;
 	wlabely = containery + weaponimgh / 5;
 
-	wx[0] = wlabelx;
+	wx[0] = wlabelx + 20;
 	wy[0] = wlabely;
 	wx[1] = wx[0] + (weaponimgw * 3);
 	wy[1] = wlabely;
@@ -641,13 +652,13 @@ void ShopCanvas::weaponSettingsSetup() {
 	wx[3] = wx[1];
 	wy[3] = wy[2];
 	wx[4] = wx[0];
-	wy[4] = wy[2] + weaponimgh;
+	wy[4] = wy[2] + (weaponimgh * 1.10);
 	wx[5] = wx[1];
-	wy[5] = wy[3] + weaponimgh;
+	wy[5] = wy[3] + (weaponimgh * 1.10);
 	wx[6] = wx[0];
-	wy[6] = wy[4] + weaponimgh;
+	wy[6] = wy[4] + (weaponimgh * 1.10);
 	wx[7] = wx[1];
-	wy[7] = wy[5] + weaponimgh;
+	wy[7] = wy[5] + (weaponimgh * 1.10);
 
 	weaponbuttons[0].set(wx[0], wy[0], wx[0] + weaponimgw, wy[0] + weaponimgh);
 	weaponbuttons[1].set(wx[1], wy[1], wx[1] + weaponimgw, wy[1] + weaponimgh);
