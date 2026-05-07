@@ -78,6 +78,9 @@ private:
 	void exitDraw();
 	void fadeEffectDraw();
 
+	void moneyExpSetup();
+	void moneyExpDraw();
+
 	gImage background;
 	std::string starttext, offlinetext, shoptext, optiontext, credittext, exittext, helptext;
 	gImage glistlogo;
@@ -95,5 +98,12 @@ private:
 	int startstate, offlinestate, shopstate, optionstate, creditstate, exitstate, helpstate;
 	gColor pressedcolor, normalcolor, focuscolor;
 	//std::unique_ptr<Fade> fadeeffect;
+
+	gImage money, exp;
+	std::string moneyname, expname;
+	std::string moneytxt, exptxt;
+	int moneyamt, expamt;
+	int moneyx, moneyy;
+	int expx, expy;
 };
 #endif /* SRC_MAINMENU_H_ */

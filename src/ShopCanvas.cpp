@@ -70,7 +70,7 @@ void ShopCanvas::refreshInformations() {
 
 void ShopCanvas::moneySetup() {
 	moneyimg.loadImage("Png/Icons/money.png");
-	moneyamt = 100;
+	moneyamt = root->getMoney();
 	moneyamttxt = gToStr(moneyamt);
 	moneyh = moneyimg.getHeight();
 	moneyx = infolinex;

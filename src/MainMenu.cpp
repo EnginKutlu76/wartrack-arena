@@ -31,6 +31,7 @@ void mainMenu::setup() {
 	creditSetup();
 	colorSetup();
 	exitSetup();
+	moneyExpSetup();
 }
 
 void mainMenu::update() {
@@ -46,7 +47,34 @@ void mainMenu::draw() {
 	helpDraw();
 	creditDraw();
 	exitDraw();
+	moneyExpDraw();
 	//fadeEffectDraw();
+}
+
+void mainMenu::moneyExpSetup() {
+	money.loadImage("PNG/Icons/money.png");
+	exp.loadImage("PNG/Icons/Icon06.png");
+	moneyname = "Money: ";
+	expname = "Level: ";
+	moneyamt = root->getMoney();
+	expamt = root->getExperience();
+	moneytxt = gToStr(moneyamt);
+	exptxt = gToStr(expamt);
+	moneyx = getWidth() + 160;
+	moneyy = 40;
+	expx = getWidth() + 160;
+	expy = 100;
+}
+
+void mainMenu::moneyExpDraw() {
+	money.draw(moneyx - 230, moneyy - money.getHeight() / 1.8);
+	exp.draw(expx - 200, expy - exp.getHeight() + 10);
+	root->menutitlefont.drawText(moneyname, moneyx - 150, moneyy);
+	root->menutitlefont.drawText(expname, expx - 150, expy);
+	setColor(240, 240, 0);
+	root->menutitlefont.drawText(moneytxt, moneyx, moneyy);
+	setColor(255, 255, 255);
+	root->menutitlefont.drawText(exptxt, expx, expy);
 }
 
 void mainMenu::keyPressed(int key) {

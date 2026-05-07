@@ -80,6 +80,9 @@ void gApp::loadAssets() {
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('track','0')");
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('tankcolor','0')");
 
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('money','100')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('experience','1')");
+
 	// LOCALIZATION DB
 	gDatabase locdb;
 	locdb.loadDatabase("localization.db");
@@ -99,12 +102,33 @@ void gApp::loadAssets() {
 	loadGraphicsSettings();
 	loadAudioSettings();
 	loadControlsSettings();
+	loadMoney();
+	loadExperience();
+	loadTankSettings();
 }
 
 int safeGetInt(std::string data) {
 	auto parts = gSplitString(data, "|");
 	if(parts.size() > 1) return gToInt(parts[1]);
 	return 0;
+}
+
+void gApp::addMoney(int amount) {
+	saveMoney(money + amount);
+}
+
+void gApp::addExperience(int amount) {
+	saveExperience(experience + amount);
+}
+
+void gApp::saveMoney(int money) {
+	this->money = money;
+	optionsdb.execute("UPDATE options SET value=" + gToStr(money) + " WHERE key='money'");
+}
+
+void gApp::saveExperience(int experience) {
+	this->experience = experience;
+	optionsdb.execute("UPDATE options SET value=" + gToStr(experience) + " WHERE key='experience'");
 }
 
 void gApp::saveGameSettings(int language, int minimap, int showfps, int vsync) {
@@ -173,6 +197,18 @@ void gApp::saveTankSettings(int hull, int weapon, int track, int tankcolor) {
 	optionsdb.execute("UPDATE options SET value=" + gToStr(weapon) + " WHERE key='weapon'");
 	optionsdb.execute("UPDATE options SET value=" + gToStr(track) + " WHERE key='track'");
 	optionsdb.execute("UPDATE options SET value=" + gToStr(tankcolor) + " WHERE key='tankcolor'");
+}
+
+void gApp::loadMoney() {
+	optionsdb.execute("SELECT value FROM options WHERE key='money'");
+	money = safeGetInt(optionsdb.getSelectData());
+	//if(money < 1) money = 100;
+}
+
+void gApp::loadExperience() {
+	optionsdb.execute("SELECT value FROM options WHERE key='experience'");
+	experience = safeGetInt(optionsdb.getSelectData());
+	if(experience < 1) experience = 1;
 }
 
 void gApp::loadGameSettings() {
@@ -422,4 +458,12 @@ int gApp::getTrack() {
 
 int gApp::getTankColor() {
 	return tankcolor;
+}
+
+int gApp::getMoney() {
+	return money;
+}
+
+int gApp::getExperience() {
+	return experience;
 }

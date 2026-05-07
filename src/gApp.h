@@ -50,12 +50,16 @@ public:
 	void saveGraphicsSettings(int resolution, int windowmode);
 	void saveAudioSettings(int soundvolume, int musicvolume, int sound, int music);
 	void saveTankSettings(int hull, int weapon, int track, int tankcolor);
+	void saveMoney(int money);
+	void saveExperience(int experience);
 
 	void loadGameSettings();
 	void loadControlsSettings();
 	void loadGraphicsSettings();
 	void loadAudioSettings();
 	void loadTankSettings();
+	void loadMoney();
+	void loadExperience();
 
 	void applyGameSettings();
 	void applyControlsSettings();
@@ -93,11 +97,15 @@ public:
 	int getRunKey();
 	int getFireKey();
 	int getInteractKey();
-
 	int getHull();
 	int getWeapon();
 	int getTrack();
 	int getTankColor();
+	int getMoney();
+	int getExperience();
+
+	void addMoney(int amount);
+	void addExperience(int experience);
 
 private:
 	void loadAssets();
@@ -106,8 +114,9 @@ private:
 
 	gImage* background;
 	gDatabase optionsdb;
-	int language, sensitivity, invertmouse, minimap, showfps, vsync, resolution, windowmode, fov, soundvolume,
-	musicvolume, sound, music, forward, backward, right, left, run, fire, interact, hull, weapon, track, tankcolor;
+	int language, sensitivity, invertmouse, minimap, showfps, vsync, resolution,
+	 windowmode, fov, soundvolume, musicvolume, sound, music, forward, backward, right,
+	 left, run, fire, interact, hull, weapon, track, tankcolor, money, experience;
 	std::string temp;
 	gLocalization localization;
 };
