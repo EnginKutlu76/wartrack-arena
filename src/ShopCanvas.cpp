@@ -35,6 +35,7 @@ void ShopCanvas::setup() {
 	buyEnabledSetup();
 	moneySetup();
 	colorPickSetup();
+	refreshInformations();
 }
 
 void ShopCanvas::update() {
@@ -53,6 +54,18 @@ void ShopCanvas::draw() {
 	colorPickDraw();
 
 	gLogi("activecolor") << activecolor;
+}
+
+void ShopCanvas::refreshInformations() {
+	values[0] = trackspeed[activetrack];
+	values[1] = hulldurability[activehull];
+	values[2] = hullhealth[activehull];
+	values[3] = weaponattack[activeweapon];
+	values[4] = weaponbulletspeed[activeweapon];
+
+	for(int i = 0; i < 5; i++) {
+		valuetxt[i] = gToStr(values[i]);
+	}
 }
 
 void ShopCanvas::moneySetup() {
@@ -172,22 +185,66 @@ void ShopCanvas::informationsSetup() {
 	speedx = infolinex;
 	speedy = infoliney + 50;
 
-	values[0] = 4;
-	values[1] = 3;
-	values[2] = 100;
-	values[3] = 6;
-	values[4] = 0.8f;
+
+	infogapy = 50;
+	infogapx = infolinex + root->menutitlefont.getStringWidth(bulletspeedtxt) + 50;
+
+	trackspeed[0] = 4;
+	trackspeed[1] = 5;
+	trackspeed[2] = 6;
+	trackspeed[3] = 7;
+
+	hulldurability[0] = 5;
+	hulldurability[1] = 7;
+	hulldurability[2] = 9;
+	hulldurability[3] = 11;
+	hulldurability[4] = 13;
+	hulldurability[5] = 15;
+	hulldurability[6] = 16;
+	hulldurability[7] = 17;
+
+	hullhealth[0] = 100;
+	hullhealth[1] = 120;
+	hullhealth[2] = 140;
+	hullhealth[3] = 150;
+	hullhealth[4] = 160;
+	hullhealth[5] = 170;
+	hullhealth[6] = 180;
+	hullhealth[7] = 200;
+
+	weaponattack[0] = 6;
+	weaponattack[1] = 8;
+	weaponattack[2] = 10;
+	weaponattack[3] = 12;
+	weaponattack[4] = 14;
+	weaponattack[5] = 16;
+	weaponattack[6] = 18;
+	weaponattack[7] = 20;
+
+	weaponbulletspeed[0] = 1;
+	weaponbulletspeed[1] = 2;
+	weaponbulletspeed[2] = 3;
+	weaponbulletspeed[3] = 4;
+	weaponbulletspeed[4] = 5;
+	weaponbulletspeed[5] = 6;
+	weaponbulletspeed[6] = 7;
+	weaponbulletspeed[7] = 8;
+
+	values[0] = trackspeed[0];
+	values[1] = hulldurability[0];
+	values[2] = hullhealth[0];
+	values[3] = weaponattack[0];
+	values[4] = weaponbulletspeed[0];
 
 	valuetxt[0] = gToStr(values[0]);
 	valuetxt[1] = gToStr(values[1]);
 	valuetxt[2] = gToStr(values[2]);
 	valuetxt[3] = gToStr(values[3]);
 	valuetxt[4] = gToStr(values[4]);
-	infogapy = 50;
-	infogapx = infolinex + root->menutitlefont.getStringWidth(bulletspeedtxt) + 50;
 }
 
 void ShopCanvas::informationsDraw() {
+	setColor(255, 255, 255);
 	root->menutitlefont.drawText(infotext, infox, infoy);
 	infoline.draw(infolinex, infoliney, infolinew, infolineh);
 	root->menutitlefont.drawText(speedtxt, speedx, speedy);
@@ -455,7 +512,7 @@ void ShopCanvas::trackTabSetup() {
 }
 
 void ShopCanvas::effectTabSetup() {
-	effecttabtext = root->localizeWord(root->controlskey);
+	effecttabtext = root->localizeWord(root->skillskey);
 	effecttabbuttonstate = BUTTON_NONE;
 	effecttabbuttonw = tabw / 4;
 	effecttabbuttonh = tabh;
@@ -545,9 +602,8 @@ void ShopCanvas::hullSettingsDraw() {
 
     	hulls[i].draw(x, y, hullimgw, hullimgh);
     	setColor(255, 255, 255);
-    	//root->menutitlefont.drawText(valuetxt[0], speedx + 150, speedy);
     	root->menutitlefont.drawText(hulltexts[i], hx[i] + hullbuttons[i].getWidth() / 1.15f, hy[i] + hullbuttons[i].getHeight() / 4);
-    }
+   }
 }
 
 void ShopCanvas::weaponSettingsSetup() {
@@ -922,48 +978,56 @@ void ShopCanvas::hullSettingsReleased(int x, int y) {
 		hullbuttonstates[0] = BUTTON_PERFORMED;
 		activehull = HULL_ONE;
 		currenthull = &hulls[0];
+		refreshInformations();
 	}
 
 	else if(hullbuttons[1].contains(x, y) && hullbuttonstates[1] == BUTTON_PRESSED) {
 		hullbuttonstates[1] = BUTTON_PERFORMED;
 		activehull = HULL_TWO;
 		currenthull = &hulls[1];
+		refreshInformations();
 	}
 
 	else if(hullbuttons[2].contains(x, y) && hullbuttonstates[2] == BUTTON_PRESSED) {
 		hullbuttonstates[2] = BUTTON_PERFORMED;
 		activehull = HULL_THREE;
 		currenthull = &hulls[2];
+		refreshInformations();
 	}
 
 	else if(hullbuttons[3].contains(x, y) && hullbuttonstates[3] == BUTTON_PRESSED) {
 		hullbuttonstates[3] = BUTTON_PERFORMED;
 		activehull = HULL_FOUR;
 		currenthull = &hulls[3];
+		refreshInformations();
 	}
 
 	else if(hullbuttons[4].contains(x, y) && hullbuttonstates[4] == BUTTON_PRESSED) {
 		hullbuttonstates[4] = BUTTON_PERFORMED;
 		activehull = HULL_FIVE;
 		currenthull = &hulls[4];
+		refreshInformations();
 	}
 
 	else if(hullbuttons[5].contains(x, y) && hullbuttonstates[5] == BUTTON_PRESSED) {
 		hullbuttonstates[5] = BUTTON_PERFORMED;
 		activehull = HULL_SIX;
 		currenthull = &hulls[5];
+		refreshInformations();
 	}
 
 	else if(hullbuttons[6].contains(x, y) && hullbuttonstates[6] == BUTTON_PRESSED) {
 		hullbuttonstates[6] = BUTTON_PERFORMED;
 		activehull = HULL_SEVEN;
 		currenthull = &hulls[6];
+		refreshInformations();
 	}
 
 	else if(hullbuttons[7].contains(x, y) && hullbuttonstates[7] == BUTTON_PRESSED) {
 		hullbuttonstates[7] = BUTTON_PERFORMED;
 		activehull = HULL_EIGHT;
 		currenthull = &hulls[7];
+		refreshInformations();
 	}
 	else {
 		hullbuttonstates[0] = BUTTON_CANCELED;
@@ -1090,48 +1154,56 @@ void ShopCanvas::weaponSettingsReleased(int x, int y) {
 		weaponbuttonstates[0] = BUTTON_PERFORMED;
 		activeweapon = WEAPON_ONE;
 		currentweapon = &weapons[0];
+		refreshInformations();
 	}
 
 	else if(weaponbuttons[1].contains(x, y) && weaponbuttonstates[1] == BUTTON_PRESSED) {
 		weaponbuttonstates[1] = BUTTON_PERFORMED;
 		activeweapon = WEAPON_TWO;
 		currentweapon = &weapons[1];
+		refreshInformations();
 	}
 
 	else if(weaponbuttons[2].contains(x, y) && weaponbuttonstates[2] == BUTTON_PRESSED) {
 		weaponbuttonstates[2] = BUTTON_PERFORMED;
 		activeweapon = WEAPON_THREE;
 		currentweapon = &weapons[2];
+		refreshInformations();
 	}
 
 	else if(weaponbuttons[3].contains(x, y) && weaponbuttonstates[3] == BUTTON_PRESSED) {
 		weaponbuttonstates[3] = BUTTON_PERFORMED;
 		activeweapon = WEAPON_FOUR;
 		currentweapon = &weapons[3];
+		refreshInformations();
 	}
 
 	else if(weaponbuttons[4].contains(x, y) && weaponbuttonstates[4] == BUTTON_PRESSED) {
 		weaponbuttonstates[4] = BUTTON_PERFORMED;
 		activeweapon = WEAPON_FIVE;
 		currentweapon = &weapons[4];
+		refreshInformations();
 	}
 
 	else if(weaponbuttons[5].contains(x, y) && weaponbuttonstates[5] == BUTTON_PRESSED) {
 		weaponbuttonstates[5] = BUTTON_PERFORMED;
 		activeweapon = WEAPON_SIX;
 		currentweapon = &weapons[5];
+		refreshInformations();
 	}
 
 	else if(weaponbuttons[6].contains(x, y) && weaponbuttonstates[6] == BUTTON_PRESSED) {
 		weaponbuttonstates[6] = BUTTON_PERFORMED;
 		activeweapon = WEAPON_SEVEN;
 		currentweapon = &weapons[6];
+		refreshInformations();
 	}
 
 	else if(weaponbuttons[7].contains(x, y) && weaponbuttonstates[7] == BUTTON_PRESSED) {
 		weaponbuttonstates[7] = BUTTON_PERFORMED;
 		activeweapon = WEAPON_EIGHT;
 		currentweapon = &weapons[7];
+		refreshInformations();
 	}
 	else {
 		weaponbuttonstates[0] = BUTTON_CANCELED;
@@ -1242,24 +1314,28 @@ void ShopCanvas::trackSettingsReleased(int x, int y) {
 		trackbuttonstates[0] = BUTTON_PERFORMED;
 		activetrack = TRACK_ONE;
 		currenttrack = &tracks[0];
+		refreshInformations();
 	}
 
 	else if(trackbuttons[1].contains(x, y) && trackbuttonstates[1] == BUTTON_PRESSED) {
 		trackbuttonstates[1] = BUTTON_PERFORMED;
 		activetrack = TRACK_TWO;
 		currenttrack = &tracks[1];
+		refreshInformations();
 	}
 
 	else if(trackbuttons[2].contains(x, y) && trackbuttonstates[2] == BUTTON_PRESSED) {
 		trackbuttonstates[2] = BUTTON_PERFORMED;
 		activetrack = TRACK_THREE;
 		currenttrack = &tracks[2];
+		refreshInformations();
 	}
 
 	else if(trackbuttons[3].contains(x, y) && trackbuttonstates[3] == BUTTON_PRESSED) {
 		trackbuttonstates[3] = BUTTON_PERFORMED;
 		activetrack = TRACK_FOUR;
 		currenttrack = &tracks[3];
+		refreshInformations();
 	}
 	else {
 		trackbuttonstates[0] = BUTTON_CANCELED;

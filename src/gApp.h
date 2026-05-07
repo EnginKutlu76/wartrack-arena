@@ -39,7 +39,7 @@ public:
 			forwardkey = "forward", backwardkey = "backward", rightkey = "right", leftkey = "left", runkey = "run", firekey = "fire", interactkey = "interact",
 			offlinekey = "offline", startkey = "start", shopkey = "store", optionskey = "options", creditskey = "credits", exitkey = "exit", tankkey = "tank",
 			fullscreenkey = "fullscreen", windowedkey = "windowed", lowkey = "low", normalkey = "normal", highkey = "high", returnkey = "return",
-			generalkey = "general", videokey = "video", audiokey = "audio", controlskey = "controls", applykey = "apply", resetkey = "reset", helpkey = "help",
+			generalkey = "general", videokey = "video", audiokey = "audio", controlskey = "controls", skillskey = "skills", applykey = "apply", resetkey = "reset", helpkey = "help",
 			generallabelkey = "Summary: Tanks can move forward and backward, and rotate using the left and right controls, while the turret is aimed independently with the mouse. The game features two modes: Score Mode and Flag Mode. In Score Mode, teams compete to earn the highest score within a limited time, and the team with the most points at the end wins; however, if a team reaches 40 points, they win instantly. In Flag Mode, teams compete to capture flags within a limited time, and the team that collects all flags wins immediately; if time runs out, the team with the most flags wins. You can also practice in offline mode, and use in-game abilities to gain an advantage during matches.";
 
 	void drawMenuBackground(int w, int h);

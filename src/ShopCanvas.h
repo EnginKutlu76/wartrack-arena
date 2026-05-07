@@ -126,6 +126,8 @@ private:
 	void moneySetup();
 	void moneyDraw();
 
+	void refreshInformations();
+
 	//tabs
 	gRect hulltabbutton, weapontabbutton, tracktabbutton, effecttabbutton;
 	std::string hulltabtext, weapontabtext, tracktabtext, effecttabtext;
@@ -269,6 +271,12 @@ private:
 	int speedx, speedy;
 	float values[5];
 	std::string valuetxt[5];
+	int trackspeed[4];
+	int hulldurability[8];
+	int hullhealth[8];
+	int weaponattack[8];
+	int weaponbulletspeed[8];
+	//int speed, durability, health, attack, bulletspeed;
 	int infogapx, infogapy;
 
 	//Money
