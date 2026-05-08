@@ -117,10 +117,9 @@ private:
 	void moneyDraw();
 
 	void refreshInformations();
-
 	void buyTank();
-
 	void refreshTankPreview();
+	void lockSetup();
 
 	//tabs
 	gRect hulltabbutton, weapontabbutton, tracktabbutton, effecttabbutton;
@@ -288,6 +287,10 @@ private:
 	int priceweapon[8];
 	int pricetrack[4];
 	std::string pricetxt;
+
+	//lock
+	gImage lock;
+	int lockx, locky, lockw, lockh;
 };
 
 #endif /* SRC_SHOPCANVAS_H_ */

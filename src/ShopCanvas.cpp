@@ -37,6 +37,7 @@ void ShopCanvas::setup() {
 	moneySetup();
 	colorPickSetup();
 	refreshInformations();
+	lockSetup();
 }
 
 void ShopCanvas::update() {
@@ -53,6 +54,18 @@ void ShopCanvas::draw() {
 	buyEnabledDraw();
 	moneyDraw();
 	colorPickDraw();
+	//color lock
+	lock.draw(lockx + colorspace * 1, locky, lockw, lockh);
+	lock.draw(lockx + colorspace * 2, locky, lockw, lockh);
+	lock.draw(lockx + colorspace * 3, locky, lockw, lockh);
+}
+
+void ShopCanvas::lockSetup() {
+	lock.loadImage("PNG/padlock.png");
+	lockw =  lock.getWidth() * 0.06;
+	lockh = lock.getHeight() * 0.06;
+	lockx =  colorx + (colors[0].getWidth() - lockw) / 2;
+	locky = colory + (colors[0].getHeight() - lockh) - 31;
 }
 
 void ShopCanvas::refreshTankPreview() {
@@ -75,8 +88,8 @@ void ShopCanvas::refreshTankPreview() {
 void ShopCanvas::buyTank() {
 	root->saveTankSettings(activehull + 1, activeweapon + 1, activetrack + 1);
 	root->saveTankColor(activehullcolor + 1, activeweaponcolor + 1);
-	tabSetup();
-	containerSetup();
+//	tabSetup();
+//	containerSetup();
 	refreshTankPreview();
 }
 
@@ -432,7 +445,6 @@ void ShopCanvas::checkButtonPressed(int x, int y, int button) {
 
 	if(buyhitbox.contains(x, y)) {
 		buystate = BUTTON_PRESSED;
-		returny += 2;
 	}
 
 	if(colorshitbox[0].contains(x, y)) {
@@ -634,9 +646,10 @@ void ShopCanvas::hullSettingsDraw() {
 
    // 	gDrawRectangle(x, y, hullimgw, hullimgh, true);
     	//setColor(255, 255, 255);
-
-
     	hulls[i].draw(x, y, hullimgw, hullimgh);
+	    if(i > 0)
+    	lock.draw(x + 25, y + 25, lockw * 4, lockh * 4);
+
     	setColor(255, 255, 255);
     	root->menutitlefont.drawText(hulltexts[i], hx[i] + hullbuttons[i].getWidth() / 1.15f, hy[i] + hullbuttons[i].getHeight() / 4);
    }
@@ -722,10 +735,10 @@ void ShopCanvas::trackSettingsSetup() {
 	tx[3] = tx[1];
 	ty[3] = ty[2];
 
-	trackbuttons[0].set(tx[0], ty[0], tx[0] + trackimgw, ty[0] + trackimgh);
-	trackbuttons[1].set(tx[1], ty[1], tx[1] + trackimgw, ty[1] + trackimgh);
-	trackbuttons[2].set(tx[2], ty[2], tx[2] + trackimgw, ty[2] + trackimgh);
-	trackbuttons[3].set(tx[3], ty[3], tx[3] + trackimgw, ty[3] + trackimgh);
+	trackbuttons[0].set(tx[0], ty[0], tx[0] + trackimgw + 50, ty[0] + trackimgh);
+	trackbuttons[1].set(tx[1], ty[1], tx[1] + trackimgw + 50, ty[1] + trackimgh);
+	trackbuttons[2].set(tx[2], ty[2], tx[2] + trackimgw + 50, ty[2] + trackimgh);
+	trackbuttons[3].set(tx[3], ty[3], tx[3] + trackimgw + 50, ty[3] + trackimgh);
 }
 
 void ShopCanvas::tabDraw() {
@@ -798,6 +811,9 @@ void ShopCanvas::weaponSettingsDraw() {
 	    //gDrawRectangle(x, y, hullimgw, hullimgh, true);
 		//setColor(255, 255, 255);
 	    weapons[i].draw(x, y, weaponimgw, weaponimgh);
+	    if(i > 0)
+	    lock.draw(x + 75, y + 75, lockw * 2, lockh * 2);
+
 	    setColor(255, 255, 255);
 	    root->menutitlefont.drawText(weapontexts[i], wx[i] + weaponbuttons[i].getWidth() / 1.15f, wy[i] + weaponbuttons[i].getHeight() / 4);
 	    }
@@ -816,9 +832,12 @@ void ShopCanvas::trackSettingsDraw() {
     	else setColor(normalcolor);
    // 	gDrawRectangle(x, y, hullimgw, hullimgh, true);
     	//setColor(255, 255, 255);
-    	tracks[i].draw(x, y, trackimgw, trackimgh);
-    	setColor(255, 255, 255);
-    	root->menutitlefont.drawText(tracktexts[i], tx[i] + trackbuttons[i].getWidth() / 1.15f, ty[i] + trackbuttons[i].getHeight() / 4);
+    	tracks[i].draw(x + 50, y, trackimgw, trackimgh);
+	    if(i > 0)
+	    lock.draw(x + 50, y + 75, lockw * 1.5, lockh * 1.5);
+
+	    setColor(255, 255, 255);
+    	root->menutitlefont.drawText(tracktexts[i], (tx[i] + trackbuttons[i].getWidth() / 1.15f ) + 75, ty[i] + trackbuttons[i].getHeight() / 4);
     }
 	setColor(255, 255, 255);
 }
