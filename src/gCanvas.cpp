@@ -18,17 +18,19 @@ gCanvas::~gCanvas() {
 }
 
 void gCanvas::setup() {
-	selectedhull = 3;
-	selectedweapon = 2;
-	selectedtrack = 2;
+	selectedhull = root->getHull();
+	selectedweapon = root->getWeapon();
+	selectedtrack = root->getTrack();
+	selectedhullcolor = root->getHullColor();
+	selectedweaponcolor = root->getWeaponColor();
 	map.loadImage("haritalar/arkaplan1.jpg");
-	tank1.loadImage("oyun/PNG/Hulls_Color_A/Hull_0" + gToStr(selectedhull) + ".png");
+	tank1.loadImage("oyun/PNG/Hulls_Color_" + gToStr(selectedhullcolor) + "/Hull_0" + gToStr(selectedhull) + ".png");
 	for(int i = 0; i < trackframenum; i++) {
 		track[i].loadImage("oyun/PNG/Tracks/Track_" + gToStr(selectedtrack) + "_" + gToStr(i) + ".png");
 	}
-	gun.loadImage("oyun/PNG/Weapon_Color_A/Gun_0" + gToStr(selectedweapon) + ".png");
+	gun.loadImage("oyun/PNG/Weapon_Color_" + gToStr(selectedweaponcolor) + "/Gun_0" + gToStr(selectedweapon) + ".png");
 	bulletimage.loadImage("oyun/PNG/Effects/Exhaust_Fire.png");
-	enemy.loadImage("oyun/PNG/Hulls_Color_B/Hull_01.png");
+	enemy.loadImage("oyun/PNG/Hulls_Color_3/Hull_01.png");
 	minimap.loadImage("haritalar/radar1.png");
 	minimapradarsign1.loadImage("haritalar/radarisaret1.png");
 	minimapradarsign2.loadImage("haritalar/radarisaret2.png");

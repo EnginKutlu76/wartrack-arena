@@ -120,6 +120,8 @@ private:
 
 	void buyTank();
 
+	void refreshTankPreview();
+
 	//tabs
 	gRect hulltabbutton, weapontabbutton, tracktabbutton, effecttabbutton;
 	std::string hulltabtext, weapontabtext, tracktabtext, effecttabtext;
@@ -194,8 +196,10 @@ private:
 	int colorspace;
 	gRect colorshitbox[4];
 	int colorstate[4];
-	int activecolor;
-	gImage* currentcolor;
+	int activehullcolor;
+	int activeweaponcolor;
+	gImage* currenthullcolor;
+	gImage* currentweaponcolor;
 	std::string colorname;
 
 	//hulls images

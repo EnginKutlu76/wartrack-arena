@@ -180,6 +180,8 @@ private:
 	int selectedhull;
 	int selectedweapon;
 	int selectedtrack;
+	int selectedhullcolor;
+	int selectedweaponcolor;
 };
 
 #endif /* GCANVAS_H_ */

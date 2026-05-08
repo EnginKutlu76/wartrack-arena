@@ -49,7 +49,8 @@ public:
 	void saveControlsSettings(int forward, int backward, int right, int left, int run, int fire, int interact, int sensitivity);
 	void saveGraphicsSettings(int resolution, int windowmode);
 	void saveAudioSettings(int soundvolume, int musicvolume, int sound, int music);
-	void saveTankSettings(int hull, int weapon, int track, int tankcolor);
+	void saveTankSettings(int hull, int weapon, int track);
+	void saveTankColor(int hullcolor, int weaponcolor);
 	void saveMoney(int money);
 	void saveExperience(int experience);
 	void saveName(std::string name);
@@ -62,6 +63,7 @@ public:
 	void loadMoney();
 	void loadExperience();
 	void loadName();
+	void loadColors();
 
 	void applyGameSettings();
 	void applyControlsSettings();
@@ -102,7 +104,8 @@ public:
 	int getHull();
 	int getWeapon();
 	int getTrack();
-	int getTankColor();
+	int getHullColor();
+	int getWeaponColor();
 	int getMoney();
 	int getExperience();
 	std::string getName();
@@ -119,7 +122,7 @@ private:
 	gDatabase optionsdb;
 	int language, sensitivity, invertmouse, minimap, showfps, vsync, resolution,
 	 windowmode, fov, soundvolume, musicvolume, sound, music, forward, backward, right,
-	 left, run, fire, interact, hull, weapon, track, tankcolor, money, experience;
+	 left, run, fire, interact, hull, weapon, track, hullcolor, weaponcolor, money, experience;
 	std::string temp;
 	std::string name;
 	gLocalization localization;

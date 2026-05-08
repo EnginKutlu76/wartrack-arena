@@ -75,10 +75,11 @@ void gApp::loadAssets() {
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('sound','1')");
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('music','1')");
 
-	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('hull','0')");
-	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('weapon','0')");
-	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('track','0')");
-	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('tankcolor','0')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('hull','1')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('weapon','1')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('track','1')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('hullcolor','2')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('weaponcolor','2')");
 
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('money','100')");
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('experience','1')");
@@ -108,6 +109,7 @@ void gApp::loadAssets() {
 	loadExperience();
 	loadTankSettings();
 	loadName();
+	loadColors();
 }
 
 int safeGetInt(std::string data) {
@@ -201,16 +203,22 @@ void gApp::saveAudioSettings(int soundvolume, int musicvolume, int sound, int mu
 	optionsdb.execute("UPDATE options SET value=" + gToStr(music) + " WHERE key='music'");
 }
 
-void gApp::saveTankSettings(int hull, int weapon, int track, int tankcolor) {
+void gApp::saveTankColor(int hullcolor, int weaponcolor) {
+	this->hullcolor = hullcolor;
+	this->weaponcolor = weaponcolor;
+
+	optionsdb.execute("UPDATE options SET value=" + gToStr(hullcolor) + " WHERE key='hullcolor'");
+	optionsdb.execute("UPDATE options SET value=" + gToStr(weaponcolor) + " WHERE key='weaponcolor'");
+}
+
+void gApp::saveTankSettings(int hull, int weapon, int track) {
 	this->hull = hull;
 	this->weapon = weapon;
 	this->track = track;
-	this->tankcolor = tankcolor;
 
 	optionsdb.execute("UPDATE options SET value=" + gToStr(hull) + " WHERE key='hull'");
 	optionsdb.execute("UPDATE options SET value=" + gToStr(weapon) + " WHERE key='weapon'");
 	optionsdb.execute("UPDATE options SET value=" + gToStr(track) + " WHERE key='track'");
-	optionsdb.execute("UPDATE options SET value=" + gToStr(tankcolor) + " WHERE key='tankcolor'");
 }
 
 void gApp::loadName() {
@@ -284,9 +292,14 @@ void gApp::loadTankSettings() {
 
 	optionsdb.execute("SELECT value FROM options WHERE key='track'");
 	track = safeGetInt(optionsdb.getSelectData());
+}
 
-	optionsdb.execute("SELECT value FROM options WHERE key='tankcolor'");
-	tankcolor = safeGetInt(optionsdb.getSelectData());
+void gApp::loadColors() {
+	optionsdb.execute("SELECT value FROM options WHERE key='hullcolor'");
+	hullcolor = safeGetInt(optionsdb.getSelectData());
+
+	optionsdb.execute("SELECT value FROM options WHERE key='weaponcolor'");
+	weaponcolor = safeGetInt(optionsdb.getSelectData());
 }
 
 void gApp::loadControlsSettings() {
@@ -476,8 +489,12 @@ int gApp::getTrack() {
 	return track;
 }
 
-int gApp::getTankColor() {
-	return tankcolor;
+int gApp::getHullColor() {
+	return hullcolor;
+}
+
+int gApp::getWeaponColor() {
+	return weaponcolor;
 }
 
 int gApp::getMoney() {
