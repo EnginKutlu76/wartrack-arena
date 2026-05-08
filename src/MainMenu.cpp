@@ -74,9 +74,9 @@ void mainMenu::moneyExpSetup() {
 	expamt = root->getExperience();
 	moneytxt = gToStr(moneyamt);
 	exptxt = gToStr(expamt);
-	moneyx = getWidth() + 160;
+	moneyx = 1450;
 	moneyy = 40;
-	expx = getWidth() + 160;
+	expx = 1450;
 	expy = 100;
 }
 

@@ -40,10 +40,8 @@ private:
 	gApp* root;
 
 	static const int  BUTTON_NONE = 0, BUTTON_PRESSED = 1, BUTTON_CANCELED = -1, BUTTON_PERFORMED = 2, BUTTON_FOCUS = 3;
-	static const int TAB_NONE = 0, TAB_GENERAL = 1, TAB_LEVEL = 2, TAB_ITEMS = 3, TAB_CONTROLS = 4, TAB_BACK = 5;
-	static const int languagenum = 3, resolutionnum = 3, windowmodenum = 3, qualitynum = 3, keynum = 7;
+	static const int TAB_NONE = 0, TAB_HULL = 1, TAB_WEAPON = 2, TAB_TRACK = 3, TAB_BACK = 4;
 	static const int LANG_EN = 1, LANG_TR = 2;
-	static const int KEY_NONE = -1, KEY_FORWARD = 0, KEY_BACKWARD = 1, KEY_RIGHT = 2, KEY_LEFT = 3, KEY_RUN = 4, KEY_FIRE = 5, KEY_INTERACT = 6;
 	static const int HULL_ONE = 0, HULL_TWO = 1, HULL_THREE = 2, HULL_FOUR = 3, HULL_FIVE = 4, HULL_SIX = 5, HULL_SEVEN = 6, HULL_EIGHT = 7;
 	static const int WEAPON_ONE = 0, WEAPON_TWO = 1, WEAPON_THREE = 2, WEAPON_FOUR = 3, WEAPON_FIVE = 4, WEAPON_SIX = 5, WEAPON_SEVEN = 6, WEAPON_EIGHT = 7;
 	static const int TRACK_ONE = 0, TRACK_TWO = 1, TRACK_THREE = 2, TRACK_FOUR = 3;
@@ -61,25 +59,21 @@ private:
 	void hullTabSetup();
 	void weaponTabSetup();
 	void trackTabSetup();
-	void effectTabSetup();
 
 	void containerSetup();
 	void hullSettingsSetup();
 	void weaponSettingsSetup();
 	void trackSettingsSetup();
-	void effectSettingsSetup();
 
 	void tabDraw();
 	void hullTabButtonDraw();
 	void weaponTabButtonDraw();
 	void trackTabButtonDraw();
-	void effectTabButtonDraw();
 
 	void containerDraw();
 	void hullSettingsDraw();
 	void weaponSettingsDraw();
 	void trackSettingsDraw();
-	void effectSettingsDraw();
 
 	void tabButtonPressed(int x, int y);
 	void tabButtonReleased(int x, int y);
@@ -100,10 +94,6 @@ private:
 	void trackSettingsPressed(int x, int y);
 	void trackSettingsReleased(int x, int y);
 	void trackSettingsFocus(int x, int y);
-
-	void effectSettingsPressed(int x, int y);
-	void effectSettingsReleased(int x, int y);
-	void effectSettingsFocus(int x, int y);
 
 	void updateButtonState(int x, int y);
 	void checkButtonPressed(int x, int y, int button);
@@ -128,6 +118,8 @@ private:
 
 	void refreshInformations();
 
+	void buyTank();
+
 	//tabs
 	gRect hulltabbutton, weapontabbutton, tracktabbutton, effecttabbutton;
 	std::string hulltabtext, weapontabtext, tracktabtext, effecttabtext;
@@ -144,9 +136,9 @@ private:
 	std::vector<std::string> hulllabellines;
 
 	//weapon settings
-	std::string weaponlabeltext, weapondisplaytext[resolutionnum];
-	std::string weapononelabeltext, wepaononedisplaytext[resolutionnum];
-	std::string weapontwolabeltext, weapontwodisplaytext[resolutionnum];
+	std::string weaponlabeltext;
+	std::string weapononelabeltext;
+	std::string weapontwolabeltext;
 	gRect resolutionprev, resolutionnext;
 	int resolutionprevstate, resolutionnextstate;
 	int resolution;
@@ -162,13 +154,7 @@ private:
 	//effect settings
 	bool ischangingkey;
 	int selectedkey;
-	int keyboardcontrols[keynum];
-
-	std::string effectlabeltext[keynum], effectdisplaytext[keynum];
-	gRect effectbutton[keynum];
-	int effectbuttonstate[keynum];
-	int effectlabelx[keynum], effectlabely[keynum], effectlabelw[keynum], effectlabelh[keynum];
-	int effectx[keynum], effecty[keynum], effectw[keynum], effecth[keynum];
+//	int keyboardcontrols[keynum];
 
 	int hulltabbuttonx, hulltabbuttony, hulltabbuttonw, hulltabbuttonh;
 	int weapontabbuttonx, weapontabbuttony, weapontabbuttonw, weapontabbuttonh;

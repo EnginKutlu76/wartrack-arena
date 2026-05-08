@@ -56,6 +56,13 @@ void ShopCanvas::draw() {
 	gLogi("activecolor") << activecolor;
 }
 
+void ShopCanvas::buyTank() {
+	//root->saveTankSettings(activehull, activeweapon, activetrack, activecolor);
+	//root->applyGameSettings();
+	//tabSetup();
+	//containerSetup();
+}
+
 void ShopCanvas::refreshInformations() {
 	values[0] = trackspeed[activetrack];
 	values[1] = hulldurability[activehull];
@@ -486,16 +493,15 @@ void ShopCanvas::tabSetup() {
 	hullTabSetup();
 	weaponTabSetup();
 	trackTabSetup();
-	effectTabSetup();
 	returnSetup();
 
-	activetab = TAB_GENERAL;
+	activetab = TAB_HULL;
 }
 
 void ShopCanvas::hullTabSetup() {
 	hulltabtext = root->localizeWord(root->generalkey);
 	hulltabbuttonstate = BUTTON_NONE;
-	hulltabbuttonw = tabw / 4;
+	hulltabbuttonw = tabw / 3;
 	hulltabbuttonh = tabh;
 	hulltabbuttonx = tabx;
 	hulltabbuttony = taby;
@@ -505,7 +511,7 @@ void ShopCanvas::hullTabSetup() {
 void ShopCanvas::weaponTabSetup() {
 	weapontabtext = "Silahlar";
 	weapontabbuttonstate = BUTTON_NONE;
-	weapontabbuttonw = tabw / 4;
+	weapontabbuttonw = tabw / 3;
 	weapontabbuttonh = tabh;
 	weapontabbuttonx = tabx + hulltabbuttonw;
 	weapontabbuttony = taby;
@@ -515,21 +521,11 @@ void ShopCanvas::weaponTabSetup() {
 void ShopCanvas::trackTabSetup() {
 	tracktabtext = "Tekerlek";
 	tracktabbuttonstate = BUTTON_NONE;
-	tracktabbuttonw = tabw / 4;
+	tracktabbuttonw = tabw / 3;
 	tracktabbuttonh = tabh;
 	tracktabbuttonx = tabx + hulltabbuttonw + weapontabbuttonw;
 	tracktabbuttony = taby;
 	tracktabbutton.set(tracktabbuttonx, tracktabbuttony, tracktabbuttonx + tracktabbuttonw, tracktabbuttony + tracktabbuttonh);
-}
-
-void ShopCanvas::effectTabSetup() {
-	effecttabtext = root->localizeWord(root->skillskey);
-	effecttabbuttonstate = BUTTON_NONE;
-	effecttabbuttonw = tabw / 4;
-	effecttabbuttonh = tabh;
-	effecttabbuttonx = tabx + hulltabbuttonw + weapontabbuttonw + tracktabbuttonw;
-	effecttabbuttony = taby;
-	effecttabbutton.set(effecttabbuttonx, effecttabbuttony, effecttabbuttonx + effecttabbuttonw, effecttabbuttony + effecttabbuttonh);
 }
 
 void ShopCanvas::containerSetup() {
@@ -541,7 +537,6 @@ void ShopCanvas::containerSetup() {
 	hullSettingsSetup();
 	weaponSettingsSetup();
 	trackSettingsSetup();
-	effectSettingsSetup();
 }
 
 void ShopCanvas::hullSettingsSetup() {
@@ -703,10 +698,6 @@ void ShopCanvas::trackSettingsSetup() {
 	trackbuttons[3].set(tx[3], ty[3], tx[3] + trackimgw, ty[3] + trackimgh);
 }
 
-void ShopCanvas::effectSettingsSetup() {
-	//////////////////////////////////////////
-}
-
 void ShopCanvas::tabDraw() {
 	setColor(tabcolor);
 	gDrawRectangle(tabx, taby, tabw, tabh, true);
@@ -714,13 +705,12 @@ void ShopCanvas::tabDraw() {
 	hullTabButtonDraw();
 	weaponTabButtonDraw();
 	trackTabButtonDraw();
-	effectTabButtonDraw();
 	returnDraw();
 }
 
 void ShopCanvas::hullTabButtonDraw() {
 	if(hulltabbuttonstate == BUTTON_FOCUS) setColor(focuscolor);
-	if(hulltabbuttonstate == BUTTON_PRESSED || hulltabbuttonstate == BUTTON_PERFORMED || activetab == TAB_GENERAL) setColor(pressedcolor);
+	if(hulltabbuttonstate == BUTTON_PRESSED || hulltabbuttonstate == BUTTON_PERFORMED || activetab == TAB_HULL) setColor(pressedcolor);
 	gDrawRectangle(hulltabbuttonx, hulltabbuttony, hulltabbuttonw, hulltabbuttonh, true);
 	tabfontw = root->menutitlefont.getStringWidth(hulltabtext);
 	tabfonth = root->menutitlefont.getStringHeight(hulltabtext);
@@ -733,7 +723,7 @@ void ShopCanvas::hullTabButtonDraw() {
 
 void ShopCanvas::weaponTabButtonDraw() {
 	if(weapontabbuttonstate == BUTTON_FOCUS) setColor(focuscolor);
-	if(weapontabbuttonstate == BUTTON_PRESSED || weapontabbuttonstate == BUTTON_PERFORMED || activetab == TAB_LEVEL) setColor(pressedcolor);
+	if(weapontabbuttonstate == BUTTON_PRESSED || weapontabbuttonstate == BUTTON_PERFORMED || activetab == TAB_WEAPON) setColor(pressedcolor);
 	gDrawRectangle(weapontabbuttonx, weapontabbuttony, weapontabbuttonw, weapontabbuttonh, true);
 	tabfontw = root->menutitlefont.getStringWidth(weapontabtext);
 	tabfonth = root->menutitlefont.getStringHeight(weapontabtext);
@@ -746,7 +736,7 @@ void ShopCanvas::weaponTabButtonDraw() {
 
 void ShopCanvas::trackTabButtonDraw() {
 	if(tracktabbuttonstate == BUTTON_FOCUS) setColor(focuscolor);
-	if(tracktabbuttonstate == BUTTON_PRESSED || tracktabbuttonstate == BUTTON_PERFORMED || activetab == TAB_ITEMS) setColor(pressedcolor);
+	if(tracktabbuttonstate == BUTTON_PRESSED || tracktabbuttonstate == BUTTON_PERFORMED || activetab == TAB_TRACK) setColor(pressedcolor);
 	gDrawRectangle(tracktabbuttonx, tracktabbuttony, tracktabbuttonw, tracktabbuttonh, true);
 	tabfontw = root->menutitlefont.getStringWidth(tracktabtext);
 	tabfonth = root->menutitlefont.getStringHeight(tracktabtext);
@@ -757,26 +747,13 @@ void ShopCanvas::trackTabButtonDraw() {
 	setColor(normalcolor);
 }
 
-void ShopCanvas::effectTabButtonDraw() {
-	if(effecttabbuttonstate == BUTTON_FOCUS) setColor(focuscolor);
-	if(effecttabbuttonstate == BUTTON_PRESSED || effecttabbuttonstate == BUTTON_PERFORMED || activetab == TAB_CONTROLS) setColor(pressedcolor);
-	gDrawRectangle(effecttabbuttonx, effecttabbuttony, effecttabbuttonw, effecttabbuttonh, true);
-	tabfontw = root->menutitlefont.getStringWidth(effecttabtext);
-	tabfonth = root->menutitlefont.getStringHeight(effecttabtext);
-	tabfontx = effecttabbuttonx + (effecttabbuttonw - tabfontw) / 2;
-	tabfonty = effecttabbuttony + (effecttabbuttonh + tabfonth) / 2;
-	setColor(255, 255, 255);
-	root->menutitlefont.drawText(effecttabtext, tabfontx, tabfonty);
-	setColor(normalcolor);
-}
 
 void ShopCanvas::containerDraw() {
 	setColor(containercolor);
 	gDrawRectangle(containerx, containery, containerw, containerh, true);
-	if(activetab == TAB_GENERAL) hullSettingsDraw();
-	else if(activetab == TAB_LEVEL) weaponSettingsDraw();
-	else if(activetab == TAB_ITEMS) trackSettingsDraw();
-	else if(activetab == TAB_CONTROLS) effectSettingsDraw();
+	if(activetab == TAB_HULL) hullSettingsDraw();
+	else if(activetab == TAB_WEAPON) weaponSettingsDraw();
+	else if(activetab == TAB_TRACK) trackSettingsDraw();
 }
 
 void ShopCanvas::weaponSettingsDraw() {
@@ -816,10 +793,6 @@ void ShopCanvas::trackSettingsDraw() {
 	setColor(255, 255, 255);
 }
 
-void ShopCanvas::effectSettingsDraw() {
-//////////////////////////////
-}
-
 void ShopCanvas::tabButtonPressed(int x, int y) {
 	if(hulltabbutton.contains(x, y)) {
 		hulltabbuttonstate = BUTTON_PRESSED;
@@ -841,29 +814,23 @@ void ShopCanvas::tabButtonPressed(int x, int y) {
 void ShopCanvas::tabButtonReleased(int x, int y) {
 	if(hulltabbutton.contains(x, y) && hulltabbuttonstate == BUTTON_PRESSED) {
 		hulltabbuttonstate = BUTTON_PERFORMED;
-		activetab = TAB_GENERAL;
+		activetab = TAB_HULL;
 	}
 
 	else if(weapontabbutton.contains(x, y) && weapontabbuttonstate == BUTTON_PRESSED) {
 		weapontabbuttonstate = BUTTON_PERFORMED;
-		activetab = TAB_LEVEL;
+		activetab = TAB_WEAPON;
 	}
 
 	else if(tracktabbutton.contains(x, y) && tracktabbuttonstate == BUTTON_PRESSED) {
 		tracktabbuttonstate = BUTTON_PERFORMED;
-		activetab = TAB_ITEMS;
-	}
-
-	else if(effecttabbutton.contains(x, y) && effecttabbuttonstate == BUTTON_PRESSED) {
-		effecttabbuttonstate = BUTTON_PERFORMED;
-		activetab = TAB_CONTROLS;
+		activetab = TAB_TRACK;
 	}
 
 	else {
 		hulltabbuttonstate = BUTTON_CANCELED;
 		weapontabbuttonstate = BUTTON_CANCELED;
 		tracktabbuttonstate = BUTTON_CANCELED;
-		effecttabbuttonstate = BUTTON_CANCELED;
 	}
 }
 
@@ -906,47 +873,38 @@ void ShopCanvas::tabButtonFocus(int x, int y) {
 }
 
 void ShopCanvas::containerButtonPressed(int x, int y) {
-	if(activetab == TAB_GENERAL) {
+	if(activetab == TAB_HULL) {
 		hullSettingsPressed(x, y);
 	}
-	else if(activetab == TAB_LEVEL) {
+	else if(activetab == TAB_WEAPON) {
 		weaponSettingsPressed(x, y);
 	}
-	else if(activetab == TAB_ITEMS) {
+	else if(activetab == TAB_TRACK) {
 		trackSettingsPressed(x, y);
-	}
-	else if(activetab == TAB_CONTROLS) {
-		effectSettingsPressed(x, y);
 	}
 }
 
 void ShopCanvas::containerButtonReleased(int x, int y) {
-	if(activetab == TAB_GENERAL) {
+	if(activetab == TAB_HULL) {
 		hullSettingsReleased(x, y);
 	}
-	else if(activetab == TAB_LEVEL) {
+	else if(activetab == TAB_WEAPON) {
 		weaponSettingsReleased(x, y);
 	}
-	else if(activetab == TAB_ITEMS) {
+	else if(activetab == TAB_TRACK) {
 		trackSettingsReleased(x, y);
-	}
-	else if(activetab == TAB_CONTROLS) {
-		effectSettingsReleased(x, y);
 	}
 }
 
 void ShopCanvas::containerButtonFocus(int x, int y) {
-	if(activetab == TAB_GENERAL) {
+	if(activetab == TAB_HULL) {
 		hullSettingsFocus(x, y);
 	}
-	else if(activetab == TAB_LEVEL) {
+	else if(activetab == TAB_WEAPON) {
 		weaponSettingsFocus(x, y);
 	}
-	else if(activetab == TAB_ITEMS) {
+	else if(activetab == TAB_TRACK) {
 		trackSettingsFocus(x, y);
-	}
-	else if(activetab == TAB_CONTROLS) {
-		effectSettingsFocus(x, y);
 	}
 }
 
@@ -1392,18 +1350,6 @@ void ShopCanvas::trackSettingsFocus(int x, int y) {
 			trackbuttonstates[3] = BUTTON_NONE;
 		}
 	}
-}
-
-void ShopCanvas::effectSettingsPressed(int x, int y) {
-
-}
-
-void ShopCanvas::effectSettingsReleased(int x, int y) {
-
-}
-
-void ShopCanvas::effectSettingsFocus(int x, int y) {
-
 }
 
 void ShopCanvas::keyPressed(int key) {

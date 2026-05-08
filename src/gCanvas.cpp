@@ -18,12 +18,15 @@ gCanvas::~gCanvas() {
 }
 
 void gCanvas::setup() {
+	selectedhull = 3;
+	selectedweapon = 2;
+	selectedtrack = 2;
 	map.loadImage("haritalar/arkaplan1.jpg");
-	tank1.loadImage("oyun/PNG/Hulls_Color_A/Hull_01.png");
+	tank1.loadImage("oyun/PNG/Hulls_Color_A/Hull_0" + gToStr(selectedhull) + ".png");
 	for(int i = 0; i < trackframenum; i++) {
-		track[i].loadImage("oyun/PNG/Tracks/Track_1_" + gToStr(i) + ".png");
+		track[i].loadImage("oyun/PNG/Tracks/Track_" + gToStr(selectedtrack) + "_" + gToStr(i) + ".png");
 	}
-	gun.loadImage("oyun/PNG/Weapon_Color_A/Gun_01.png");
+	gun.loadImage("oyun/PNG/Weapon_Color_A/Gun_0" + gToStr(selectedweapon) + ".png");
 	bulletimage.loadImage("oyun/PNG/Effects/Exhaust_Fire.png");
 	enemy.loadImage("oyun/PNG/Hulls_Color_B/Hull_01.png");
 	minimap.loadImage("haritalar/radar1.png");
@@ -180,7 +183,7 @@ void gCanvas::draw() {
 	setColor(255, 255, 255);
 	if(root->getMinimap() == 1) drawMinimap();
 	//drawEnemies();
-	namefont.drawText("Name", cx + cwh, cy + chh);
+	namefont.drawText(root->getName(), cx + cwh, cy + chh);
 	//namefont.drawText(gToStr(bulletamt), gbbbx, gbbby);
 	drawGui();
 	drawDialogues();

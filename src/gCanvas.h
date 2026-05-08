@@ -176,6 +176,10 @@ private:
 	float fpscounterx, fpscountery;
 
 	float applysensivity;
+
+	int selectedhull;
+	int selectedweapon;
+	int selectedtrack;
 };
 
 #endif /* GCANVAS_H_ */
