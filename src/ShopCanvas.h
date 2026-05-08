@@ -200,6 +200,8 @@ private:
 	gImage* currenthullcolor;
 	gImage* currentweaponcolor;
 	std::string colorname;
+	gImage frame;
+	int framex, framey, framew, frameh;
 
 	//hulls images
 	gImage hulls[8];
@@ -276,13 +278,7 @@ private:
 	int moneyh;
 	int moneytextx, moneytexty;
 
-	//Buy&enabled
-	std::string buy, enabled;
-	int buyx, buyy;
-	int buyw, buyh;
-	int buystate;
-	gRect buyhitbox;
-	bool buyed;
+	//Buy
 	int pricehull[8];
 	int priceweapon[8];
 	int pricetrack[4];

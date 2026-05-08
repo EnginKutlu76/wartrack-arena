@@ -33,7 +33,6 @@ void ShopCanvas::setup() {
 	containerSetup();
 	informationsSetup();
 	colorPickTextSetup();
-	buyEnabledSetup();
 	moneySetup();
 	colorPickSetup();
 	refreshInformations();
@@ -51,13 +50,9 @@ void ShopCanvas::draw() {
 	containerDraw();
 	informationsDraw();
 	colorPickTextDraw();
-	buyEnabledDraw();
 	moneyDraw();
 	colorPickDraw();
-	//color lock
-	lock.draw(lockx + colorspace * 1, locky, lockw, lockh);
-	lock.draw(lockx + colorspace * 2, locky, lockw, lockh);
-	lock.draw(lockx + colorspace * 3, locky, lockw, lockh);
+	frame.draw(framex, framey, framew, frameh);
 }
 
 void ShopCanvas::lockSetup() {
@@ -123,31 +118,6 @@ void ShopCanvas::moneyDraw() {
 	setColor(255, 255, 255);
 }
 
-void ShopCanvas::buyEnabledSetup() {
-	buy = "BUY: ";
-	enabled = "Equipped";
-	buyh = root->menutitlefont.getStringHeight(buy);
-	buyw = root->menutitlefont.getStringWidth(buy);
-	buyx = infolinex;
-	buyy = infoliney + 600;
-	buyhitbox.set(buyx, buyy - buyh, buyx + buyw, buyy);
-	buystate = BUTTON_NONE;
-	//databaseden veri al
-	buyed = false;
-	pricehull[0] = 100;
-	pricetxt = gToStr(pricehull[0]);
-}
-
-void ShopCanvas::buyEnabledDraw() {
-	setColor(255, 255, 255, 255);
-	if(buystate == BUTTON_FOCUS) setColor(focuscolor);
-	if(buystate == BUTTON_PRESSED) setColor(pressedcolor);
-	root->menutitlefont.drawText(buy, buyx, buyy);
-	if(buyed == true) root->menutitlefont.drawText(enabled, buyx + 60, buyy);
-	else root->menutitlefont.drawText(pricetxt, buyx + 60, buyy);
-	setColor(255, 255, 255);
-}
-
 void ShopCanvas::colorPickTextSetup() {
     colortext = "Choose a color";
 
@@ -176,12 +146,17 @@ void ShopCanvas::colorPickSetup() {
 	colors[1].loadImage("PNG/color2.png");
 	colors[2].loadImage("PNG/color3.png");
 	colors[3].loadImage("PNG/color4.png");
+	frame.loadImage("PNG/check-markred.png");
 
 	colorw = colors[0].getWidth();
 	colorh = colors[0].getHeight();
 	colorx = colorlinex;
 	colory = colorliney + 100;
 	colorspace = colorw * 2;
+	framew = frame.getWidth() * 0.05;
+	frameh = frame.getHeight() * 0.05;
+	framex = colorx + (colorw - framew + 1) / 2;
+	framey = colory - colorh;
 
 	colorshitbox[0].set(colorx + colorspace * 0, colory - colorh, colorx + colorw, colory);
 	colorshitbox[1].set(colorx + colorspace * 1, colory - colorh, colorx + colorspace * 1 + colorw, colory);
@@ -203,10 +178,8 @@ void ShopCanvas::colorPickDraw() {
 
     	setColor(255, 255, 255);
     	colors[i].draw(x, y, colorw, colorh);
+    	if(i > 0) lock.draw(lockx + colorspace * i, locky, lockw, lockh);
     }
-//	for(int i = 0; i < 4; i++) {
-//		colors[i].draw(colorx + (colorspace * i), colory);
-//	}
 }
 
 void ShopCanvas::informationsSetup() {
@@ -391,14 +364,6 @@ void ShopCanvas::updateButtonState(int x, int y) {
 			returnbuttonstate = BUTTON_NONE;
 		}
 	}
-	if(buystate != BUTTON_PRESSED) {
-		if(buyhitbox.contains(x, y)) {
-			buystate = BUTTON_FOCUS;
-		}
-		else {
-			buystate = BUTTON_NONE;
-		}
-	}
 
 	if(colorstate[0] != BUTTON_PRESSED) {
 		if(colorshitbox[0].contains(x, y)) {
@@ -443,10 +408,6 @@ void ShopCanvas::checkButtonPressed(int x, int y, int button) {
 		returny += 2;
 	}
 
-	if(buyhitbox.contains(x, y)) {
-		buystate = BUTTON_PRESSED;
-	}
-
 	if(colorshitbox[0].contains(x, y)) {
 		colorstate[0] = BUTTON_PRESSED;
 	}
@@ -472,23 +433,20 @@ void ShopCanvas::checkButtonReleased(int x, int y, int button) {
 		root->setCurrentCanvas(new mainMenu(root));
 	}
 
-	else if(buyhitbox.contains(x, y) && buystate == BUTTON_PRESSED) {
-		buystate = BUTTON_PERFORMED;
-		buyTank();
-	}
-
 	else if(colorshitbox[0].contains(x, y) && colorstate[0] == BUTTON_PRESSED) {
 		colorstate[0] = BUTTON_PERFORMED;
 		if(activetab == TAB_HULL) activehullcolor = COLOR_ONE;
 		if(activetab == TAB_WEAPON) activeweaponcolor = COLOR_ONE;
 		refreshTankPreview();
 		gLogi("aktif hc") << 1;
+		framex = colorx;
 		//currentcolor = &colors[0];
 	}
 	else if(colorshitbox[1].contains(x, y) && colorstate[1] == BUTTON_PRESSED) {
 		colorstate[1] = BUTTON_PERFORMED;
 		if(activetab == TAB_HULL) activehullcolor = COLOR_TWO;
 		if(activetab == TAB_WEAPON) activeweaponcolor = COLOR_TWO;
+		framex = colorx + colorspace;
 		refreshTankPreview();
 		//currentcolor = &colors[1];
 		gLogi("aktif hc") << 2;
@@ -497,6 +455,7 @@ void ShopCanvas::checkButtonReleased(int x, int y, int button) {
 		colorstate[2] = BUTTON_PERFORMED;
 		if(activetab == TAB_HULL) activehullcolor = COLOR_THREE;
 		if(activetab == TAB_WEAPON) activeweaponcolor = COLOR_THREE;
+		framex = colorx + colorspace * 2;
 		refreshTankPreview();
 		//currentcolor = &colors[2];
 		gLogi("aktif hc") << 3;
@@ -505,6 +464,7 @@ void ShopCanvas::checkButtonReleased(int x, int y, int button) {
 		colorstate[3] = BUTTON_PERFORMED;
 		if(activetab == TAB_HULL) activehullcolor = COLOR_FOUR;
 		if(activetab == TAB_WEAPON) activeweaponcolor = COLOR_FOUR;
+		framex = colorx + colorspace * 3;
 		refreshTankPreview();
 		//currentcolor = &colors[3];
 		gLogi("aktif hc") << 4;
@@ -640,19 +600,21 @@ void ShopCanvas::hullSettingsDraw() {
     	int x = hullbuttons[i].left();
     	int y = hullbuttons[i].top();
 
-    	if(activehull == i) setColor(200, 200, 255);
+    	if(i > 0) if(activehull == i) setColor(200, 200, 255);
     	//else if(hullButtonStates[i] == BUTTON_FOCUS) setColor(focuscolor);
     	else setColor(normalcolor);
 
    // 	gDrawRectangle(x, y, hullimgw, hullimgh, true);
     	//setColor(255, 255, 255);
+    	pricehull[i] = 200 + (100 * i);
     	hulls[i].draw(x, y, hullimgw, hullimgh);
 	    if(i > 0)
     	lock.draw(x + 25, y + 25, lockw * 4, lockh * 4);
 
     	setColor(255, 255, 255);
     	root->menutitlefont.drawText(hulltexts[i], hx[i] + hullbuttons[i].getWidth() / 1.15f, hy[i] + hullbuttons[i].getHeight() / 4);
-   }
+	    if(i > 0) root->menutitlefont.drawText(gToStr(pricehull[i]), hx[i] + hullbuttons[i].getWidth() / 1.15f, hy[i] + hullbuttons[i].getHeight() / 2);
+    }
 }
 
 void ShopCanvas::weaponSettingsSetup() {
@@ -805,7 +767,7 @@ void ShopCanvas::weaponSettingsDraw() {
 		int x = weaponbuttons[i].left();
 		int y = weaponbuttons[i].top();
 
-		if(activeweapon == i) setColor(200, 200, 255);
+		if(i > 0) if(activeweapon == i) setColor(200, 200, 255);
 		//else if(hullButtonStates[i] == BUTTON_FOCUS) setColor(focuscolor);
 		else setColor(normalcolor);
 	    //gDrawRectangle(x, y, hullimgw, hullimgh, true);
@@ -813,11 +775,11 @@ void ShopCanvas::weaponSettingsDraw() {
 	    weapons[i].draw(x, y, weaponimgw, weaponimgh);
 	    if(i > 0)
 	    lock.draw(x + 75, y + 75, lockw * 2, lockh * 2);
-
+	    priceweapon[i] = 200 + (50 * i);
 	    setColor(255, 255, 255);
 	    root->menutitlefont.drawText(weapontexts[i], wx[i] + weaponbuttons[i].getWidth() / 1.15f, wy[i] + weaponbuttons[i].getHeight() / 4);
-	    }
-
+	    if(i > 0) root->menutitlefont.drawText(gToStr(priceweapon[i]), wx[i] + weaponbuttons[i].getWidth() / 1.15f, wy[i] + weaponbuttons[i].getHeight() / 2);
+	}
     setColor(255, 255, 255);
 }
 
@@ -827,17 +789,19 @@ void ShopCanvas::trackSettingsDraw() {
     	int x = trackbuttons[i].left();
     	int y = trackbuttons[i].top();
 
-    	if(activetrack == i) setColor(200, 200, 255);
+    	if(i > 0) if(activetrack == i) setColor(200, 200, 255);
     	//else if(hullButtonStates[i] == BUTTON_FOCUS) setColor(focuscolor);
     	else setColor(normalcolor);
    // 	gDrawRectangle(x, y, hullimgw, hullimgh, true);
     	//setColor(255, 255, 255);
+    	pricetrack[i] = 150 + (i * 80);
     	tracks[i].draw(x + 50, y, trackimgw, trackimgh);
 	    if(i > 0)
 	    lock.draw(x + 50, y + 75, lockw * 1.5, lockh * 1.5);
 
 	    setColor(255, 255, 255);
     	root->menutitlefont.drawText(tracktexts[i], (tx[i] + trackbuttons[i].getWidth() / 1.15f ) + 75, ty[i] + trackbuttons[i].getHeight() / 4);
+	    if(i > 0) root->menutitlefont.drawText(gToStr(pricetrack[i]), tx[i] + trackbuttons[i].getWidth() + 100, ty[i] + trackbuttons[i].getHeight() / 2);
     }
 	setColor(255, 255, 255);
 }
