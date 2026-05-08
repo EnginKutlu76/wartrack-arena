@@ -83,6 +83,8 @@ void gApp::loadAssets() {
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('money','100')");
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('experience','1')");
 
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('name','Player')");
+
 	// LOCALIZATION DB
 	gDatabase locdb;
 	locdb.loadDatabase("localization.db");
@@ -105,6 +107,7 @@ void gApp::loadAssets() {
 	loadMoney();
 	loadExperience();
 	loadTankSettings();
+	loadName();
 }
 
 int safeGetInt(std::string data) {
@@ -113,12 +116,23 @@ int safeGetInt(std::string data) {
 	return 0;
 }
 
+std::string safeGetString(std::string data) {
+	auto parts = gSplitString(data, "|");
+	if(parts.size() > 1) return parts[1];
+	return "Player";
+}
+
 void gApp::addMoney(int amount) {
 	saveMoney(money + amount);
 }
 
 void gApp::addExperience(int amount) {
 	saveExperience(experience + amount);
+}
+
+void gApp::saveName(std::string name) {
+	this->name = name;
+	optionsdb.execute("UPDATE options SET value=" + gToStr(name) + " WHERE key='name'");
 }
 
 void gApp::saveMoney(int money) {
@@ -197,6 +211,12 @@ void gApp::saveTankSettings(int hull, int weapon, int track, int tankcolor) {
 	optionsdb.execute("UPDATE options SET value=" + gToStr(weapon) + " WHERE key='weapon'");
 	optionsdb.execute("UPDATE options SET value=" + gToStr(track) + " WHERE key='track'");
 	optionsdb.execute("UPDATE options SET value=" + gToStr(tankcolor) + " WHERE key='tankcolor'");
+}
+
+void gApp::loadName() {
+	optionsdb.execute("SELECT value FROM options WHERE key='name'");
+	name = safeGetString(optionsdb.getSelectData());
+	//if(money < 1) money = 100;
 }
 
 void gApp::loadMoney() {
@@ -466,4 +486,8 @@ int gApp::getMoney() {
 
 int gApp::getExperience() {
 	return experience;
+}
+
+std::string gApp::getName() {
+	return name;
 }

@@ -32,6 +32,7 @@ void mainMenu::setup() {
 	colorSetup();
 	exitSetup();
 	moneyExpSetup();
+	nameSetup();
 }
 
 void mainMenu::update() {
@@ -48,7 +49,20 @@ void mainMenu::draw() {
 	creditDraw();
 	exitDraw();
 	moneyExpDraw();
+	nameDraw();
 	//fadeEffectDraw();
+}
+
+void mainMenu::nameSetup() {
+	nametxt = "Name: ";
+	name = root->getName();
+	namex = moneyx - 200;
+	namey = moneyy + 150;
+}
+
+void mainMenu::nameDraw() {
+	root->menutitlefont.drawText(nametxt, namex, namey);
+	root->menutitlefont.drawText(name, namex + 140, namey);
 }
 
 void mainMenu::moneyExpSetup() {

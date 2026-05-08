@@ -52,6 +52,7 @@ public:
 	void saveTankSettings(int hull, int weapon, int track, int tankcolor);
 	void saveMoney(int money);
 	void saveExperience(int experience);
+	void saveName(std::string name);
 
 	void loadGameSettings();
 	void loadControlsSettings();
@@ -60,6 +61,7 @@ public:
 	void loadTankSettings();
 	void loadMoney();
 	void loadExperience();
+	void loadName();
 
 	void applyGameSettings();
 	void applyControlsSettings();
@@ -103,6 +105,7 @@ public:
 	int getTankColor();
 	int getMoney();
 	int getExperience();
+	std::string getName();
 
 	void addMoney(int amount);
 	void addExperience(int experience);
@@ -118,6 +121,7 @@ private:
 	 windowmode, fov, soundvolume, musicvolume, sound, music, forward, backward, right,
 	 left, run, fire, interact, hull, weapon, track, tankcolor, money, experience;
 	std::string temp;
+	std::string name;
 	gLocalization localization;
 };
 

@@ -81,6 +81,9 @@ private:
 	void moneyExpSetup();
 	void moneyExpDraw();
 
+	void nameSetup();
+	void nameDraw();
+
 	gImage background;
 	std::string starttext, offlinetext, shoptext, optiontext, credittext, exittext, helptext;
 	gImage glistlogo;
@@ -105,5 +108,8 @@ private:
 	int moneyamt, expamt;
 	int moneyx, moneyy;
 	int expx, expy;
+
+	std::string nametxt, name;
+	int namex, namey;
 };
 #endif /* SRC_MAINMENU_H_ */
