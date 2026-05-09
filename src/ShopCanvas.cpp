@@ -600,7 +600,7 @@ void ShopCanvas::hullSettingsDraw() {
     	int x = hullbuttons[i].left();
     	int y = hullbuttons[i].top();
 
-    	if(i > 0) if(activehull == i) setColor(200, 200, 255);
+    	if(!hullowned[i]) if(activehull == i) setColor(200, 200, 255);
     	//else if(hullButtonStates[i] == BUTTON_FOCUS) setColor(focuscolor);
     	else setColor(normalcolor);
 
@@ -608,9 +608,8 @@ void ShopCanvas::hullSettingsDraw() {
     	//setColor(255, 255, 255);
     	pricehull[i] = 200 + (100 * i);
     	hulls[i].draw(x, y, hullimgw, hullimgh);
-	    if(i > 0)
+    	if(!hullowned[i])
     	lock.draw(x + 25, y + 25, lockw * 4, lockh * 4);
-
     	setColor(255, 255, 255);
     	root->menutitlefont.drawText(hulltexts[i], hx[i] + hullbuttons[i].getWidth() / 1.15f, hy[i] + hullbuttons[i].getHeight() / 4);
 	    if(i > 0) root->menutitlefont.drawText(gToStr(pricehull[i]), hx[i] + hullbuttons[i].getWidth() / 1.15f, hy[i] + hullbuttons[i].getHeight() / 2);
@@ -767,15 +766,15 @@ void ShopCanvas::weaponSettingsDraw() {
 		int x = weaponbuttons[i].left();
 		int y = weaponbuttons[i].top();
 
-		if(i > 0) if(activeweapon == i) setColor(200, 200, 255);
+		if(!weaponowned[i]) if(activeweapon == i) setColor(200, 200, 255);
 		//else if(hullButtonStates[i] == BUTTON_FOCUS) setColor(focuscolor);
 		else setColor(normalcolor);
 	    //gDrawRectangle(x, y, hullimgw, hullimgh, true);
 		//setColor(255, 255, 255);
 	    weapons[i].draw(x, y, weaponimgw, weaponimgh);
 	    if(i > 0)
-	    lock.draw(x + 75, y + 75, lockw * 2, lockh * 2);
-	    priceweapon[i] = 200 + (50 * i);
+	    if(!weaponowned[i]) lock.draw(x + 75, y + 75, lockw * 2, lockh * 2);
+	    if(!weaponowned[i]) priceweapon[i] = 200 + (50 * i);
 	    setColor(255, 255, 255);
 	    root->menutitlefont.drawText(weapontexts[i], wx[i] + weaponbuttons[i].getWidth() / 1.15f, wy[i] + weaponbuttons[i].getHeight() / 4);
 	    if(i > 0) root->menutitlefont.drawText(gToStr(priceweapon[i]), wx[i] + weaponbuttons[i].getWidth() / 1.15f, wy[i] + weaponbuttons[i].getHeight() / 2);
@@ -789,7 +788,7 @@ void ShopCanvas::trackSettingsDraw() {
     	int x = trackbuttons[i].left();
     	int y = trackbuttons[i].top();
 
-    	if(i > 0) if(activetrack == i) setColor(200, 200, 255);
+    	if(!trackowned[i]) if(activetrack == i) setColor(200, 200, 255);
     	//else if(hullButtonStates[i] == BUTTON_FOCUS) setColor(focuscolor);
     	else setColor(normalcolor);
    // 	gDrawRectangle(x, y, hullimgw, hullimgh, true);
@@ -797,7 +796,7 @@ void ShopCanvas::trackSettingsDraw() {
     	pricetrack[i] = 150 + (i * 80);
     	tracks[i].draw(x + 50, y, trackimgw, trackimgh);
 	    if(i > 0)
-	    lock.draw(x + 50, y + 75, lockw * 1.5, lockh * 1.5);
+	    if(!trackowned[i]) lock.draw(x + 50, y + 75, lockw * 1.5, lockh * 1.5);
 
 	    setColor(255, 255, 255);
     	root->menutitlefont.drawText(tracktexts[i], (tx[i] + trackbuttons[i].getWidth() / 1.15f ) + 75, ty[i] + trackbuttons[i].getHeight() / 4);
@@ -958,6 +957,7 @@ void ShopCanvas::hullSettingsPressed(int x, int y) {
 void ShopCanvas::hullSettingsReleased(int x, int y) {
 	if(hullbuttons[0].contains(x, y) && hullbuttonstates[0] == BUTTON_PRESSED) {
 		hullbuttonstates[0] = BUTTON_PERFORMED;
+		hullowned[0] = false;
 		activehull = HULL_ONE;
 		currenthull = &hulls[0];
 		refreshInformations();
@@ -967,6 +967,7 @@ void ShopCanvas::hullSettingsReleased(int x, int y) {
 	else if(hullbuttons[1].contains(x, y) && hullbuttonstates[1] == BUTTON_PRESSED) {
 		hullbuttonstates[1] = BUTTON_PERFORMED;
 		activehull = HULL_TWO;
+		hullowned[1] = true;
 		currenthull = &hulls[1];
 		refreshInformations();
 		refreshTankPreview();
@@ -975,6 +976,7 @@ void ShopCanvas::hullSettingsReleased(int x, int y) {
 	else if(hullbuttons[2].contains(x, y) && hullbuttonstates[2] == BUTTON_PRESSED) {
 		hullbuttonstates[2] = BUTTON_PERFORMED;
 		activehull = HULL_THREE;
+		hullowned[2] = true;
 		currenthull = &hulls[2];
 		refreshInformations();
 		refreshTankPreview();
@@ -983,6 +985,7 @@ void ShopCanvas::hullSettingsReleased(int x, int y) {
 	else if(hullbuttons[3].contains(x, y) && hullbuttonstates[3] == BUTTON_PRESSED) {
 		hullbuttonstates[3] = BUTTON_PERFORMED;
 		activehull = HULL_FOUR;
+		hullowned[3] = true;
 		currenthull = &hulls[3];
 		refreshInformations();
 		refreshTankPreview();
@@ -991,6 +994,7 @@ void ShopCanvas::hullSettingsReleased(int x, int y) {
 	else if(hullbuttons[4].contains(x, y) && hullbuttonstates[4] == BUTTON_PRESSED) {
 		hullbuttonstates[4] = BUTTON_PERFORMED;
 		activehull = HULL_FIVE;
+		hullowned[4] = true;
 		currenthull = &hulls[4];
 		refreshInformations();
 		refreshTankPreview();
@@ -999,6 +1003,7 @@ void ShopCanvas::hullSettingsReleased(int x, int y) {
 	else if(hullbuttons[5].contains(x, y) && hullbuttonstates[5] == BUTTON_PRESSED) {
 		hullbuttonstates[5] = BUTTON_PERFORMED;
 		activehull = HULL_SIX;
+		hullowned[5] = true;
 		currenthull = &hulls[5];
 		refreshInformations();
 		refreshTankPreview();
@@ -1007,6 +1012,7 @@ void ShopCanvas::hullSettingsReleased(int x, int y) {
 	else if(hullbuttons[6].contains(x, y) && hullbuttonstates[6] == BUTTON_PRESSED) {
 		hullbuttonstates[6] = BUTTON_PERFORMED;
 		activehull = HULL_SEVEN;
+		hullowned[6] = true;
 		currenthull = &hulls[6];
 		refreshInformations();
 		refreshTankPreview();
@@ -1015,6 +1021,7 @@ void ShopCanvas::hullSettingsReleased(int x, int y) {
 	else if(hullbuttons[7].contains(x, y) && hullbuttonstates[7] == BUTTON_PRESSED) {
 		hullbuttonstates[7] = BUTTON_PERFORMED;
 		activehull = HULL_EIGHT;
+		hullowned[7] = true;
 		currenthull = &hulls[7];
 		refreshInformations();
 		refreshTankPreview();
@@ -1152,6 +1159,7 @@ void ShopCanvas::weaponSettingsReleased(int x, int y) {
 		weaponbuttonstates[1] = BUTTON_PERFORMED;
 		activeweapon = WEAPON_TWO;
 		currentweapon = &weapons[1];
+		weaponowned[1] = true;
 		refreshInformations();
 		refreshTankPreview();
 	}
@@ -1160,6 +1168,7 @@ void ShopCanvas::weaponSettingsReleased(int x, int y) {
 		weaponbuttonstates[2] = BUTTON_PERFORMED;
 		activeweapon = WEAPON_THREE;
 		currentweapon = &weapons[2];
+		weaponowned[2] = true;
 		refreshInformations();
 		refreshTankPreview();
 	}
@@ -1168,6 +1177,7 @@ void ShopCanvas::weaponSettingsReleased(int x, int y) {
 		weaponbuttonstates[3] = BUTTON_PERFORMED;
 		activeweapon = WEAPON_FOUR;
 		currentweapon = &weapons[3];
+		weaponowned[3] = true;
 		refreshInformations();
 		refreshTankPreview();
 	}
@@ -1176,6 +1186,7 @@ void ShopCanvas::weaponSettingsReleased(int x, int y) {
 		weaponbuttonstates[4] = BUTTON_PERFORMED;
 		activeweapon = WEAPON_FIVE;
 		currentweapon = &weapons[4];
+		weaponowned[4] = true;
 		refreshInformations();
 		refreshTankPreview();
 	}
@@ -1184,6 +1195,7 @@ void ShopCanvas::weaponSettingsReleased(int x, int y) {
 		weaponbuttonstates[5] = BUTTON_PERFORMED;
 		activeweapon = WEAPON_SIX;
 		currentweapon = &weapons[5];
+		weaponowned[5] = true;
 		refreshInformations();
 		refreshTankPreview();
 	}
@@ -1192,6 +1204,7 @@ void ShopCanvas::weaponSettingsReleased(int x, int y) {
 		weaponbuttonstates[6] = BUTTON_PERFORMED;
 		activeweapon = WEAPON_SEVEN;
 		currentweapon = &weapons[6];
+		weaponowned[6] = true;
 		refreshInformations();
 		refreshTankPreview();
 	}
@@ -1200,6 +1213,7 @@ void ShopCanvas::weaponSettingsReleased(int x, int y) {
 		weaponbuttonstates[7] = BUTTON_PERFORMED;
 		activeweapon = WEAPON_EIGHT;
 		currentweapon = &weapons[7];
+		weaponowned[7] = true;
 		refreshInformations();
 		refreshTankPreview();
 	}
@@ -1319,6 +1333,7 @@ void ShopCanvas::trackSettingsReleased(int x, int y) {
 		trackbuttonstates[1] = BUTTON_PERFORMED;
 		activetrack = TRACK_TWO;
 		currenttrack = &tracks[1];
+		trackowned[1] = true;
 		refreshInformations();
 	}
 
@@ -1326,6 +1341,7 @@ void ShopCanvas::trackSettingsReleased(int x, int y) {
 		trackbuttonstates[2] = BUTTON_PERFORMED;
 		activetrack = TRACK_THREE;
 		currenttrack = &tracks[2];
+		trackowned[2] = true;
 		refreshInformations();
 	}
 
@@ -1333,6 +1349,7 @@ void ShopCanvas::trackSettingsReleased(int x, int y) {
 		trackbuttonstates[3] = BUTTON_PERFORMED;
 		activetrack = TRACK_FOUR;
 		currenttrack = &tracks[3];
+		trackowned[3] = true;
 		refreshInformations();
 	}
 	else {

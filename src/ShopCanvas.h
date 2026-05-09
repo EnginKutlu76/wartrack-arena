@@ -287,6 +287,9 @@ private:
 	//lock
 	gImage lock;
 	int lockx, locky, lockw, lockh;
+	bool hullowned[8] = {true, false, false, false, false, false, false, false};
+	bool weaponowned[8] = {true, false, false, false, false, false, false, false};
+	bool trackowned[4] = {true, false, false, false};
 };
 
 #endif /* SRC_SHOPCANVAS_H_ */
