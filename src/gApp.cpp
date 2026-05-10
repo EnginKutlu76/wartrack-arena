@@ -81,7 +81,7 @@ void gApp::loadAssets() {
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('hullcolor','2')");
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('weaponcolor','2')");
 
-	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('money','100')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('money','300')");
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('experience','1')");
 
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('name','Player')");

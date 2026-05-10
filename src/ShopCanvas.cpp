@@ -964,7 +964,7 @@ void ShopCanvas::hullSettingsReleased(int x, int y) {
 		refreshTankPreview();
 	}
 
-	else if(hullbuttons[1].contains(x, y) && hullbuttonstates[1] == BUTTON_PRESSED) {
+	else if(hullbuttons[1].contains(x, y) && moneyamt >= pricehull[1] && hullbuttonstates[1] == BUTTON_PRESSED) {
 		hullbuttonstates[1] = BUTTON_PERFORMED;
 		activehull = HULL_TWO;
 		hullowned[1] = true;
@@ -973,7 +973,7 @@ void ShopCanvas::hullSettingsReleased(int x, int y) {
 		refreshTankPreview();
 	}
 
-	else if(hullbuttons[2].contains(x, y) && hullbuttonstates[2] == BUTTON_PRESSED) {
+	else if(hullbuttons[2].contains(x, y) && moneyamt >= pricehull[2] && hullbuttonstates[2] == BUTTON_PRESSED) {
 		hullbuttonstates[2] = BUTTON_PERFORMED;
 		activehull = HULL_THREE;
 		hullowned[2] = true;
@@ -982,7 +982,7 @@ void ShopCanvas::hullSettingsReleased(int x, int y) {
 		refreshTankPreview();
 	}
 
-	else if(hullbuttons[3].contains(x, y) && hullbuttonstates[3] == BUTTON_PRESSED) {
+	else if(hullbuttons[3].contains(x, y) && moneyamt >= pricehull[3] && hullbuttonstates[3] == BUTTON_PRESSED) {
 		hullbuttonstates[3] = BUTTON_PERFORMED;
 		activehull = HULL_FOUR;
 		hullowned[3] = true;
@@ -991,7 +991,7 @@ void ShopCanvas::hullSettingsReleased(int x, int y) {
 		refreshTankPreview();
 	}
 
-	else if(hullbuttons[4].contains(x, y) && hullbuttonstates[4] == BUTTON_PRESSED) {
+	else if(hullbuttons[4].contains(x, y) && moneyamt >= pricehull[4] && hullbuttonstates[4] == BUTTON_PRESSED) {
 		hullbuttonstates[4] = BUTTON_PERFORMED;
 		activehull = HULL_FIVE;
 		hullowned[4] = true;
@@ -1000,7 +1000,7 @@ void ShopCanvas::hullSettingsReleased(int x, int y) {
 		refreshTankPreview();
 	}
 
-	else if(hullbuttons[5].contains(x, y) && hullbuttonstates[5] == BUTTON_PRESSED) {
+	else if(hullbuttons[5].contains(x, y) && moneyamt >= pricehull[5] && hullbuttonstates[5] == BUTTON_PRESSED) {
 		hullbuttonstates[5] = BUTTON_PERFORMED;
 		activehull = HULL_SIX;
 		hullowned[5] = true;
@@ -1009,7 +1009,7 @@ void ShopCanvas::hullSettingsReleased(int x, int y) {
 		refreshTankPreview();
 	}
 
-	else if(hullbuttons[6].contains(x, y) && hullbuttonstates[6] == BUTTON_PRESSED) {
+	else if(hullbuttons[6].contains(x, y) && moneyamt >= pricehull[6] && hullbuttonstates[6] == BUTTON_PRESSED) {
 		hullbuttonstates[6] = BUTTON_PERFORMED;
 		activehull = HULL_SEVEN;
 		hullowned[6] = true;
@@ -1018,7 +1018,7 @@ void ShopCanvas::hullSettingsReleased(int x, int y) {
 		refreshTankPreview();
 	}
 
-	else if(hullbuttons[7].contains(x, y) && hullbuttonstates[7] == BUTTON_PRESSED) {
+	else if(hullbuttons[7].contains(x, y) && moneyamt >= pricehull[7] && hullbuttonstates[7] == BUTTON_PRESSED) {
 		hullbuttonstates[7] = BUTTON_PERFORMED;
 		activehull = HULL_EIGHT;
 		hullowned[7] = true;
@@ -1155,7 +1155,7 @@ void ShopCanvas::weaponSettingsReleased(int x, int y) {
 		refreshTankPreview();
 	}
 
-	else if(weaponbuttons[1].contains(x, y) && weaponbuttonstates[1] == BUTTON_PRESSED) {
+	else if(weaponbuttons[1].contains(x, y) && moneyamt >= pricetrack[1] &&  weaponbuttonstates[1] == BUTTON_PRESSED) {
 		weaponbuttonstates[1] = BUTTON_PERFORMED;
 		activeweapon = WEAPON_TWO;
 		currentweapon = &weapons[1];
@@ -1164,7 +1164,7 @@ void ShopCanvas::weaponSettingsReleased(int x, int y) {
 		refreshTankPreview();
 	}
 
-	else if(weaponbuttons[2].contains(x, y) && weaponbuttonstates[2] == BUTTON_PRESSED) {
+	else if(weaponbuttons[2].contains(x, y) && moneyamt >= priceweapon[2] && weaponbuttonstates[2] == BUTTON_PRESSED) {
 		weaponbuttonstates[2] = BUTTON_PERFORMED;
 		activeweapon = WEAPON_THREE;
 		currentweapon = &weapons[2];
@@ -1173,7 +1173,7 @@ void ShopCanvas::weaponSettingsReleased(int x, int y) {
 		refreshTankPreview();
 	}
 
-	else if(weaponbuttons[3].contains(x, y) && weaponbuttonstates[3] == BUTTON_PRESSED) {
+	else if(weaponbuttons[3].contains(x, y) && moneyamt >= priceweapon[3] && weaponbuttonstates[3] == BUTTON_PRESSED) {
 		weaponbuttonstates[3] = BUTTON_PERFORMED;
 		activeweapon = WEAPON_FOUR;
 		currentweapon = &weapons[3];
@@ -1182,7 +1182,7 @@ void ShopCanvas::weaponSettingsReleased(int x, int y) {
 		refreshTankPreview();
 	}
 
-	else if(weaponbuttons[4].contains(x, y) && weaponbuttonstates[4] == BUTTON_PRESSED) {
+	else if(weaponbuttons[4].contains(x, y) && moneyamt >= priceweapon[4] && weaponbuttonstates[4] == BUTTON_PRESSED) {
 		weaponbuttonstates[4] = BUTTON_PERFORMED;
 		activeweapon = WEAPON_FIVE;
 		currentweapon = &weapons[4];
@@ -1191,7 +1191,7 @@ void ShopCanvas::weaponSettingsReleased(int x, int y) {
 		refreshTankPreview();
 	}
 
-	else if(weaponbuttons[5].contains(x, y) && weaponbuttonstates[5] == BUTTON_PRESSED) {
+	else if(weaponbuttons[5].contains(x, y) && moneyamt >= priceweapon[5] && weaponbuttonstates[5] == BUTTON_PRESSED) {
 		weaponbuttonstates[5] = BUTTON_PERFORMED;
 		activeweapon = WEAPON_SIX;
 		currentweapon = &weapons[5];
@@ -1200,7 +1200,7 @@ void ShopCanvas::weaponSettingsReleased(int x, int y) {
 		refreshTankPreview();
 	}
 
-	else if(weaponbuttons[6].contains(x, y) && weaponbuttonstates[6] == BUTTON_PRESSED) {
+	else if(weaponbuttons[6].contains(x, y) && moneyamt >= priceweapon[6] && weaponbuttonstates[6] == BUTTON_PRESSED) {
 		weaponbuttonstates[6] = BUTTON_PERFORMED;
 		activeweapon = WEAPON_SEVEN;
 		currentweapon = &weapons[6];
@@ -1209,7 +1209,7 @@ void ShopCanvas::weaponSettingsReleased(int x, int y) {
 		refreshTankPreview();
 	}
 
-	else if(weaponbuttons[7].contains(x, y) && weaponbuttonstates[7] == BUTTON_PRESSED) {
+	else if(weaponbuttons[7].contains(x, y) && moneyamt >= priceweapon[7] && weaponbuttonstates[7] == BUTTON_PRESSED) {
 		weaponbuttonstates[7] = BUTTON_PERFORMED;
 		activeweapon = WEAPON_EIGHT;
 		currentweapon = &weapons[7];
@@ -1329,7 +1329,7 @@ void ShopCanvas::trackSettingsReleased(int x, int y) {
 		refreshInformations();
 	}
 
-	else if(trackbuttons[1].contains(x, y) && trackbuttonstates[1] == BUTTON_PRESSED) {
+	else if(trackbuttons[1].contains(x, y) && moneyamt >= pricetrack[1] && trackbuttonstates[1] == BUTTON_PRESSED) {
 		trackbuttonstates[1] = BUTTON_PERFORMED;
 		activetrack = TRACK_TWO;
 		currenttrack = &tracks[1];
@@ -1337,7 +1337,7 @@ void ShopCanvas::trackSettingsReleased(int x, int y) {
 		refreshInformations();
 	}
 
-	else if(trackbuttons[2].contains(x, y) && trackbuttonstates[2] == BUTTON_PRESSED) {
+	else if(trackbuttons[2].contains(x, y) &&  moneyamt >= pricetrack[2] && trackbuttonstates[2] == BUTTON_PRESSED) {
 		trackbuttonstates[2] = BUTTON_PERFORMED;
 		activetrack = TRACK_THREE;
 		currenttrack = &tracks[2];
@@ -1345,7 +1345,7 @@ void ShopCanvas::trackSettingsReleased(int x, int y) {
 		refreshInformations();
 	}
 
-	else if(trackbuttons[3].contains(x, y) && trackbuttonstates[3] == BUTTON_PRESSED) {
+	else if(trackbuttons[3].contains(x, y) &&  moneyamt >= pricetrack[3] && trackbuttonstates[3] == BUTTON_PRESSED) {
 		trackbuttonstates[3] = BUTTON_PERFORMED;
 		activetrack = TRACK_FOUR;
 		currenttrack = &tracks[3];
