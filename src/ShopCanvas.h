@@ -191,7 +191,7 @@ private:
 	gImage colorline;
 	int colorlinex, colorliney, colorlinew, colorlineh;
 	gImage colors[4];
-	int colorx, colory, colorw, colorh;
+	int colorx[4], colory[4], colorw, colorh;
 	int colorspace;
 	gRect colorshitbox[4];
 	int colorstate[4];
@@ -282,6 +282,7 @@ private:
 	int pricehull[8];
 	int priceweapon[8];
 	int pricetrack[4];
+	int pricecolor[4];
 	std::string pricetxt;
 
 	//lock
@@ -290,6 +291,7 @@ private:
 	bool hullowned[8] = {true, false, false, false, false, false, false, false};
 	bool weaponowned[8] = {true, false, false, false, false, false, false, false};
 	bool trackowned[4] = {true, false, false, false};
+	bool colorowned[4] = {true, false, false, false};
 };
 
 #endif /* SRC_SHOPCANVAS_H_ */

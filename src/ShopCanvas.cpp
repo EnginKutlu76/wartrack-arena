@@ -59,8 +59,6 @@ void ShopCanvas::lockSetup() {
 	lock.loadImage("PNG/padlock.png");
 	lockw =  lock.getWidth() * 0.06;
 	lockh = lock.getHeight() * 0.06;
-	lockx =  colorx + (colors[0].getWidth() - lockw) / 2;
-	locky = colory + (colors[0].getHeight() - lockh) - 31;
 }
 
 void ShopCanvas::refreshTankPreview() {
@@ -150,18 +148,24 @@ void ShopCanvas::colorPickSetup() {
 
 	colorw = colors[0].getWidth();
 	colorh = colors[0].getHeight();
-	colorx = colorlinex;
-	colory = colorliney + 100;
+	colorx[0] = colorlinex;
+	colorx[1] = colorlinex + colorspace * 1 ;
+	colorx[2] = colorlinex + colorspace * 2 ;
+	colorx[3] = colorlinex + colorspace * 3 ;
+	colory[0] = colorliney + 100;
+	colory[1] = colorliney + 100;
+	colory[2] = colorliney + 100;
+	colory[3] = colorliney + 100;
 	colorspace = colorw * 2;
 	framew = frame.getWidth() * 0.05;
 	frameh = frame.getHeight() * 0.05;
-	framex = colorx + (colorw - framew + 1) / 2;
-	framey = colory - colorh;
+	framex = colorx[0] + (colorw - framew + 1) / 2;
+	framey = colory[0] - colorh;
 
-	colorshitbox[0].set(colorx + colorspace * 0, colory - colorh, colorx + colorw, colory);
-	colorshitbox[1].set(colorx + colorspace * 1, colory - colorh, colorx + colorspace * 1 + colorw, colory);
-	colorshitbox[2].set(colorx + colorspace * 2, colory - colorh, colorx + colorspace * 2 + colorw, colory);
-	colorshitbox[3].set(colorx + colorspace * 3, colory - colorh, colorx + colorspace * 3 + colorw, colory);
+	colorshitbox[0].set(colorx[0] + colorspace * 0, colory[0] - colorh, colorx[0] + colorw, colory[0]);
+	colorshitbox[1].set(colorx[1] + colorspace * 1, colory[1] - colorh, colorx[1] + colorspace * 1 + colorw, colory[1]);
+	colorshitbox[2].set(colorx[2] + colorspace * 2, colory[2] - colorh, colorx[2] + colorspace * 2 + colorw, colory[2]);
+	colorshitbox[3].set(colorx[3] + colorspace * 3, colory[3] - colorh, colorx[3] + colorspace * 3 + colorw, colory[3]);
 
 	for(int i = 0; i < 4; i++) {
 	    colorstate[i] = BUTTON_NONE;
@@ -173,13 +177,19 @@ void ShopCanvas::colorPickDraw() {
     	int x = colorshitbox[i].left();
     	int y = colorshitbox[i].top();
 
-    	if(activehullcolor == i) setColor(200, 200, 255);
+    	if(!colorowned[i]) if(activehullcolor == i) setColor(200, 200, 255);
     	else setColor(normalcolor);
+    	if(!colorowned[i]) pricecolor[i] = 50 + (i * 20);
 
     	setColor(255, 255, 255);
+	    if(i > 0) root->menutitlefont.drawText(gToStr(pricecolor[i]), colorx[i] + colorshitbox[i].getWidth() + 20, colory[i] + colorshitbox[i].getHeight() / 2);
     	colors[i].draw(x, y, colorw, colorh);
-    	if(i > 0) lock.draw(lockx + colorspace * i, locky, lockw, lockh);
-    }
+    	if(!colorowned[i]) lock.draw(
+    	    x + (colorw - lockw) / 2,
+    	    y + (colorh - lockh) / 2,
+    	    lockw,
+    	    lockh
+    	);    }
 }
 
 void ShopCanvas::informationsSetup() {
@@ -438,36 +448,34 @@ void ShopCanvas::checkButtonReleased(int x, int y, int button) {
 		if(activetab == TAB_HULL) activehullcolor = COLOR_ONE;
 		if(activetab == TAB_WEAPON) activeweaponcolor = COLOR_ONE;
 		refreshTankPreview();
-		gLogi("aktif hc") << 1;
-		framex = colorx;
+		framex = colorx[0];
 		//currentcolor = &colors[0];
 	}
-	else if(colorshitbox[1].contains(x, y) && colorstate[1] == BUTTON_PRESSED) {
+	else if(colorshitbox[1].contains(x, y) && moneyamt >= pricecolor[1] && colorstate[1] == BUTTON_PRESSED) {
 		colorstate[1] = BUTTON_PERFORMED;
+		colorowned[1] = true;
 		if(activetab == TAB_HULL) activehullcolor = COLOR_TWO;
 		if(activetab == TAB_WEAPON) activeweaponcolor = COLOR_TWO;
-		framex = colorx + colorspace;
+		framex = colorx[0] + colorspace;
 		refreshTankPreview();
 		//currentcolor = &colors[1];
-		gLogi("aktif hc") << 2;
 	}
-	else if(colorshitbox[2].contains(x, y) && colorstate[2] == BUTTON_PRESSED) {
+	else if(colorshitbox[2].contains(x, y) && moneyamt >= pricecolor[2] && colorstate[2] == BUTTON_PRESSED) {
 		colorstate[2] = BUTTON_PERFORMED;
+		colorowned[2] = true;
 		if(activetab == TAB_HULL) activehullcolor = COLOR_THREE;
 		if(activetab == TAB_WEAPON) activeweaponcolor = COLOR_THREE;
-		framex = colorx + colorspace * 2;
+		framex = colorx[0] + colorspace * 2;
 		refreshTankPreview();
 		//currentcolor = &colors[2];
-		gLogi("aktif hc") << 3;
 	}
-	else if(colorshitbox[3].contains(x, y) && colorstate[3] == BUTTON_PRESSED) {
+	else if(colorshitbox[3].contains(x, y) && moneyamt >= pricecolor[3] && colorstate[3] == BUTTON_PRESSED) {
 		colorstate[3] = BUTTON_PERFORMED;
+		colorowned[3] = true;
 		if(activetab == TAB_HULL) activehullcolor = COLOR_FOUR;
 		if(activetab == TAB_WEAPON) activeweaponcolor = COLOR_FOUR;
-		framex = colorx + colorspace * 3;
+		framex = colorx[0] + colorspace * 3;
 		refreshTankPreview();
-		//currentcolor = &colors[3];
-		gLogi("aktif hc") << 4;
 	}
 	else {
 		colorstate[0] = BUTTON_CANCELED;
@@ -601,15 +609,11 @@ void ShopCanvas::hullSettingsDraw() {
     	int y = hullbuttons[i].top();
 
     	if(!hullowned[i]) if(activehull == i) setColor(200, 200, 255);
-    	//else if(hullButtonStates[i] == BUTTON_FOCUS) setColor(focuscolor);
     	else setColor(normalcolor);
 
-   // 	gDrawRectangle(x, y, hullimgw, hullimgh, true);
-    	//setColor(255, 255, 255);
     	pricehull[i] = 200 + (100 * i);
     	hulls[i].draw(x, y, hullimgw, hullimgh);
-    	if(!hullowned[i])
-    	lock.draw(x + 25, y + 25, lockw * 4, lockh * 4);
+    	if(!hullowned[i]) lock.draw(x + 25, y + 25, lockw * 4, lockh * 4);
     	setColor(255, 255, 255);
     	root->menutitlefont.drawText(hulltexts[i], hx[i] + hullbuttons[i].getWidth() / 1.15f, hy[i] + hullbuttons[i].getHeight() / 4);
 	    if(i > 0) root->menutitlefont.drawText(gToStr(pricehull[i]), hx[i] + hullbuttons[i].getWidth() / 1.15f, hy[i] + hullbuttons[i].getHeight() / 2);
@@ -767,10 +771,7 @@ void ShopCanvas::weaponSettingsDraw() {
 		int y = weaponbuttons[i].top();
 
 		if(!weaponowned[i]) if(activeweapon == i) setColor(200, 200, 255);
-		//else if(hullButtonStates[i] == BUTTON_FOCUS) setColor(focuscolor);
 		else setColor(normalcolor);
-	    //gDrawRectangle(x, y, hullimgw, hullimgh, true);
-		//setColor(255, 255, 255);
 	    weapons[i].draw(x, y, weaponimgw, weaponimgh);
 	    if(i > 0)
 	    if(!weaponowned[i]) lock.draw(x + 75, y + 75, lockw * 2, lockh * 2);
@@ -789,10 +790,7 @@ void ShopCanvas::trackSettingsDraw() {
     	int y = trackbuttons[i].top();
 
     	if(!trackowned[i]) if(activetrack == i) setColor(200, 200, 255);
-    	//else if(hullButtonStates[i] == BUTTON_FOCUS) setColor(focuscolor);
     	else setColor(normalcolor);
-   // 	gDrawRectangle(x, y, hullimgw, hullimgh, true);
-    	//setColor(255, 255, 255);
     	pricetrack[i] = 150 + (i * 80);
     	tracks[i].draw(x + 50, y, trackimgw, trackimgh);
 	    if(i > 0)
@@ -957,7 +955,6 @@ void ShopCanvas::hullSettingsPressed(int x, int y) {
 void ShopCanvas::hullSettingsReleased(int x, int y) {
 	if(hullbuttons[0].contains(x, y) && hullbuttonstates[0] == BUTTON_PRESSED) {
 		hullbuttonstates[0] = BUTTON_PERFORMED;
-		hullowned[0] = false;
 		activehull = HULL_ONE;
 		currenthull = &hulls[0];
 		refreshInformations();
