@@ -614,12 +614,12 @@ void ShopCanvas::hullSettingsDraw() {
     	int x = hullbuttons[i].left();
     	int y = hullbuttons[i].top();
 
-    	if(!hullowned[i]) if(activehull == i) setColor(200, 200, 255);
+    	if(!root->isHullOwned(i)) if(activehull == i) setColor(200, 200, 255);
     	else setColor(normalcolor);
 
     	pricehull[i] = 200 + (100 * i);
     	hulls[i].draw(x, y, hullimgw, hullimgh);
-    	if(!hullowned[i]) lock.draw(x + 25, y + 25, lockw * 4, lockh * 4);
+    	if(!root->isHullOwned(i)) lock.draw(x + 25, y + 25, lockw * 4, lockh * 4);
     	setColor(255, 255, 255);
     	root->menutitlefont.drawText(hulltexts[i], hx[i] + hullbuttons[i].getWidth() / 1.15f, hy[i] + hullbuttons[i].getHeight() / 4);
 	    if(i > 0) root->menutitlefont.drawText(gToStr(pricehull[i]), hx[i] + hullbuttons[i].getWidth() / 1.15f, hy[i] + hullbuttons[i].getHeight() / 2);
@@ -969,77 +969,84 @@ void ShopCanvas::hullSettingsReleased(int x, int y) {
 		refreshTankPreview();
 	}
 
-	else if(hullbuttons[1].contains(x, y) && (moneyamt >= pricehull[1] || hullowned[1]) && hullbuttonstates[1] == BUTTON_PRESSED) {
+	else if(hullbuttons[1].contains(x, y) && (moneyamt >= pricehull[1] || root->isHullOwned(1)) && hullbuttonstates[1] == BUTTON_PRESSED) {
 		hullbuttonstates[1] = BUTTON_PERFORMED;
 		activehull = HULL_TWO;
-		if(hullowned[1] == false) moneyamt -= pricehull[1];
-		hullowned[1] = true;
+		if(root->isHullOwned(1) == false) moneyamt -= pricehull[1];
+		//hullowned[1] = true;
+		root->buyHull(1);
 		root->saveMoney(moneyamt);
 		currenthull = &hulls[1];
 		refreshInformations();
 		refreshTankPreview();
 	}
 
-	else if(hullbuttons[2].contains(x, y) && (moneyamt >= pricehull[2] || hullowned[2]) && hullbuttonstates[2] == BUTTON_PRESSED) {
+	else if(hullbuttons[2].contains(x, y) && (moneyamt >= pricehull[2] || root->isHullOwned(2)) && hullbuttonstates[2] == BUTTON_PRESSED) {
 		hullbuttonstates[2] = BUTTON_PERFORMED;
 		activehull = HULL_THREE;
-		if(hullowned[2] == false) moneyamt -= pricehull[2];
-		hullowned[2] = true;
+		if(root->isHullOwned(2) == false) moneyamt -= pricehull[2];
+		//hullowned[2] = true;
+		root->buyHull(2);
 		root->saveMoney(moneyamt);
 		currenthull = &hulls[2];
 		refreshInformations();
 		refreshTankPreview();
 	}
 
-	else if(hullbuttons[3].contains(x, y) && (moneyamt >= pricehull[3] || hullowned[3])  && hullbuttonstates[3] == BUTTON_PRESSED) {
+	else if(hullbuttons[3].contains(x, y) && (moneyamt >= pricehull[3] || root->isHullOwned(3))  && hullbuttonstates[3] == BUTTON_PRESSED) {
 		hullbuttonstates[3] = BUTTON_PERFORMED;
 		activehull = HULL_FOUR;
-		if(hullowned[3] == false) moneyamt -= pricehull[3];
-		hullowned[3] = true;
+		if(root->isHullOwned(3) == false) moneyamt -= pricehull[3];
+		//hullowned[3] = true;
+		root->buyHull(3);
 		root->saveMoney(moneyamt);
 		currenthull = &hulls[3];
 		refreshInformations();
 		refreshTankPreview();
 	}
 
-	else if(hullbuttons[4].contains(x, y) && (moneyamt >= pricehull[4] || hullowned[4]) && hullbuttonstates[4] == BUTTON_PRESSED) {
+	else if(hullbuttons[4].contains(x, y) && (moneyamt >= pricehull[4] || root->isHullOwned(4)) && hullbuttonstates[4] == BUTTON_PRESSED) {
 		hullbuttonstates[4] = BUTTON_PERFORMED;
 		activehull = HULL_FIVE;
-		if(hullowned[4] == false) moneyamt -= pricehull[4];
-		hullowned[4] = true;
+		if(root->isHullOwned(4) == false) moneyamt -= pricehull[4];
+		//hullowned[4] = true;
+		root->buyHull(4);
 		root->saveMoney(moneyamt);
 		currenthull = &hulls[4];
 		refreshInformations();
 		refreshTankPreview();
 	}
 
-	else if(hullbuttons[5].contains(x, y) && (moneyamt >= pricehull[5] || hullowned[5]) && hullbuttonstates[5] == BUTTON_PRESSED) {
+	else if(hullbuttons[5].contains(x, y) && (moneyamt >= pricehull[5] || root->isHullOwned(5)) && hullbuttonstates[5] == BUTTON_PRESSED) {
 		hullbuttonstates[5] = BUTTON_PERFORMED;
 		activehull = HULL_SIX;
-		if(hullowned[5] == false) moneyamt -= pricehull[5];
-		hullowned[5] = true;
+		if(root->isHullOwned(5) == false) moneyamt -= pricehull[5];
+		//hullowned[5] = true;
+		root->buyHull(5);
 		root->saveMoney(moneyamt);
 		currenthull = &hulls[5];
 		refreshInformations();
 		refreshTankPreview();
 	}
 
-	else if(hullbuttons[6].contains(x, y) && (moneyamt >= pricehull[6] || hullowned[6]) && hullbuttonstates[6] == BUTTON_PRESSED) {
+	else if(hullbuttons[6].contains(x, y) && (moneyamt >= pricehull[6] || root->isHullOwned(6)) && hullbuttonstates[6] == BUTTON_PRESSED) {
 		hullbuttonstates[6] = BUTTON_PERFORMED;
 		activehull = HULL_SEVEN;
-		if(hullowned[6] == false) moneyamt -= pricehull[6];
-		hullowned[6] = true;
+		if(root->isHullOwned(6) == false) moneyamt -= pricehull[6];
+		//hullowned[6] = true;
+		root->buyHull(6);
 		root->saveMoney(moneyamt);
 		currenthull = &hulls[6];
 		refreshInformations();
 		refreshTankPreview();
 	}
 
-	else if(hullbuttons[7].contains(x, y) && (moneyamt >= pricehull[7] || hullowned[7]) && hullbuttonstates[7] == BUTTON_PRESSED) {
+	else if(hullbuttons[7].contains(x, y) && (moneyamt >= pricehull[7] || root->isHullOwned(7)) && hullbuttonstates[7] == BUTTON_PRESSED) {
 		hullbuttonstates[7] = BUTTON_PERFORMED;
 		activehull = HULL_EIGHT;
-		if(hullowned[7] == false) moneyamt -= pricehull[7];
-		hullowned[7] = true;
+		if(root->isHullOwned(2) == false) moneyamt -= pricehull[7];
+		//hullowned[7] = true;
+		root->buyHull(7);
 		root->saveMoney(moneyamt);
 		currenthull = &hulls[7];
 		refreshInformations();

@@ -80,6 +80,9 @@ public:
 	void toggleMusic();
 	void setMusicEnabled(bool enabled);
 	bool getMusicEnabled() const { return musicenabled; }
+	void loadOwned();
+	bool isHullOwned(int index);
+	void buyHull(int index);
 
 	int getLanguage();
 	int getMinimap();
@@ -126,6 +129,11 @@ private:
 	std::string temp;
 	std::string name;
 	gLocalization localization;
+
+	std::string hullowned;
+	std::string weaponowned;
+	std::string trackowned;
+	std::string colorowned;
 };
 
 #endif /* GAPP_H_ */

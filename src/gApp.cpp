@@ -86,6 +86,11 @@ void gApp::loadAssets() {
 
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('name','Player')");
 
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('hullowned','10000000')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('weaponowned','10000000')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('trackowned','1000')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('colorowned','1000')");
+
 	// LOCALIZATION DB
 	gDatabase locdb;
 	locdb.loadDatabase("localization.db");
@@ -110,12 +115,27 @@ void gApp::loadAssets() {
 	loadTankSettings();
 	loadName();
 	loadColors();
+	loadOwned();
 }
 
 int safeGetInt(std::string data) {
 	auto parts = gSplitString(data, "|");
 	if(parts.size() > 1) return gToInt(parts[1]);
 	return 0;
+}
+
+bool gApp::isHullOwned(int index) {
+	return hullowned[index] == '1';
+}
+
+void gApp::buyHull(int index) {
+	hullowned[index] = '1';
+
+	optionsdb.execute(
+		"UPDATE options SET value='" +
+		hullowned +
+		"' WHERE key='hullowned'"
+	);
 }
 
 std::string safeGetString(std::string data) {
@@ -335,7 +355,19 @@ void gApp::loadControlsSettings() {
 	sensitivity = safeGetInt(optionsdb.getSelectData());
 }
 
+void gApp::loadOwned() {
+	optionsdb.execute("SELECT value FROM options WHERE key='hullowned'");
+	hullowned = safeGetString(optionsdb.getSelectData());
 
+	optionsdb.execute("SELECT value FROM options WHERE key='weaponowned'");
+	weaponowned = safeGetString(optionsdb.getSelectData());
+
+	optionsdb.execute("SELECT value FROM options WHERE key='trackowned'");
+	trackowned = safeGetString(optionsdb.getSelectData());
+
+	optionsdb.execute("SELECT value FROM options WHERE key='colorowned'");
+	colorowned = safeGetString(optionsdb.getSelectData());
+}
 
 void gApp::applyGameSettings() {
 	localization.setCurrentLanguage(language);
