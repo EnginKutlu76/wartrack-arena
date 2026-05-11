@@ -393,8 +393,6 @@ void gApp::setMusicEnabled(bool enabled) {
     else stopMenuMusic();
 }
 
-
-
 int gApp::getLanguage() {
 	return language;
 }

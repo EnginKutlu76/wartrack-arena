@@ -273,7 +273,6 @@ private:
 	//Money
 	gImage moneyimg;
 	int moneyamt;
-	std::string moneyamttxt;
 	int moneyx, moneyy;
 	int moneyh;
 	int moneytextx, moneytexty;

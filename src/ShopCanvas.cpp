@@ -53,6 +53,7 @@ void ShopCanvas::draw() {
 	moneyDraw();
 	colorPickDraw();
 	frame.draw(framex, framey, framew, frameh);
+	gLogi("money amount: ") << moneyamt;
 }
 
 void ShopCanvas::lockSetup() {
@@ -101,7 +102,6 @@ void ShopCanvas::refreshInformations() {
 void ShopCanvas::moneySetup() {
 	moneyimg.loadImage("Png/Icons/money.png");
 	moneyamt = root->getMoney();
-	moneyamttxt = gToStr(moneyamt);
 	moneyh = moneyimg.getHeight();
 	moneyx = infolinex;
 	moneyy = infoliney + 350;
@@ -112,7 +112,7 @@ void ShopCanvas::moneySetup() {
 void ShopCanvas::moneyDraw() {
 	moneyimg.draw(moneyx, moneyy);
 	setColor(240, 240, 0);
-	root->menutitlefont.drawText(moneyamttxt, moneytextx, moneytexty);
+	root->menutitlefont.drawText(gToStr(moneyamt), moneytextx, moneytexty);
 	setColor(255, 255, 255);
 }
 
@@ -451,30 +451,36 @@ void ShopCanvas::checkButtonReleased(int x, int y, int button) {
 		framex = colorx[0];
 		//currentcolor = &colors[0];
 	}
-	else if(colorshitbox[1].contains(x, y) && moneyamt >= pricecolor[1] && colorstate[1] == BUTTON_PRESSED) {
+	else if(colorshitbox[1].contains(x, y) && (moneyamt >= pricecolor[1] || colorowned[1]) && colorstate[1] == BUTTON_PRESSED) {
 		colorstate[1] = BUTTON_PERFORMED;
-		colorowned[1] = true;
 		if(activetab == TAB_HULL) activehullcolor = COLOR_TWO;
 		if(activetab == TAB_WEAPON) activeweaponcolor = COLOR_TWO;
+		if(colorowned[1] == false) moneyamt -= pricecolor[1] + 8;
+		root->saveMoney(moneyamt);
+		colorowned[1] = true;
 		framex = colorx[0] + colorspace;
 		refreshTankPreview();
 		//currentcolor = &colors[1];
 	}
-	else if(colorshitbox[2].contains(x, y) && moneyamt >= pricecolor[2] && colorstate[2] == BUTTON_PRESSED) {
+	else if(colorshitbox[2].contains(x, y) && (moneyamt >= pricecolor[2] || colorowned[2]) && colorstate[2] == BUTTON_PRESSED) {
 		colorstate[2] = BUTTON_PERFORMED;
-		colorowned[2] = true;
 		if(activetab == TAB_HULL) activehullcolor = COLOR_THREE;
 		if(activetab == TAB_WEAPON) activeweaponcolor = COLOR_THREE;
-		framex = colorx[0] + colorspace * 2;
+		if(colorowned[2] == false) moneyamt -= pricecolor[2];
+		root->saveMoney(moneyamt);
+		colorowned[2] = true;
+		framex = colorx[0] + colorspace * 2 + 8;
 		refreshTankPreview();
 		//currentcolor = &colors[2];
 	}
-	else if(colorshitbox[3].contains(x, y) && moneyamt >= pricecolor[3] && colorstate[3] == BUTTON_PRESSED) {
+	else if(colorshitbox[3].contains(x, y) && (moneyamt >= pricecolor[3] || colorowned[3]) && colorstate[3] == BUTTON_PRESSED) {
 		colorstate[3] = BUTTON_PERFORMED;
-		colorowned[3] = true;
 		if(activetab == TAB_HULL) activehullcolor = COLOR_FOUR;
 		if(activetab == TAB_WEAPON) activeweaponcolor = COLOR_FOUR;
-		framex = colorx[0] + colorspace * 3;
+		if(colorowned[3] == false) moneyamt -= pricecolor[3];
+		root->saveMoney(moneyamt);
+		colorowned[3] = true;
+		framex = colorx[0] + colorspace * 3 + 8;
 		refreshTankPreview();
 	}
 	else {
@@ -956,69 +962,85 @@ void ShopCanvas::hullSettingsReleased(int x, int y) {
 	if(hullbuttons[0].contains(x, y) && hullbuttonstates[0] == BUTTON_PRESSED) {
 		hullbuttonstates[0] = BUTTON_PERFORMED;
 		activehull = HULL_ONE;
+		moneyamt += 500;
+		root->saveMoney(moneyamt);
 		currenthull = &hulls[0];
 		refreshInformations();
 		refreshTankPreview();
 	}
 
-	else if(hullbuttons[1].contains(x, y) && moneyamt >= pricehull[1] && hullbuttonstates[1] == BUTTON_PRESSED) {
+	else if(hullbuttons[1].contains(x, y) && (moneyamt >= pricehull[1] || hullowned[1]) && hullbuttonstates[1] == BUTTON_PRESSED) {
 		hullbuttonstates[1] = BUTTON_PERFORMED;
 		activehull = HULL_TWO;
+		if(hullowned[1] == false) moneyamt -= pricehull[1];
 		hullowned[1] = true;
+		root->saveMoney(moneyamt);
 		currenthull = &hulls[1];
 		refreshInformations();
 		refreshTankPreview();
 	}
 
-	else if(hullbuttons[2].contains(x, y) && moneyamt >= pricehull[2] && hullbuttonstates[2] == BUTTON_PRESSED) {
+	else if(hullbuttons[2].contains(x, y) && (moneyamt >= pricehull[2] || hullowned[2]) && hullbuttonstates[2] == BUTTON_PRESSED) {
 		hullbuttonstates[2] = BUTTON_PERFORMED;
 		activehull = HULL_THREE;
+		if(hullowned[2] == false) moneyamt -= pricehull[2];
 		hullowned[2] = true;
+		root->saveMoney(moneyamt);
 		currenthull = &hulls[2];
 		refreshInformations();
 		refreshTankPreview();
 	}
 
-	else if(hullbuttons[3].contains(x, y) && moneyamt >= pricehull[3] && hullbuttonstates[3] == BUTTON_PRESSED) {
+	else if(hullbuttons[3].contains(x, y) && (moneyamt >= pricehull[3] || hullowned[3])  && hullbuttonstates[3] == BUTTON_PRESSED) {
 		hullbuttonstates[3] = BUTTON_PERFORMED;
 		activehull = HULL_FOUR;
+		if(hullowned[3] == false) moneyamt -= pricehull[3];
 		hullowned[3] = true;
+		root->saveMoney(moneyamt);
 		currenthull = &hulls[3];
 		refreshInformations();
 		refreshTankPreview();
 	}
 
-	else if(hullbuttons[4].contains(x, y) && moneyamt >= pricehull[4] && hullbuttonstates[4] == BUTTON_PRESSED) {
+	else if(hullbuttons[4].contains(x, y) && (moneyamt >= pricehull[4] || hullowned[4]) && hullbuttonstates[4] == BUTTON_PRESSED) {
 		hullbuttonstates[4] = BUTTON_PERFORMED;
 		activehull = HULL_FIVE;
+		if(hullowned[4] == false) moneyamt -= pricehull[4];
 		hullowned[4] = true;
+		root->saveMoney(moneyamt);
 		currenthull = &hulls[4];
 		refreshInformations();
 		refreshTankPreview();
 	}
 
-	else if(hullbuttons[5].contains(x, y) && moneyamt >= pricehull[5] && hullbuttonstates[5] == BUTTON_PRESSED) {
+	else if(hullbuttons[5].contains(x, y) && (moneyamt >= pricehull[5] || hullowned[5]) && hullbuttonstates[5] == BUTTON_PRESSED) {
 		hullbuttonstates[5] = BUTTON_PERFORMED;
 		activehull = HULL_SIX;
+		if(hullowned[5] == false) moneyamt -= pricehull[5];
 		hullowned[5] = true;
+		root->saveMoney(moneyamt);
 		currenthull = &hulls[5];
 		refreshInformations();
 		refreshTankPreview();
 	}
 
-	else if(hullbuttons[6].contains(x, y) && moneyamt >= pricehull[6] && hullbuttonstates[6] == BUTTON_PRESSED) {
+	else if(hullbuttons[6].contains(x, y) && (moneyamt >= pricehull[6] || hullowned[6]) && hullbuttonstates[6] == BUTTON_PRESSED) {
 		hullbuttonstates[6] = BUTTON_PERFORMED;
 		activehull = HULL_SEVEN;
+		if(hullowned[6] == false) moneyamt -= pricehull[6];
 		hullowned[6] = true;
+		root->saveMoney(moneyamt);
 		currenthull = &hulls[6];
 		refreshInformations();
 		refreshTankPreview();
 	}
 
-	else if(hullbuttons[7].contains(x, y) && moneyamt >= pricehull[7] && hullbuttonstates[7] == BUTTON_PRESSED) {
+	else if(hullbuttons[7].contains(x, y) && (moneyamt >= pricehull[7] || hullowned[7]) && hullbuttonstates[7] == BUTTON_PRESSED) {
 		hullbuttonstates[7] = BUTTON_PERFORMED;
 		activehull = HULL_EIGHT;
+		if(hullowned[7] == false) moneyamt -= pricehull[7];
 		hullowned[7] = true;
+		root->saveMoney(moneyamt);
 		currenthull = &hulls[7];
 		refreshInformations();
 		refreshTankPreview();
@@ -1152,64 +1174,78 @@ void ShopCanvas::weaponSettingsReleased(int x, int y) {
 		refreshTankPreview();
 	}
 
-	else if(weaponbuttons[1].contains(x, y) && moneyamt >= pricetrack[1] &&  weaponbuttonstates[1] == BUTTON_PRESSED) {
+	else if(weaponbuttons[1].contains(x, y) && (moneyamt >= priceweapon[1] || weaponowned[1]) &&  weaponbuttonstates[1] == BUTTON_PRESSED) {
 		weaponbuttonstates[1] = BUTTON_PERFORMED;
 		activeweapon = WEAPON_TWO;
 		currentweapon = &weapons[1];
+		if(weaponowned[1] == false) moneyamt -= priceweapon[1];
+		root->saveMoney(moneyamt);
 		weaponowned[1] = true;
 		refreshInformations();
 		refreshTankPreview();
 	}
 
-	else if(weaponbuttons[2].contains(x, y) && moneyamt >= priceweapon[2] && weaponbuttonstates[2] == BUTTON_PRESSED) {
+	else if(weaponbuttons[2].contains(x, y) && (moneyamt >= priceweapon[2] || weaponowned[2]) && weaponbuttonstates[2] == BUTTON_PRESSED) {
 		weaponbuttonstates[2] = BUTTON_PERFORMED;
 		activeweapon = WEAPON_THREE;
 		currentweapon = &weapons[2];
+		if(weaponowned[2] == false) moneyamt -= priceweapon[2];
+		root->saveMoney(moneyamt);
 		weaponowned[2] = true;
 		refreshInformations();
 		refreshTankPreview();
 	}
 
-	else if(weaponbuttons[3].contains(x, y) && moneyamt >= priceweapon[3] && weaponbuttonstates[3] == BUTTON_PRESSED) {
+	else if(weaponbuttons[3].contains(x, y) && (moneyamt >= priceweapon[3] || weaponowned[3]) && weaponbuttonstates[3] == BUTTON_PRESSED) {
 		weaponbuttonstates[3] = BUTTON_PERFORMED;
 		activeweapon = WEAPON_FOUR;
 		currentweapon = &weapons[3];
+		if(weaponowned[3] == false) moneyamt -= priceweapon[3];
+		root->saveMoney(moneyamt);
 		weaponowned[3] = true;
 		refreshInformations();
 		refreshTankPreview();
 	}
 
-	else if(weaponbuttons[4].contains(x, y) && moneyamt >= priceweapon[4] && weaponbuttonstates[4] == BUTTON_PRESSED) {
+	else if(weaponbuttons[4].contains(x, y) && (moneyamt >= priceweapon[4] || weaponowned[4]) && weaponbuttonstates[4] == BUTTON_PRESSED) {
 		weaponbuttonstates[4] = BUTTON_PERFORMED;
 		activeweapon = WEAPON_FIVE;
 		currentweapon = &weapons[4];
+		if(weaponowned[4] == false) moneyamt -= priceweapon[4];
+		root->saveMoney(moneyamt);
 		weaponowned[4] = true;
 		refreshInformations();
 		refreshTankPreview();
 	}
 
-	else if(weaponbuttons[5].contains(x, y) && moneyamt >= priceweapon[5] && weaponbuttonstates[5] == BUTTON_PRESSED) {
+	else if(weaponbuttons[5].contains(x, y) && (moneyamt >= priceweapon[5] || weaponowned[5]) && weaponbuttonstates[5] == BUTTON_PRESSED) {
 		weaponbuttonstates[5] = BUTTON_PERFORMED;
 		activeweapon = WEAPON_SIX;
 		currentweapon = &weapons[5];
+		if(weaponowned[5] == false) moneyamt -= priceweapon[5];
+		root->saveMoney(moneyamt);
 		weaponowned[5] = true;
 		refreshInformations();
 		refreshTankPreview();
 	}
 
-	else if(weaponbuttons[6].contains(x, y) && moneyamt >= priceweapon[6] && weaponbuttonstates[6] == BUTTON_PRESSED) {
+	else if(weaponbuttons[6].contains(x, y) && (moneyamt >= priceweapon[6] || weaponowned[6]) && weaponbuttonstates[6] == BUTTON_PRESSED) {
 		weaponbuttonstates[6] = BUTTON_PERFORMED;
 		activeweapon = WEAPON_SEVEN;
 		currentweapon = &weapons[6];
+		if(weaponowned[6] == false) moneyamt -= priceweapon[6];
+		root->saveMoney(moneyamt);
 		weaponowned[6] = true;
 		refreshInformations();
 		refreshTankPreview();
 	}
 
-	else if(weaponbuttons[7].contains(x, y) && moneyamt >= priceweapon[7] && weaponbuttonstates[7] == BUTTON_PRESSED) {
+	else if(weaponbuttons[7].contains(x, y) && (moneyamt >= priceweapon[7] || weaponowned[7]) && weaponbuttonstates[7] == BUTTON_PRESSED) {
 		weaponbuttonstates[7] = BUTTON_PERFORMED;
 		activeweapon = WEAPON_EIGHT;
 		currentweapon = &weapons[7];
+		if(weaponowned[7] == false) moneyamt -= priceweapon[7];
+		root->saveMoney(moneyamt);
 		weaponowned[7] = true;
 		refreshInformations();
 		refreshTankPreview();
@@ -1326,26 +1362,32 @@ void ShopCanvas::trackSettingsReleased(int x, int y) {
 		refreshInformations();
 	}
 
-	else if(trackbuttons[1].contains(x, y) && moneyamt >= pricetrack[1] && trackbuttonstates[1] == BUTTON_PRESSED) {
+	else if(trackbuttons[1].contains(x, y) && (moneyamt >= pricetrack[1] || trackowned[1]) && trackbuttonstates[1] == BUTTON_PRESSED) {
 		trackbuttonstates[1] = BUTTON_PERFORMED;
 		activetrack = TRACK_TWO;
 		currenttrack = &tracks[1];
+		if(trackowned[1] == false) moneyamt -= pricetrack[1];
+		root->saveMoney(moneyamt);
 		trackowned[1] = true;
 		refreshInformations();
 	}
 
-	else if(trackbuttons[2].contains(x, y) &&  moneyamt >= pricetrack[2] && trackbuttonstates[2] == BUTTON_PRESSED) {
+	else if(trackbuttons[2].contains(x, y) && (moneyamt >= pricetrack[2] || trackowned[2]) && trackbuttonstates[2] == BUTTON_PRESSED) {
 		trackbuttonstates[2] = BUTTON_PERFORMED;
 		activetrack = TRACK_THREE;
 		currenttrack = &tracks[2];
+		if(trackowned[2] == false) moneyamt -= pricetrack[2];
+		root->saveMoney(moneyamt);
 		trackowned[2] = true;
 		refreshInformations();
 	}
 
-	else if(trackbuttons[3].contains(x, y) &&  moneyamt >= pricetrack[3] && trackbuttonstates[3] == BUTTON_PRESSED) {
+	else if(trackbuttons[3].contains(x, y) &&  (moneyamt >= pricetrack[3] || trackowned[3]) && trackbuttonstates[3] == BUTTON_PRESSED) {
 		trackbuttonstates[3] = BUTTON_PERFORMED;
 		activetrack = TRACK_FOUR;
 		currenttrack = &tracks[3];
+		if(trackowned[3] == false) moneyamt -= pricetrack[3];
+		root->saveMoney(moneyamt);
 		trackowned[3] = true;
 		refreshInformations();
 	}
