@@ -179,10 +179,10 @@ void ShopCanvas::colorPickDraw() {
 
     	if(!colorowned[i]) if(activehullcolor == i) setColor(200, 200, 255);
     	else setColor(normalcolor);
-    	if(!colorowned[i]) pricecolor[i] = 50 + (i * 20);
+    	if(!colorowned[i]) pricecolor[i] = 50 + (i * 10);
 
     	setColor(255, 255, 255);
-	    if(i > 0) root->menutitlefont.drawText(gToStr(pricecolor[i]), colorx[i] + colorshitbox[i].getWidth() + 20, colory[i] + colorshitbox[i].getHeight() / 2);
+	    if(i > 0) root->menutitlefont.drawText(gToStr(pricecolor[i]), (colorx[i] - 20) + colorshitbox[i].getWidth() + (i * 55), colory[i] + colorshitbox[i].getHeight() / 1.2);
     	colors[i].draw(x, y, colorw, colorh);
     	if(!colorowned[i]) lock.draw(
     	    x + (colorw - lockw) / 2,
