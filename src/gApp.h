@@ -82,7 +82,13 @@ public:
 	bool getMusicEnabled() const { return musicenabled; }
 	void loadOwned();
 	bool isHullOwned(int index);
+	bool isWeaponOwned(int index);
+	bool isTrackOwned(int index);
+	bool isColorOwned(int index);
 	void buyHull(int index);
+	void buyWeapon(int index);
+	void buyTrack(int index);
+	void buyColor(int index);
 
 	int getLanguage();
 	int getMinimap();

@@ -128,6 +128,18 @@ bool gApp::isHullOwned(int index) {
 	return hullowned[index] == '1';
 }
 
+bool gApp::isWeaponOwned(int index) {
+	return weaponowned[index] == '1';
+}
+
+bool gApp::isTrackOwned(int index) {
+	return trackowned[index] == '1';
+}
+
+bool gApp::isColorOwned(int index) {
+	return colorowned[index] == '1';
+}
+
 void gApp::buyHull(int index) {
 	hullowned[index] = '1';
 
@@ -135,6 +147,36 @@ void gApp::buyHull(int index) {
 		"UPDATE options SET value='" +
 		hullowned +
 		"' WHERE key='hullowned'"
+	);
+}
+
+void gApp::buyWeapon(int index) {
+	weaponowned[index] = '1';
+
+	optionsdb.execute(
+		"UPDATE options SET value='" +
+		weaponowned +
+		"' WHERE key='weaponowned'"
+	);
+}
+
+void gApp::buyTrack(int index) {
+	trackowned[index] = '1';
+
+	optionsdb.execute(
+		"UPDATE options SET value='" +
+		trackowned +
+		"' WHERE key='trackowned'"
+	);
+}
+
+void gApp::buyColor(int index) {
+	colorowned[index] = '1';
+
+	optionsdb.execute(
+		"UPDATE options SET value='" +
+		colorowned +
+		"' WHERE key='colorowned'"
 	);
 }
 
