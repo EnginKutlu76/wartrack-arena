@@ -81,8 +81,6 @@ void ShopCanvas::refreshTankPreview() {
 void ShopCanvas::buyTank() {
 	root->saveTankSettings(activehull + 1, activeweapon + 1, activetrack + 1);
 	root->saveTankColor(activehullcolor + 1, activeweaponcolor + 1);
-//	tabSetup();
-//	containerSetup();
 	refreshTankPreview();
 }
 
@@ -461,7 +459,6 @@ void ShopCanvas::checkButtonReleased(int x, int y, int button) {
 		root->buyColor(1);
 		framex = colorx[0] + colorspace;
 		refreshTankPreview();
-		//currentcolor = &colors[1];
 	}
 	else if(colorshitbox[2].contains(x, y) && (moneyamt >= pricecolor[2] || root->isColorOwned(2)) && colorstate[2] == BUTTON_PRESSED) {
 		colorstate[2] = BUTTON_PERFORMED;
@@ -472,7 +469,6 @@ void ShopCanvas::checkButtonReleased(int x, int y, int button) {
 		root->buyColor(2);
 		framex = colorx[0] + colorspace * 2 + 8;
 		refreshTankPreview();
-		//currentcolor = &colors[2];
 	}
 	else if(colorshitbox[3].contains(x, y) && (moneyamt >= pricecolor[3] || root->isColorOwned(3)) && colorstate[3] == BUTTON_PRESSED) {
 		colorstate[3] = BUTTON_PERFORMED;
@@ -974,7 +970,6 @@ void ShopCanvas::hullSettingsReleased(int x, int y) {
 		hullbuttonstates[1] = BUTTON_PERFORMED;
 		activehull = HULL_TWO;
 		if(root->isHullOwned(1) == false) moneyamt -= pricehull[1];
-		//hullowned[1] = true;
 		root->buyHull(1);
 		root->saveMoney(moneyamt);
 		currenthull = &hulls[1];
@@ -986,7 +981,6 @@ void ShopCanvas::hullSettingsReleased(int x, int y) {
 		hullbuttonstates[2] = BUTTON_PERFORMED;
 		activehull = HULL_THREE;
 		if(root->isHullOwned(2) == false) moneyamt -= pricehull[2];
-		//hullowned[2] = true;
 		root->buyHull(2);
 		root->saveMoney(moneyamt);
 		currenthull = &hulls[2];
@@ -998,7 +992,6 @@ void ShopCanvas::hullSettingsReleased(int x, int y) {
 		hullbuttonstates[3] = BUTTON_PERFORMED;
 		activehull = HULL_FOUR;
 		if(root->isHullOwned(3) == false) moneyamt -= pricehull[3];
-		//hullowned[3] = true;
 		root->buyHull(3);
 		root->saveMoney(moneyamt);
 		currenthull = &hulls[3];
@@ -1010,7 +1003,6 @@ void ShopCanvas::hullSettingsReleased(int x, int y) {
 		hullbuttonstates[4] = BUTTON_PERFORMED;
 		activehull = HULL_FIVE;
 		if(root->isHullOwned(4) == false) moneyamt -= pricehull[4];
-		//hullowned[4] = true;
 		root->buyHull(4);
 		root->saveMoney(moneyamt);
 		currenthull = &hulls[4];
@@ -1022,7 +1014,6 @@ void ShopCanvas::hullSettingsReleased(int x, int y) {
 		hullbuttonstates[5] = BUTTON_PERFORMED;
 		activehull = HULL_SIX;
 		if(root->isHullOwned(5) == false) moneyamt -= pricehull[5];
-		//hullowned[5] = true;
 		root->buyHull(5);
 		root->saveMoney(moneyamt);
 		currenthull = &hulls[5];
@@ -1034,7 +1025,6 @@ void ShopCanvas::hullSettingsReleased(int x, int y) {
 		hullbuttonstates[6] = BUTTON_PERFORMED;
 		activehull = HULL_SEVEN;
 		if(root->isHullOwned(6) == false) moneyamt -= pricehull[6];
-		//hullowned[6] = true;
 		root->buyHull(6);
 		root->saveMoney(moneyamt);
 		currenthull = &hulls[6];
@@ -1046,7 +1036,6 @@ void ShopCanvas::hullSettingsReleased(int x, int y) {
 		hullbuttonstates[7] = BUTTON_PERFORMED;
 		activehull = HULL_EIGHT;
 		if(root->isHullOwned(2) == false) moneyamt -= pricehull[7];
-		//hullowned[7] = true;
 		root->buyHull(7);
 		root->saveMoney(moneyamt);
 		currenthull = &hulls[7];

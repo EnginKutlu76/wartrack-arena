@@ -267,7 +267,6 @@ private:
 	int hullhealth[8];
 	int weaponattack[8];
 	int weaponbulletspeed[8];
-	//int speed, durability, health, attack, bulletspeed;
 	int infogapx, infogapy;
 
 	//Money
