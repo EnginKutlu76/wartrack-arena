@@ -117,7 +117,7 @@ private:
 	void moneyDraw();
 
 	void refreshInformations();
-	void buyTank();
+	void saveTank();
 	void refreshTankPreview();
 	void lockSetup();
 

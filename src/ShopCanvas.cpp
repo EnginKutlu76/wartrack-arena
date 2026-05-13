@@ -22,6 +22,9 @@ ShopCanvas::~ShopCanvas() {
 }
 
 void ShopCanvas::setup() {
+	if(activehull < 0 || activehull >= 8) activehull = 0;
+	if(activeweapon < 0 || activeweapon >= 8) activeweapon = 0;
+	if(activetrack < 0 || activetrack >= 4) activetrack = 0;
 	currenthull = &hulls[activehull];
 	currentweapon = &weapons[activeweapon];
 	currenttrack = &tracks[activetrack];
@@ -78,7 +81,7 @@ void ShopCanvas::refreshTankPreview() {
 	);
 }
 
-void ShopCanvas::buyTank() {
+void ShopCanvas::saveTank() {
 	root->saveTankSettings(activehull + 1, activeweapon + 1, activetrack + 1);
 	root->saveTankColor(activehullcolor + 1, activeweaponcolor + 1);
 	refreshTankPreview();
@@ -142,6 +145,9 @@ void ShopCanvas::colorPickSetup() {
 	colors[2].loadImage("PNG/color3.png");
 	colors[3].loadImage("PNG/color4.png");
 	frame.loadImage("PNG/check-markred.png");
+	pricecolor[1] = 50;
+	pricecolor[2] = 50;
+	pricecolor[3] = 50;
 
 	colorw = colors[0].getWidth();
 	colorh = colors[0].getHeight();
@@ -174,13 +180,7 @@ void ShopCanvas::colorPickDraw() {
     for(int i = 0; i < 4; i++) {
     	int x = colorshitbox[i].left();
     	int y = colorshitbox[i].top();
-
-    	if(!colorowned[i]) if(activehullcolor == i) setColor(200, 200, 255);
-    	else setColor(normalcolor);
-    	if(!root->isColorOwned(i)) pricecolor[i] = 50 + (i * 10);
-
     	setColor(255, 255, 255);
-	    if(i > 0) root->menutitlefont.drawText(gToStr(pricecolor[i]), (colorx[i] - 20) + colorshitbox[i].getWidth(), colory[i] + colorshitbox[i].getHeight() / 1.2);
     	colors[i].draw(x, y, colorw, colorh);
     	if(!root->isColorOwned(i)) lock.draw(
     	    x + (colorw - lockw) / 2,
@@ -189,6 +189,10 @@ void ShopCanvas::colorPickDraw() {
     	    lockh
     	);
     }
+
+    root->menutitlefont.drawText(gToStr(pricecolor[1]), (colorx[1] - colorw) + colorshitbox[1].getWidth(), colory[1] + colorshitbox[1].getHeight() / 1.2);
+    root->menutitlefont.drawText(gToStr(pricecolor[2]), (colorx[2] - colorw) + colorshitbox[2].getWidth(), colory[2] + colorshitbox[2].getHeight() / 1.2);
+    root->menutitlefont.drawText(gToStr(pricecolor[3]), (colorx[3] - colorw) + colorshitbox[3].getWidth(), colory[3] + colorshitbox[3].getHeight() / 1.2);
 }
 
 void ShopCanvas::informationsSetup() {
@@ -448,17 +452,19 @@ void ShopCanvas::checkButtonReleased(int x, int y, int button) {
 		if(activetab == TAB_WEAPON) activeweaponcolor = COLOR_ONE;
 		refreshTankPreview();
 		framex = colorx[0];
+		saveTank();
 		//currentcolor = &colors[0];
 	}
 	else if(colorshitbox[1].contains(x, y) && (moneyamt >= pricecolor[1] || root->isColorOwned(1)) && colorstate[1] == BUTTON_PRESSED) {
 		colorstate[1] = BUTTON_PERFORMED;
 		if(activetab == TAB_HULL) activehullcolor = COLOR_TWO;
 		if(activetab == TAB_WEAPON) activeweaponcolor = COLOR_TWO;
-		if(root->isColorOwned(1) == false) moneyamt -= pricecolor[1] + 8;
+		if(root->isColorOwned(1) == false) moneyamt -= pricecolor[1];
 		root->saveMoney(moneyamt);
 		root->buyColor(1);
 		framex = colorx[0] + colorspace;
 		refreshTankPreview();
+		saveTank();
 	}
 	else if(colorshitbox[2].contains(x, y) && (moneyamt >= pricecolor[2] || root->isColorOwned(2)) && colorstate[2] == BUTTON_PRESSED) {
 		colorstate[2] = BUTTON_PERFORMED;
@@ -469,6 +475,7 @@ void ShopCanvas::checkButtonReleased(int x, int y, int button) {
 		root->buyColor(2);
 		framex = colorx[0] + colorspace * 2 + 8;
 		refreshTankPreview();
+		saveTank();
 	}
 	else if(colorshitbox[3].contains(x, y) && (moneyamt >= pricecolor[3] || root->isColorOwned(3)) && colorstate[3] == BUTTON_PRESSED) {
 		colorstate[3] = BUTTON_PERFORMED;
@@ -479,6 +486,7 @@ void ShopCanvas::checkButtonReleased(int x, int y, int button) {
 		root->buyColor(3);
 		framex = colorx[0] + colorspace * 3 + 8;
 		refreshTankPreview();
+		saveTank();
 	}
 	else {
 		colorstate[0] = BUTTON_CANCELED;
@@ -818,10 +826,6 @@ void ShopCanvas::tabButtonPressed(int x, int y) {
 	if(tracktabbutton.contains(x, y)) {
 		tracktabbuttonstate = BUTTON_PRESSED;
 	}
-
-	if(effecttabbutton.contains(x, y)) {
-		effecttabbuttonstate = BUTTON_PRESSED;
-	}
 }
 
 void ShopCanvas::tabButtonReleased(int x, int y) {
@@ -872,15 +876,6 @@ void ShopCanvas::tabButtonFocus(int x, int y) {
 		}
 		else {
 			tracktabbuttonstate = BUTTON_NONE;
-		}
-	}
-
-	if(effecttabbuttonstate != BUTTON_PRESSED) {
-		if(effecttabbutton.contains(x, y)) {
-			effecttabbuttonstate = BUTTON_FOCUS;
-		}
-		else {
-			effecttabbuttonstate = BUTTON_NONE;
 		}
 	}
 }
@@ -959,11 +954,12 @@ void ShopCanvas::hullSettingsReleased(int x, int y) {
 	if(hullbuttons[0].contains(x, y) && hullbuttonstates[0] == BUTTON_PRESSED) {
 		hullbuttonstates[0] = BUTTON_PERFORMED;
 		activehull = HULL_ONE;
-		moneyamt += 500;
+//		moneyamt += 500;
 		root->saveMoney(moneyamt);
-		currenthull = &hulls[0];
+		currenthull = &hulls[activehull];
 		refreshInformations();
 		refreshTankPreview();
+		saveTank();
 	}
 
 	else if(hullbuttons[1].contains(x, y) && (moneyamt >= pricehull[1] || root->isHullOwned(1)) && hullbuttonstates[1] == BUTTON_PRESSED) {
@@ -972,9 +968,10 @@ void ShopCanvas::hullSettingsReleased(int x, int y) {
 		if(root->isHullOwned(1) == false) moneyamt -= pricehull[1];
 		root->buyHull(1);
 		root->saveMoney(moneyamt);
-		currenthull = &hulls[1];
+		currenthull = &hulls[activehull];
 		refreshInformations();
 		refreshTankPreview();
+		saveTank();
 	}
 
 	else if(hullbuttons[2].contains(x, y) && (moneyamt >= pricehull[2] || root->isHullOwned(2)) && hullbuttonstates[2] == BUTTON_PRESSED) {
@@ -983,9 +980,10 @@ void ShopCanvas::hullSettingsReleased(int x, int y) {
 		if(root->isHullOwned(2) == false) moneyamt -= pricehull[2];
 		root->buyHull(2);
 		root->saveMoney(moneyamt);
-		currenthull = &hulls[2];
+		currenthull = &hulls[activehull];
 		refreshInformations();
 		refreshTankPreview();
+		saveTank();
 	}
 
 	else if(hullbuttons[3].contains(x, y) && (moneyamt >= pricehull[3] || root->isHullOwned(3))  && hullbuttonstates[3] == BUTTON_PRESSED) {
@@ -994,9 +992,10 @@ void ShopCanvas::hullSettingsReleased(int x, int y) {
 		if(root->isHullOwned(3) == false) moneyamt -= pricehull[3];
 		root->buyHull(3);
 		root->saveMoney(moneyamt);
-		currenthull = &hulls[3];
+		currenthull = &hulls[activehull];
 		refreshInformations();
 		refreshTankPreview();
+		saveTank();
 	}
 
 	else if(hullbuttons[4].contains(x, y) && (moneyamt >= pricehull[4] || root->isHullOwned(4)) && hullbuttonstates[4] == BUTTON_PRESSED) {
@@ -1005,9 +1004,10 @@ void ShopCanvas::hullSettingsReleased(int x, int y) {
 		if(root->isHullOwned(4) == false) moneyamt -= pricehull[4];
 		root->buyHull(4);
 		root->saveMoney(moneyamt);
-		currenthull = &hulls[4];
+		currenthull = &hulls[activehull];
 		refreshInformations();
 		refreshTankPreview();
+		saveTank();
 	}
 
 	else if(hullbuttons[5].contains(x, y) && (moneyamt >= pricehull[5] || root->isHullOwned(5)) && hullbuttonstates[5] == BUTTON_PRESSED) {
@@ -1016,9 +1016,10 @@ void ShopCanvas::hullSettingsReleased(int x, int y) {
 		if(root->isHullOwned(5) == false) moneyamt -= pricehull[5];
 		root->buyHull(5);
 		root->saveMoney(moneyamt);
-		currenthull = &hulls[5];
+		currenthull = &hulls[activehull];
 		refreshInformations();
 		refreshTankPreview();
+		saveTank();
 	}
 
 	else if(hullbuttons[6].contains(x, y) && (moneyamt >= pricehull[6] || root->isHullOwned(6)) && hullbuttonstates[6] == BUTTON_PRESSED) {
@@ -1027,20 +1028,22 @@ void ShopCanvas::hullSettingsReleased(int x, int y) {
 		if(root->isHullOwned(6) == false) moneyamt -= pricehull[6];
 		root->buyHull(6);
 		root->saveMoney(moneyamt);
-		currenthull = &hulls[6];
+		currenthull = &hulls[activehull];
 		refreshInformations();
 		refreshTankPreview();
+		saveTank();
 	}
 
 	else if(hullbuttons[7].contains(x, y) && (moneyamt >= pricehull[7] || root->isHullOwned(7)) && hullbuttonstates[7] == BUTTON_PRESSED) {
 		hullbuttonstates[7] = BUTTON_PERFORMED;
 		activehull = HULL_EIGHT;
-		if(root->isHullOwned(2) == false) moneyamt -= pricehull[7];
+		if(root->isHullOwned(7) == false) moneyamt -= pricehull[7];
 		root->buyHull(7);
 		root->saveMoney(moneyamt);
-		currenthull = &hulls[7];
+		currenthull = &hulls[activehull];
 		refreshInformations();
 		refreshTankPreview();
+		saveTank();
 	}
 	else {
 		hullbuttonstates[0] = BUTTON_CANCELED;
@@ -1169,6 +1172,7 @@ void ShopCanvas::weaponSettingsReleased(int x, int y) {
 		currentweapon = &weapons[0];
 		refreshInformations();
 		refreshTankPreview();
+		saveTank();
 	}
 
 	else if(weaponbuttons[1].contains(x, y) && (moneyamt >= priceweapon[1] || root->isWeaponOwned(1)) &&  weaponbuttonstates[1] == BUTTON_PRESSED) {
@@ -1180,6 +1184,7 @@ void ShopCanvas::weaponSettingsReleased(int x, int y) {
 		root->buyWeapon(1);
 		refreshInformations();
 		refreshTankPreview();
+		saveTank();
 	}
 
 	else if(weaponbuttons[2].contains(x, y) && (moneyamt >= priceweapon[2] || root->isWeaponOwned(2)) && weaponbuttonstates[2] == BUTTON_PRESSED) {
@@ -1191,6 +1196,7 @@ void ShopCanvas::weaponSettingsReleased(int x, int y) {
 		root->buyWeapon(2);
 		refreshInformations();
 		refreshTankPreview();
+		saveTank();
 	}
 
 	else if(weaponbuttons[3].contains(x, y) && (moneyamt >= priceweapon[3] || root->isWeaponOwned(3)) && weaponbuttonstates[3] == BUTTON_PRESSED) {
@@ -1202,6 +1208,7 @@ void ShopCanvas::weaponSettingsReleased(int x, int y) {
 		root->buyWeapon(3);
 		refreshInformations();
 		refreshTankPreview();
+		saveTank();
 	}
 
 	else if(weaponbuttons[4].contains(x, y) && (moneyamt >= priceweapon[4] || root->isWeaponOwned(4)) && weaponbuttonstates[4] == BUTTON_PRESSED) {
@@ -1213,6 +1220,7 @@ void ShopCanvas::weaponSettingsReleased(int x, int y) {
 		root->buyWeapon(4);
 		refreshInformations();
 		refreshTankPreview();
+		saveTank();
 	}
 
 	else if(weaponbuttons[5].contains(x, y) && (moneyamt >= priceweapon[5] || root->isWeaponOwned(5)) && weaponbuttonstates[5] == BUTTON_PRESSED) {
@@ -1224,6 +1232,7 @@ void ShopCanvas::weaponSettingsReleased(int x, int y) {
 		root->buyWeapon(5);
 		refreshInformations();
 		refreshTankPreview();
+		saveTank();
 	}
 
 	else if(weaponbuttons[6].contains(x, y) && (moneyamt >= priceweapon[6] || root->isWeaponOwned(6)) && weaponbuttonstates[6] == BUTTON_PRESSED) {
@@ -1235,6 +1244,7 @@ void ShopCanvas::weaponSettingsReleased(int x, int y) {
 		root->buyWeapon(6);
 		refreshInformations();
 		refreshTankPreview();
+		saveTank();
 	}
 
 	else if(weaponbuttons[7].contains(x, y) && (moneyamt >= priceweapon[7] || root->isWeaponOwned(7)) && weaponbuttonstates[7] == BUTTON_PRESSED) {
@@ -1246,6 +1256,7 @@ void ShopCanvas::weaponSettingsReleased(int x, int y) {
 		root->buyWeapon(7);
 		refreshInformations();
 		refreshTankPreview();
+		saveTank();
 	}
 	else {
 		weaponbuttonstates[0] = BUTTON_CANCELED;
@@ -1357,6 +1368,7 @@ void ShopCanvas::trackSettingsReleased(int x, int y) {
 		activetrack = TRACK_ONE;
 		currenttrack = &tracks[0];
 		refreshInformations();
+		saveTank();
 	}
 
 	else if(trackbuttons[1].contains(x, y) && (moneyamt >= pricetrack[1] || root->isTrackOwned(1)) && trackbuttonstates[1] == BUTTON_PRESSED) {
@@ -1367,6 +1379,7 @@ void ShopCanvas::trackSettingsReleased(int x, int y) {
 		root->saveMoney(moneyamt);
 		root->buyTrack(1);
 		refreshInformations();
+		saveTank();
 	}
 
 	else if(trackbuttons[2].contains(x, y) && (moneyamt >= pricetrack[2] || root->isTrackOwned(2)) && trackbuttonstates[2] == BUTTON_PRESSED) {
@@ -1377,6 +1390,7 @@ void ShopCanvas::trackSettingsReleased(int x, int y) {
 		root->saveMoney(moneyamt);
 		root->buyTrack(2);
 		refreshInformations();
+		saveTank();
 	}
 
 	else if(trackbuttons[3].contains(x, y) &&  (moneyamt >= pricetrack[3] || root->isTrackOwned(3)) && trackbuttonstates[3] == BUTTON_PRESSED) {
@@ -1387,6 +1401,7 @@ void ShopCanvas::trackSettingsReleased(int x, int y) {
 		root->saveMoney(moneyamt);
 		root->buyTrack(3);
 		refreshInformations();
+		saveTank();
 	}
 	else {
 		trackbuttonstates[0] = BUTTON_CANCELED;
@@ -1466,6 +1481,11 @@ void ShopCanvas::mousePressed(int x, int y, int button) {
 
 void ShopCanvas::mouseReleased(int x, int y, int button) {
 //	gLogi("ShopCanvas") << "mouseReleased" << ", button:" << button;
+	if(returnhitbox.contains(x, y) && returnbuttonstate == BUTTON_PRESSED) {
+		checkButtonReleased(x, y, button);
+		return;
+	}
+
 	checkButtonReleased(x, y, button);
 	containerButtonReleased(x, y);
 	tabButtonReleased(x, y);
