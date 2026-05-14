@@ -11,7 +11,6 @@
 #include "MainMenu.h"
 #include "gFont.h"
 #include "gImage.h"
-#include "gFont.h"
 
 ShopCanvas::ShopCanvas(gApp* root): gBaseCanvas(root) {
 	this->root = root;
@@ -579,8 +578,8 @@ void ShopCanvas::hullSettingsSetup() {
     hulltexts[6] = "HULL 7";
     hulltexts[7] = "HULL 8";
 
-    hullimgw = hulls[0].getWidth() / 1.5;
-    hullimgh = hulls[0].getHeight() / 1.5;
+    hullimgw = static_cast<int>(hulls[0].getWidth() / 1.5);
+    hullimgh = static_cast<int>(hulls[0].getHeight() / 1.5);
  	hlabelw = root->menutitlefont.getStringWidth(hulltexts[0]);
 	hlabelh = root->menutitlefont.getStringHeight("y");
 	hlabelx = containerx ;
@@ -619,8 +618,14 @@ void ShopCanvas::hullSettingsDraw() {
     	int x = hullbuttons[i].left();
     	int y = hullbuttons[i].top();
 
-    	if(!root->isHullOwned(i)) if(activehull == i) setColor(200, 200, 255);
-    	else setColor(normalcolor);
+    	if(!root->isHullOwned(i)) {
+    	    if(activehull == i) {
+    	        setColor(200, 200, 255);
+    	    }
+    	    else {
+    	        setColor(normalcolor);
+    	    }
+    	}
 
     	pricehull[i] = 200 + (100 * i);
     	hulls[i].draw(x, y, hullimgw, hullimgh);
@@ -650,9 +655,9 @@ void ShopCanvas::weaponSettingsSetup() {
     weapontexts[6] = "Gun 7";
     weapontexts[7] = "Gun 8";
 
-    weaponimgw = weapons[0].getWidth() * 0.8;
-    weaponimgh = weapons[0].getHeight() * 0.8;
- 	wlabelw = root->menutitlefont.getStringWidth(weapontexts[0]);
+    weaponimgw = static_cast<int>(weapons[0].getWidth() * 0.8f);
+    weaponimgh = static_cast<int>(weapons[0].getHeight() * 0.8f);
+    wlabelw = root->menutitlefont.getStringWidth(weapontexts[0]);
 	wlabelh = root->menutitlefont.getStringHeight("y");
 	wlabelx = containerx;
 	wlabely = containery + weaponimgh / 5;
@@ -781,8 +786,14 @@ void ShopCanvas::weaponSettingsDraw() {
 		int x = weaponbuttons[i].left();
 		int y = weaponbuttons[i].top();
 
-		if(!root->isWeaponOwned(i)) if(activeweapon == i) setColor(200, 200, 255);
-		else setColor(normalcolor);
+		if(!root->isWeaponOwned(i)) {
+		    if(activeweapon == i) {
+		        setColor(200, 200, 255);
+		    }
+		    else {
+		        setColor(normalcolor);
+		    }
+		}
 	    weapons[i].draw(x, y, weaponimgw, weaponimgh);
 	    if(i > 0)
 	    if(!root->isWeaponOwned(i)) lock.draw(x + 75, y + 75, lockw * 2, lockh * 2);
@@ -800,8 +811,14 @@ void ShopCanvas::trackSettingsDraw() {
     	int x = trackbuttons[i].left();
     	int y = trackbuttons[i].top();
 
-    	if(!root->isTrackOwned(i)) if(activetrack == i) setColor(200, 200, 255);
-    	else setColor(normalcolor);
+     	if(!root->isTrackOwned(i)) {
+    	    if(activetrack == i) {
+    	        setColor(200, 200, 255);
+    	    }
+    	    else {
+    	        setColor(normalcolor);
+    	    }
+    	}
     	if(!root->isTrackOwned(i))pricetrack[i] = 150 + (i * 80);
     	tracks[i].draw(x + 50, y, trackimgw, trackimgh);
 	    if(i > 0)
@@ -951,109 +968,33 @@ void ShopCanvas::hullSettingsPressed(int x, int y) {
 }
 
 void ShopCanvas::hullSettingsReleased(int x, int y) {
-	if(hullbuttons[0].contains(x, y) && hullbuttonstates[0] == BUTTON_PRESSED) {
-		hullbuttonstates[0] = BUTTON_PERFORMED;
-		activehull = HULL_ONE;
-//		moneyamt += 500;
-		root->saveMoney(moneyamt);
-		currenthull = &hulls[activehull];
-		refreshInformations();
-		refreshTankPreview();
-		saveTank();
+	for(int i = 0; i < 8; i++) {
+		bool ispressed = hullbuttonstates[i] == BUTTON_PRESSED;
+		bool isowned = root->isHullOwned(i);
+		bool canbuy = moneyamt >= pricehull[i];
+
+		if(hullbuttons[i].contains(x, y) && ispressed && (i == 0 || canbuy || isowned)) {
+			hullbuttonstates[i] = BUTTON_PERFORMED;
+
+			activehull = i;
+			currenthull = &hulls[i];
+
+			if(i > 0 && !isowned) {
+				moneyamt -= pricehull[i];
+				root->buyHull(i);
+			}
+
+			root->saveMoney(moneyamt);
+
+			refreshInformations();
+			refreshTankPreview();
+			saveTank();
+			return;
+		}
 	}
 
-	else if(hullbuttons[1].contains(x, y) && (moneyamt >= pricehull[1] || root->isHullOwned(1)) && hullbuttonstates[1] == BUTTON_PRESSED) {
-		hullbuttonstates[1] = BUTTON_PERFORMED;
-		activehull = HULL_TWO;
-		if(root->isHullOwned(1) == false) moneyamt -= pricehull[1];
-		root->buyHull(1);
-		root->saveMoney(moneyamt);
-		currenthull = &hulls[activehull];
-		refreshInformations();
-		refreshTankPreview();
-		saveTank();
-	}
-
-	else if(hullbuttons[2].contains(x, y) && (moneyamt >= pricehull[2] || root->isHullOwned(2)) && hullbuttonstates[2] == BUTTON_PRESSED) {
-		hullbuttonstates[2] = BUTTON_PERFORMED;
-		activehull = HULL_THREE;
-		if(root->isHullOwned(2) == false) moneyamt -= pricehull[2];
-		root->buyHull(2);
-		root->saveMoney(moneyamt);
-		currenthull = &hulls[activehull];
-		refreshInformations();
-		refreshTankPreview();
-		saveTank();
-	}
-
-	else if(hullbuttons[3].contains(x, y) && (moneyamt >= pricehull[3] || root->isHullOwned(3))  && hullbuttonstates[3] == BUTTON_PRESSED) {
-		hullbuttonstates[3] = BUTTON_PERFORMED;
-		activehull = HULL_FOUR;
-		if(root->isHullOwned(3) == false) moneyamt -= pricehull[3];
-		root->buyHull(3);
-		root->saveMoney(moneyamt);
-		currenthull = &hulls[activehull];
-		refreshInformations();
-		refreshTankPreview();
-		saveTank();
-	}
-
-	else if(hullbuttons[4].contains(x, y) && (moneyamt >= pricehull[4] || root->isHullOwned(4)) && hullbuttonstates[4] == BUTTON_PRESSED) {
-		hullbuttonstates[4] = BUTTON_PERFORMED;
-		activehull = HULL_FIVE;
-		if(root->isHullOwned(4) == false) moneyamt -= pricehull[4];
-		root->buyHull(4);
-		root->saveMoney(moneyamt);
-		currenthull = &hulls[activehull];
-		refreshInformations();
-		refreshTankPreview();
-		saveTank();
-	}
-
-	else if(hullbuttons[5].contains(x, y) && (moneyamt >= pricehull[5] || root->isHullOwned(5)) && hullbuttonstates[5] == BUTTON_PRESSED) {
-		hullbuttonstates[5] = BUTTON_PERFORMED;
-		activehull = HULL_SIX;
-		if(root->isHullOwned(5) == false) moneyamt -= pricehull[5];
-		root->buyHull(5);
-		root->saveMoney(moneyamt);
-		currenthull = &hulls[activehull];
-		refreshInformations();
-		refreshTankPreview();
-		saveTank();
-	}
-
-	else if(hullbuttons[6].contains(x, y) && (moneyamt >= pricehull[6] || root->isHullOwned(6)) && hullbuttonstates[6] == BUTTON_PRESSED) {
-		hullbuttonstates[6] = BUTTON_PERFORMED;
-		activehull = HULL_SEVEN;
-		if(root->isHullOwned(6) == false) moneyamt -= pricehull[6];
-		root->buyHull(6);
-		root->saveMoney(moneyamt);
-		currenthull = &hulls[activehull];
-		refreshInformations();
-		refreshTankPreview();
-		saveTank();
-	}
-
-	else if(hullbuttons[7].contains(x, y) && (moneyamt >= pricehull[7] || root->isHullOwned(7)) && hullbuttonstates[7] == BUTTON_PRESSED) {
-		hullbuttonstates[7] = BUTTON_PERFORMED;
-		activehull = HULL_EIGHT;
-		if(root->isHullOwned(7) == false) moneyamt -= pricehull[7];
-		root->buyHull(7);
-		root->saveMoney(moneyamt);
-		currenthull = &hulls[activehull];
-		refreshInformations();
-		refreshTankPreview();
-		saveTank();
-	}
-	else {
-		hullbuttonstates[0] = BUTTON_CANCELED;
-		hullbuttonstates[1] = BUTTON_CANCELED;
-		hullbuttonstates[2] = BUTTON_CANCELED;
-		hullbuttonstates[3] = BUTTON_CANCELED;
-		hullbuttonstates[4] = BUTTON_CANCELED;
-		hullbuttonstates[5] = BUTTON_CANCELED;
-		hullbuttonstates[6] = BUTTON_CANCELED;
-		hullbuttonstates[7] = BUTTON_CANCELED;
+	for(int i = 0; i < 8; i++) {
+		hullbuttonstates[i] = BUTTON_CANCELED;
 	}
 }
 
@@ -1166,107 +1107,32 @@ void ShopCanvas::weaponSettingsPressed(int x, int y) {
 }
 
 void ShopCanvas::weaponSettingsReleased(int x, int y) {
-	if(weaponbuttons[0].contains(x, y) && weaponbuttonstates[0] == BUTTON_PRESSED) {
-		weaponbuttonstates[0] = BUTTON_PERFORMED;
-		activeweapon = WEAPON_ONE;
-		currentweapon = &weapons[0];
-		refreshInformations();
-		refreshTankPreview();
-		saveTank();
+	for(int i = 0; i < 8; i++) {
+		bool ispressed = weaponbuttonstates[i] == BUTTON_PRESSED;
+		bool isowned = root->isWeaponOwned(i);
+		bool canbuy = moneyamt >= priceweapon[i];
+
+		if(weaponbuttons[i].contains(x, y) && ispressed && (i == 0 || canbuy || isowned)) {
+			weaponbuttonstates[i] = BUTTON_PERFORMED;
+
+			activeweapon = i;
+			currentweapon = &weapons[i];
+
+			if(i > 0 && !isowned) {
+				moneyamt -= priceweapon[i];
+				root->saveMoney(moneyamt);
+				root->buyWeapon(i);
+			}
+
+			refreshInformations();
+			refreshTankPreview();
+			saveTank();
+			return;
+		}
 	}
 
-	else if(weaponbuttons[1].contains(x, y) && (moneyamt >= priceweapon[1] || root->isWeaponOwned(1)) &&  weaponbuttonstates[1] == BUTTON_PRESSED) {
-		weaponbuttonstates[1] = BUTTON_PERFORMED;
-		activeweapon = WEAPON_TWO;
-		currentweapon = &weapons[1];
-		if(root->isWeaponOwned(1) == false) moneyamt -= priceweapon[1];
-		root->saveMoney(moneyamt);
-		root->buyWeapon(1);
-		refreshInformations();
-		refreshTankPreview();
-		saveTank();
-	}
-
-	else if(weaponbuttons[2].contains(x, y) && (moneyamt >= priceweapon[2] || root->isWeaponOwned(2)) && weaponbuttonstates[2] == BUTTON_PRESSED) {
-		weaponbuttonstates[2] = BUTTON_PERFORMED;
-		activeweapon = WEAPON_THREE;
-		currentweapon = &weapons[2];
-		if(root->isWeaponOwned(2) == false) moneyamt -= priceweapon[2];
-		root->saveMoney(moneyamt);
-		root->buyWeapon(2);
-		refreshInformations();
-		refreshTankPreview();
-		saveTank();
-	}
-
-	else if(weaponbuttons[3].contains(x, y) && (moneyamt >= priceweapon[3] || root->isWeaponOwned(3)) && weaponbuttonstates[3] == BUTTON_PRESSED) {
-		weaponbuttonstates[3] = BUTTON_PERFORMED;
-		activeweapon = WEAPON_FOUR;
-		currentweapon = &weapons[3];
-		if(root->isWeaponOwned(3) == false) moneyamt -= priceweapon[3];
-		root->saveMoney(moneyamt);
-		root->buyWeapon(3);
-		refreshInformations();
-		refreshTankPreview();
-		saveTank();
-	}
-
-	else if(weaponbuttons[4].contains(x, y) && (moneyamt >= priceweapon[4] || root->isWeaponOwned(4)) && weaponbuttonstates[4] == BUTTON_PRESSED) {
-		weaponbuttonstates[4] = BUTTON_PERFORMED;
-		activeweapon = WEAPON_FIVE;
-		currentweapon = &weapons[4];
-		if(root->isWeaponOwned(4) == false) moneyamt -= priceweapon[4];
-		root->saveMoney(moneyamt);
-		root->buyWeapon(4);
-		refreshInformations();
-		refreshTankPreview();
-		saveTank();
-	}
-
-	else if(weaponbuttons[5].contains(x, y) && (moneyamt >= priceweapon[5] || root->isWeaponOwned(5)) && weaponbuttonstates[5] == BUTTON_PRESSED) {
-		weaponbuttonstates[5] = BUTTON_PERFORMED;
-		activeweapon = WEAPON_SIX;
-		currentweapon = &weapons[5];
-		if(root->isWeaponOwned(5) == false) moneyamt -= priceweapon[5];
-		root->saveMoney(moneyamt);
-		root->buyWeapon(5);
-		refreshInformations();
-		refreshTankPreview();
-		saveTank();
-	}
-
-	else if(weaponbuttons[6].contains(x, y) && (moneyamt >= priceweapon[6] || root->isWeaponOwned(6)) && weaponbuttonstates[6] == BUTTON_PRESSED) {
-		weaponbuttonstates[6] = BUTTON_PERFORMED;
-		activeweapon = WEAPON_SEVEN;
-		currentweapon = &weapons[6];
-		if(root->isWeaponOwned(6) == false) moneyamt -= priceweapon[6];
-		root->saveMoney(moneyamt);
-		root->buyWeapon(6);
-		refreshInformations();
-		refreshTankPreview();
-		saveTank();
-	}
-
-	else if(weaponbuttons[7].contains(x, y) && (moneyamt >= priceweapon[7] || root->isWeaponOwned(7)) && weaponbuttonstates[7] == BUTTON_PRESSED) {
-		weaponbuttonstates[7] = BUTTON_PERFORMED;
-		activeweapon = WEAPON_EIGHT;
-		currentweapon = &weapons[7];
-		if(root->isWeaponOwned(7) == false) moneyamt -= priceweapon[7];
-		root->saveMoney(moneyamt);
-		root->buyWeapon(7);
-		refreshInformations();
-		refreshTankPreview();
-		saveTank();
-	}
-	else {
-		weaponbuttonstates[0] = BUTTON_CANCELED;
-		weaponbuttonstates[1] = BUTTON_CANCELED;
-		weaponbuttonstates[2] = BUTTON_CANCELED;
-		weaponbuttonstates[3] = BUTTON_CANCELED;
-		weaponbuttonstates[4] = BUTTON_CANCELED;
-		weaponbuttonstates[5] = BUTTON_CANCELED;
-		weaponbuttonstates[6] = BUTTON_CANCELED;
-		weaponbuttonstates[7] = BUTTON_CANCELED;
+	for(int i = 0; i < 8; i++) {
+		weaponbuttonstates[i] = BUTTON_CANCELED;
 	}
 }
 
@@ -1363,51 +1229,31 @@ void ShopCanvas::trackSettingsPressed(int x, int y) {
 }
 
 void ShopCanvas::trackSettingsReleased(int x, int y) {
-	if(trackbuttons[0].contains(x, y) && trackbuttonstates[0] == BUTTON_PRESSED) {
-		trackbuttonstates[0] = BUTTON_PERFORMED;
-		activetrack = TRACK_ONE;
-		currenttrack = &tracks[0];
-		refreshInformations();
-		saveTank();
+	for(int i = 0; i < 4; i++) {
+		bool ispressed = trackbuttonstates[i] == BUTTON_PRESSED;
+		bool isowned = root->isTrackOwned(i);
+		bool canbuy = moneyamt >= pricetrack[i];
+
+		if(trackbuttons[i].contains(x, y) && ispressed && (i == 0 || canbuy || isowned)) {
+			trackbuttonstates[i] = BUTTON_PERFORMED;
+
+			activetrack = i;
+			currenttrack = &tracks[i];
+
+			if(i > 0 && !isowned) {
+				moneyamt -= pricetrack[i];
+				root->saveMoney(moneyamt);
+				root->buyTrack(i);
+			}
+
+			refreshInformations();
+			saveTank();
+			return;
+		}
 	}
 
-	else if(trackbuttons[1].contains(x, y) && (moneyamt >= pricetrack[1] || root->isTrackOwned(1)) && trackbuttonstates[1] == BUTTON_PRESSED) {
-		trackbuttonstates[1] = BUTTON_PERFORMED;
-		activetrack = TRACK_TWO;
-		currenttrack = &tracks[1];
-		if(root->isTrackOwned(1) == false) moneyamt -= pricetrack[1];
-		root->saveMoney(moneyamt);
-		root->buyTrack(1);
-		refreshInformations();
-		saveTank();
-	}
-
-	else if(trackbuttons[2].contains(x, y) && (moneyamt >= pricetrack[2] || root->isTrackOwned(2)) && trackbuttonstates[2] == BUTTON_PRESSED) {
-		trackbuttonstates[2] = BUTTON_PERFORMED;
-		activetrack = TRACK_THREE;
-		currenttrack = &tracks[2];
-		if(root->isTrackOwned(2) == false) moneyamt -= pricetrack[2];
-		root->saveMoney(moneyamt);
-		root->buyTrack(2);
-		refreshInformations();
-		saveTank();
-	}
-
-	else if(trackbuttons[3].contains(x, y) &&  (moneyamt >= pricetrack[3] || root->isTrackOwned(3)) && trackbuttonstates[3] == BUTTON_PRESSED) {
-		trackbuttonstates[3] = BUTTON_PERFORMED;
-		activetrack = TRACK_FOUR;
-		currenttrack = &tracks[3];
-		if(root->isTrackOwned(3) == false) moneyamt -= pricetrack[3];
-		root->saveMoney(moneyamt);
-		root->buyTrack(3);
-		refreshInformations();
-		saveTank();
-	}
-	else {
-		trackbuttonstates[0] = BUTTON_CANCELED;
-		trackbuttonstates[1] = BUTTON_CANCELED;
-		trackbuttonstates[2] = BUTTON_CANCELED;
-		trackbuttonstates[3] = BUTTON_CANCELED;
+	for(int i = 0; i < 4; i++) {
+		trackbuttonstates[i] = BUTTON_CANCELED;
 	}
 }
 

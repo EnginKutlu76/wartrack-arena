@@ -18,23 +18,138 @@ gCanvas::~gCanvas() {
 }
 
 void gCanvas::setup() {
+	selectedSetup();
+	hullSetup();
+	weaponSetup();
+	trackSetup();
+	camSetup();
+	guiSetup();
+	mapSetup();
+	enemySetup();
+	keyControls();
+	fpsSetup();
+}
+
+void gCanvas::update() {
+	moveCharacter();
+	moveCamera();
+	playAnimations();
+	moveBullets();
+}
+
+void gCanvas::draw() {
+	drawMap();
+	drawBullets();
+	drawCharacter();
+	setColor(255, 255, 255);
+	if(root->getMinimap() == 1) drawMinimap();
+	//drawEnemies();
+	namefont.drawText(root->getName(), hx + hwh, hy + hhh);
+	//namefont.drawText(gToStr(bulletamt), gbbbx, gbbby);
+	drawGui();
+	drawDialogues();
+	fpsDraw();
+}
+
+void gCanvas::selectedSetup() {
 	selectedhull = root->getHull();
 	selectedweapon = root->getWeapon();
 	selectedtrack = root->getTrack();
 	selectedhullcolor = root->getHullColor();
 	selectedweaponcolor = root->getWeaponColor();
-	map.loadImage("haritalar/arkaplan1.jpg");
-	tank1.loadImage("oyun/PNG/Hulls_Color_" + gToStr(selectedhullcolor) + "/Hull_0" + gToStr(selectedhull) + ".png");
+}
+
+void gCanvas::hullSetup() {
+	hull.loadImage("oyun/PNG/Hulls_Color_" + gToStr(selectedhullcolor) + "/Hull_0" + gToStr(selectedhull) + ".png");
+	hx = 0;
+	hy = 0;
+	hw = hull.getWidth() * 0.4;
+	hh = hull.getHeight() * 0.4;
+	hwh = hw / 2;
+	hhh = hh / 2;
+	hdx = 0.0f;
+	hdy = 0.0f;
+	cangle = 0.0f;
+	cangletr = 0.0f;
+	canglegun = 0.0f;
+	hspeed = 4.0f;
+	hhealth = 100;
+	keystate = KEY_NONE;
+}
+
+void gCanvas::weaponSetup() {
+	weapon.loadImage("oyun/PNG/Weapon_Color_" + gToStr(selectedweaponcolor) + "/Gun_0" + gToStr(selectedweapon) + ".png");
+	bulletimage.loadImage("oyun/PNG/Effects/Exhaust_Fire.png");
+	wx = 0;
+	wy = 0;
+	ww = weapon.getWidth() * 0.4;
+	wh = weapon.getHeight() * 0.4;
+	wwh = ww / 2;
+	whh = wh / 2;
+	wdx = 0.0f;
+	wdy = 0.0f;
+	bulletamt = 5;
+}
+
+void gCanvas::trackSetup() {
 	for(int i = 0; i < trackframenum; i++) {
 		track[i].loadImage("oyun/PNG/Tracks/Track_" + gToStr(selectedtrack) + "_" + gToStr(i) + ".png");
 	}
-	gun.loadImage("oyun/PNG/Weapon_Color_" + gToStr(selectedweaponcolor) + "/Gun_0" + gToStr(selectedweapon) + ".png");
-	bulletimage.loadImage("oyun/PNG/Effects/Exhaust_Fire.png");
-	enemy.loadImage("oyun/PNG/Hulls_Color_3/Hull_01.png");
+	tx = 0;
+	ty = 0;
+	tw = track[0].getWidth() * 0.4;
+	th = track[0].getHeight() * 0.4;
+	twh = tw / 2;
+	thh = th / 2;
+	tdx = 0.0f;
+	tdy = 0.0f;
+
+	trackframecounter = 0;
+	trackframeno = 0;
+	trackframecounterlimit = 2;
+
+}
+
+void gCanvas::camSetup() {
+	camx = 0.0f;
+	camy = 0.0f;
+	camw = getWidth();
+	camh = getHeight();
+	camleftlimit = (float)getWidth() / 4.0f;
+	camrightlimit = (float)getScreenWidth() * 3.0f / 4.0f;
+	camtoplimit = (float)getHeight() / 4.0f;
+	cambottomlimit = (float)getHeight() * 3.0f / 4.0f;
+
+}
+
+void gCanvas::mapSetup() {
+	map.loadImage("haritalar/arkaplan1.jpg");
 	minimap.loadImage("haritalar/radar1.png");
 	minimapradarsign1.loadImage("haritalar/radarisaret1.png");
 	minimapradarsign2.loadImage("haritalar/radarisaret2.png");
+	mapw = map.getWidth();
+	maph = map.getHeight();
+	minimapw = minimap.getWidth();
+	minimaph = minimap.getHeight();
+	minimapx = getWidth() - minimapw - minimapw / 4;
+	minimapy = minimapw / 4;
 
+}
+
+void gCanvas::enemySetup() {
+	enemy.loadImage("oyun/PNG/Hulls_Color_3/Hull_01.png");
+	ex = 0;
+	ey = 0;
+	ew = enemy.getWidth() * 0.4;
+	eh = enemy.getHeight() * 0.4;
+	ewh = enemy.getWidth() / 2;
+	ehh = enemy.getHeight() / 2;
+}
+
+void gCanvas::guiSetup() {
+	namefont.loadFont("FreeSans.ttf", 20);
+	fontx = hwh;
+	fonty = hhh;
 	gui_charactericon.loadImage("gui/erkekikon.png");
 	gui_healthicon.loadImage("gui/element_0098_Layer-100.png");
 	gui_bulleticon.loadImage("PNG/bulleticon.png");
@@ -49,70 +164,7 @@ void gCanvas::setup() {
 	mainmbutton.loadImage("gui/button_mainmenu.png");
 	continuebutton.loadImage("gui/button_continue.png");
 	nextlevelbutton.loadImage("gui/button_nextlevel.png");
-
-	namefont.loadFont("FreeSans.ttf", 20);
-
-	keystate = KEY_NONE;
-	cx = 0;
-	cy = 0;
-	cw = tank1.getWidth() * 0.4;
-	ch = tank1.getHeight() * 0.4;
-	cwh = cw / 2;
-	chh = ch / 2;
-	cdx = 0.0f;
-	cdy = 0.0f;
-	cangle = 0.0f;
-	cangletr = 0.0f;
-	canglegun = 0.0f;
-	cspeed = 4.0f;
-
-	tx = 0;
-	ty = 0;
-	tw = track[0].getWidth() * 0.4;
-	th = track[0].getHeight() * 0.4;
-	twh = tw / 2;
-	thh = th / 2;
-	tdx = 0.0f;
-	tdy = 0.0f;
-
-	gx = 0;
-	gy = 0;
-	gw = gun.getWidth() * 0.4;
-	gh = gun.getHeight() * 0.4;
-	gwh = gw / 2;
-	ghh = gh / 2;
-	gdx = 0.0f;
-	gdy = 0.0f;
-
-	camx = 0.0f;
-	camy = 0.0f;
-	camw = getWidth();
-	camh = getHeight();
-	camleftlimit = (float)getWidth() / 4.0f;
-	camrightlimit = (float)getScreenWidth() * 3.0f / 4.0f;
-	camtoplimit = (float)getHeight() / 4.0f;
-	cambottomlimit = (float)getHeight() * 3.0f / 4.0f;
-	mapw = map.getWidth();
-	maph = map.getHeight();
-	trackframecounter = 0;
-	trackframeno = 0;
-	trackframecounterlimit = 2;
-
-	fontx = cwh;
-	fonty = chh;
-
-	minimapw = minimap.getWidth();
-	minimaph = minimap.getHeight();
-	minimapx = getWidth() - minimapw - minimapw / 4;
-	minimapy = minimapw / 4;
-
-	ex = 0;
-	ey = 0;
-	ew = enemy.getWidth() * 0.4;
-	eh = enemy.getHeight() * 0.4;
-	ewh = enemy.getWidth() / 2;
-	ehh = enemy.getHeight() / 2;
-
+	
 	gcix = gui_charactericon.getWidth() / 4;
 	gciy = gcix;
 	ghix = gui_charactericon.getWidth() + 2 * gcix;
@@ -131,8 +183,6 @@ void gCanvas::setup() {
 	gbbby = gbbfy + 8;
 	gbw = gui_healthbar.getWidth();
 	gbh = gui_healthbar.getHeight();
-	chealth = 100;
-	bulletamt = 5;
 
 	dialoguew = gui_gameoverdialogue.getWidth();
 	dialogueh = gui_gameoverdialogue.getHeight();
@@ -154,42 +204,14 @@ void gCanvas::setup() {
 	scoretitley = scorey - namefont.getSize() * 9 / 8;
 	scoretitlex = dialoguex + dialoguewidthhalf - namefont.getStringWidth("SCORE") / 2;
 
+}
+
+void gCanvas::fpsSetup() {
 	fpscounterx = minimapx + 20.0f;
 	fpscountery = minimapy + minimaph + 30.0f;
-
-	keyControls();
 }
 
-void gCanvas::update() {
-	moveCharacter();
-	moveCamera();
-	playAnimations();
-	moveBullets();
-}
-
-void gCanvas::drawCharacter() {
-	float pivotoffset = ch * 0.6f;
-
-	track[trackframeno].draw(cx + 15, cy, tw, th, cwh - 15, pivotoffset, cangle);
-	track[trackframeno].draw(cx + 70, cy, tw, th, cwh - 70, pivotoffset, cangle);
-
-	tank1.draw(cx, cy, cw, ch, cwh, pivotoffset, cangle);
-
-	gun.draw(cx + 40, cy, gw, gh, gwh, gh * 0.85f, canglegun);
-}
-
-void gCanvas::draw() {
-	drawMap();
-	drawBullets();
-	drawCharacter();
-	setColor(255, 255, 255);
-	if(root->getMinimap() == 1) drawMinimap();
-	//drawEnemies();
-	namefont.drawText(root->getName(), cx + cwh, cy + chh);
-	//namefont.drawText(gToStr(bulletamt), gbbbx, gbbby);
-	drawGui();
-	drawDialogues();
-
+void gCanvas::fpsDraw() {
 	if(root->getShowFps() == 1) {
 	char fpsBuffer[32];
 	sprintf(fpsBuffer, "%d FPS", root->getFramerate());
@@ -197,9 +219,20 @@ void gCanvas::draw() {
 	}
 }
 
+void gCanvas::drawCharacter() {
+	float pivotoffset = hh * 0.6f;
+
+	track[trackframeno].draw(hx + 15, hy, tw, th, hwh - 15, pivotoffset, cangle);
+	track[trackframeno].draw(hx + 70, hy, tw, th, hwh - 70, pivotoffset, cangle);
+
+	hull.draw(hx, hy, hw, hh, hwh, pivotoffset, cangle);
+
+	weapon.draw(hx + 40, hy, ww, wh, wwh, wh * 0.85f, canglegun);
+}
+
 void gCanvas::moveCharacter() {
-    cdx = 0.0f;
-    cdy = 0.0f;
+    hdx = 0.0f;
+    hdy = 0.0f;
 
     if(keystate & KEY_A) {
         cangle -= 2.0f;
@@ -209,25 +242,24 @@ void gCanvas::moveCharacter() {
     }
 
     if(keystate & KEY_W) {
-        cdx = std::sin(gDegToRad(cangle)) * cspeed;
-        cdy = -std::cos(gDegToRad(cangle)) * cspeed;
+        hdx = std::sin(gDegToRad(cangle)) * hspeed;
+        hdy = -std::cos(gDegToRad(cangle)) * hspeed;
     }
     if(keystate & KEY_S) {
-        cdx = -std::sin(gDegToRad(cangle)) * cspeed;
-        cdy = std::cos(gDegToRad(cangle)) * cspeed;
+        hdx = -std::sin(gDegToRad(cangle)) * hspeed;
+        hdy = std::cos(gDegToRad(cangle)) * hspeed;
     }
 
 	if(keystate == KEY_ESC) {
 		gamestate = GAMESTATE_PAUSE;
-		gLogi("gCanvas") << "aaa";
 	}
 
-    cx += cdx;
-    cy += cdy;
+    hx += hdx;
+    hy += hdy;
 }
 
 void gCanvas::playAnimations() {
-    if(cdx != 0.0f || cdy != 0.0f) {
+    if(hdx != 0.0f || hdy != 0.0f) {
         trackframecounter++;
         if(trackframecounter >= trackframecounterlimit) {
             trackframeno = (trackframeno + 1) % trackframenum;
@@ -241,9 +273,9 @@ void gCanvas::moveCamera() {
 	if(camx <= 0.0f) camleftlimit = 0.0f;
 	camrightlimit = (float)getWidth() * 3.0f / 4.0f;
 	if(camx + camw >= mapw) camrightlimit = getWidth();
-	if(cx < camleftlimit || cx + cw > camrightlimit) {
-		cx -= cdx;
-		camx += cdx;
+	if(hx < camleftlimit || hx + hw > camrightlimit) {
+		hx -= hdx;
+		camx += hdx;
 		if(camx < 0.0f) {
 			camx = 0.0f;
 		}
@@ -256,9 +288,9 @@ void gCanvas::moveCamera() {
 	if(camy <= 0.0f) camtoplimit = 0.0f;
 	cambottomlimit = (float)getHeight() * 3.0f / 4.0f;
 	if(camy + camh >= maph) cambottomlimit = getHeight();
-	if(cy < camtoplimit || cy + ch > cambottomlimit) {
-		cy -= cdy;
-		camy += cdy;
+	if(hy < camtoplimit || hy + hh > cambottomlimit) {
+		hy -= hdy;
+		camy += hdy;
 		if(camy < 0.0f) {
 			camy = 0.0f;
 		}
@@ -313,8 +345,8 @@ void gCanvas::drawMinimap() {
 	float emy = minimapy + 2 + ey / 32;
 	minimapradarsign2.draw(emx, emy);
 
-	float pmx = minimapx + 2 + (cx + camx) / 32;
-	float pmy = minimapy + 2 + (cy + camy) / 32;
+	float pmx = minimapx + 2 + (hx + camx) / 32;
+	float pmy = minimapy + 2 + (hy + camy) / 32;
 	minimapradarsign1.draw(pmx, pmy);
 }
 
@@ -327,7 +359,7 @@ void gCanvas::drawGui() {
 	gui_healthicon.draw(ghix, ghiy);
 	gui_bulleticon.draw(gbix, gbiy, gbiw, gbih);
 	gui_barbackground.draw(ghbbx, ghbby);
-	gui_healthbar.drawSub(ghbbx, ghbby, gbw * chealth / 100, gbh, gbw - (gbw * chealth / 100), 0, gbw, gbh);
+	gui_healthbar.drawSub(ghbbx, ghbby, gbw * hhealth / 100, gbh, gbw - (gbw * hhealth / 100), 0, gbw, gbh);
 	gui_barframe.draw(ghbfx, ghbfy);
 	namefont.drawText(gToStr(bulletamt), gbix * 1.4, gbiy * 1.4);
 }
@@ -453,8 +485,8 @@ void gCanvas::mouseMoved(int x, int y) {
     canglegun = (int)(
         gRadToDeg(
             std::atan2(
-                y - (cy + chh),
-                x - (cx + cwh)
+                y - (hy + hhh),
+                x - (hx + hwh)
             )
         ) + 90.0f + 360.0f
     ) % 360;
@@ -493,8 +525,8 @@ void gCanvas::mouseReleased(int x, int y, int button) {
 	}
 	if(dialogueshown) return;
 
-	float px = (cx + 40) + camx + gwh;
-	float py = cy + camy + gh * 0.85;
+	float px = (hx + 40) + camx + wwh;
+	float py = hy + camy + wh * 0.85;
 	float br = canglegun;
 	float bx = px + std::sin(gDegToRad(br + muzzleangle)) * muzzledistance - bulletimage.getHeight() / 2;
 	float by = py - std::cos(gDegToRad(br + muzzleangle)) * muzzledistance - bulletimage.getWidth() / 2;

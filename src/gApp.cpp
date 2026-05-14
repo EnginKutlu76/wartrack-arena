@@ -78,8 +78,8 @@ void gApp::loadAssets() {
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('hull','1')");
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('weapon','1')");
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('track','1')");
-	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('hullcolor','2')");
-	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('weaponcolor','2')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('hullcolor','1')");
+	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('weaponcolor','1')");
 
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('money','300')");
 	optionsdb.execute("INSERT OR IGNORE INTO options (key,value) VALUES ('experience','1')");
@@ -359,9 +359,11 @@ void gApp::loadTankSettings() {
 void gApp::loadColors() {
 	optionsdb.execute("SELECT value FROM options WHERE key='hullcolor'");
 	hullcolor = safeGetInt(optionsdb.getSelectData());
+	if(hullcolor <= 0 || hullcolor > 4) hullcolor = 1;
 
 	optionsdb.execute("SELECT value FROM options WHERE key='weaponcolor'");
 	weaponcolor = safeGetInt(optionsdb.getSelectData());
+	if(weaponcolor <= 0 || weaponcolor > 4) weaponcolor = 1;
 }
 
 void gApp::loadControlsSettings() {

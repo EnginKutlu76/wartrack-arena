@@ -63,6 +63,16 @@ private:
 	void drawGui();
 	void drawDialogues();
 	void applySensitivity();
+	void selectedSetup();
+	void hullSetup();
+	void weaponSetup();
+	void trackSetup();
+	void camSetup();
+	void mapSetup();
+	void enemySetup();
+	void guiSetup();
+	void fpsSetup();
+	void fpsDraw();
 
 	void keyControls();
 	int fkey;
@@ -76,9 +86,9 @@ private:
 	int gamestate;
 
 	gImage map;
-	gImage tank1;
+	gImage hull;
+	gImage weapon;
 	gImage track[trackframenum];
-	gImage gun;
 	gImage bulletimage;
 	gImage enemy;
 	gImage minimap;
@@ -100,13 +110,13 @@ private:
 
 	gFont namefont;
 
-	//tank
-	float cx, cy;
-	int cw, ch;
-	int cwh, chh;
-	float cdx, cdy;
-	float cspeed;
-	int chealth;
+	//hull
+	float hx, hy;
+	int hw, hh;
+	int hwh, hhh;
+	float hdx, hdy;
+	float hspeed;
+	int hhealth;
 
 	float cangle;
 	float cangletr;
@@ -132,11 +142,11 @@ private:
 	int trackframeno;
 	int trackframecounter, trackframecounterlimit;
 
-	//gun
-	float gx, gy;
-	int gw, gh;
-	int gwh, ghh;
-	float gdx, gdy;
+	//weapon
+	float wx, wy;
+	int ww, wh;
+	int wwh, whh;
+	float wdx, wdy;
 
 	//bullet
 	std::vector<std::vector<float>> bullets;

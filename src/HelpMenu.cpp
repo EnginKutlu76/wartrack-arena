@@ -273,10 +273,6 @@ void HelpMenu::itemsSettingsSetup() {
 	 itemslabeltext[4] = "Delici Mermi";
 
 	 for(int i = 0; i < 5; i++) {
-		 logo[i];
-		logoh[i];
-		logox[i];
-		logoy[i];
 		itemslabelw[i] = root->menutitlefont.getStringWidth(itemslabeltext[i]);
 	    itemslabelh[i] = root->menutitlefont.getStringHeight(itemslabeltext[i]);
 	    itemslabelx[i] = containerx + containerw / 10;
