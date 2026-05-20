@@ -247,10 +247,8 @@ void gApp::saveGraphicsSettings(int resolution, int windowmode) {
 	this->resolution = resolution;
 	this->windowmode = windowmode;
 
-	//optionsdb.execute("UPDATE options SET value=" + gToStr(brightness) + " WHERE key='brightness'");
 	optionsdb.execute("UPDATE options SET value=" + gToStr(resolution) + " WHERE key='resolution'");
 	optionsdb.execute("UPDATE options SET value=" + gToStr(windowmode) + " WHERE key='windowmode'");
-//	optionsdb.execute("UPDATE options SET value=" + gToStr(quality) + " WHERE key='quality'");
 }
 
 void gApp::saveAudioSettings(int soundvolume, int musicvolume, int sound, int music) {

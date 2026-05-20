@@ -12,7 +12,18 @@
 #include "gApp.h"
 #include "gImage.h"
 #include "gFont.h"
+#include <vector>
 
+struct SkillItem {
+    int type;
+    float x, y;
+    int w, h;
+    bool spawned;
+    bool owned;
+    float respawnTimer;
+    float activeTimer;
+    int guiAlpha;
+};
 
 class gCanvas : public gBaseCanvas {
 public:
@@ -73,6 +84,17 @@ private:
 	void guiSetup();
 	void fpsSetup();
 	void fpsDraw();
+	void skillsguiSetup();
+	void skillsguiDraw();
+	void skillsSetup();
+	void generateSkills();
+
+	//void updateSkills();
+	void checkSkillPickup();
+	void updateSkillTimers();
+
+	void drawWorldSkills();
+	void drawSkillGui();
 
 	void keyControls();
 	int fkey;
@@ -192,6 +214,19 @@ private:
 	int selectedtrack;
 	int selectedhullcolor;
 	int selectedweaponcolor;
+
+	//skills
+	gImage poison;
+	gImage bomb;
+	gImage healing;
+	gImage speedboost;
+	gImage piercingbullet;
+	int skillguix, skillguiy, skillguiw, skillguih;
+	int skillx, skilly, skillw, skillh;
+	int skillspace;
+
+	std::vector<SkillItem> skills;
+	std::vector<gImage> skillimages;
 };
 
 #endif /* GCANVAS_H_ */

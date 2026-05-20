@@ -217,10 +217,10 @@ void ShopCanvas::informationsSetup() {
 	infogapy = 50;
 	infogapx = infolinex + root->menutitlefont.getStringWidth(bulletspeedtxt) + 50;
 
-	trackspeed[0] = 4;
-	trackspeed[1] = 5;
-	trackspeed[2] = 6;
-	trackspeed[3] = 7;
+	trackspeed[0] = 3;
+	trackspeed[1] = 4;
+	trackspeed[2] = 5;
+	trackspeed[3] = 6;
 
 	hulldurability[0] = 5;
 	hulldurability[1] = 7;
@@ -228,17 +228,17 @@ void ShopCanvas::informationsSetup() {
 	hulldurability[3] = 11;
 	hulldurability[4] = 13;
 	hulldurability[5] = 15;
-	hulldurability[6] = 16;
-	hulldurability[7] = 17;
+	hulldurability[6] = 17;
+	hulldurability[7] = 19;
 
 	hullhealth[0] = 100;
 	hullhealth[1] = 120;
 	hullhealth[2] = 140;
-	hullhealth[3] = 150;
-	hullhealth[4] = 160;
-	hullhealth[5] = 170;
-	hullhealth[6] = 180;
-	hullhealth[7] = 200;
+	hullhealth[3] = 160;
+	hullhealth[4] = 180;
+	hullhealth[5] = 200;
+	hullhealth[6] = 220;
+	hullhealth[7] = 240;
 
 	weaponattack[0] = 6;
 	weaponattack[1] = 8;

@@ -28,6 +28,8 @@ void gCanvas::setup() {
 	enemySetup();
 	keyControls();
 	fpsSetup();
+	skillsguiSetup();
+	skillsSetup();
 }
 
 void gCanvas::update() {
@@ -35,6 +37,10 @@ void gCanvas::update() {
 	moveCamera();
 	playAnimations();
 	moveBullets();
+
+	//updateSkills();
+	checkSkillPickup();
+	updateSkillTimers();
 }
 
 void gCanvas::draw() {
@@ -49,6 +55,246 @@ void gCanvas::draw() {
 	drawGui();
 	drawDialogues();
 	fpsDraw();
+	drawWorldSkills();
+	drawSkillGui();
+}
+
+void gCanvas::skillsSetup() {
+	skills.clear();
+
+	SkillItem poisonskill;
+	poisonskill.type = 0;
+
+	poisonskill.w = poison.getWidth() * 0.5f;
+	poisonskill.h = poison.getHeight() * 0.5f;
+
+	poisonskill.x = (gRandomf() + 1.0f) * 0.1f * (mapw - poisonskill.w);
+	poisonskill.y = (gRandomf() + 1.0f) * 0.1f * (maph - poisonskill.h);
+
+	poisonskill.spawned = true;
+	poisonskill.owned = false;
+	poisonskill.respawnTimer = 0.0f;
+	poisonskill.activeTimer = 0.0f;
+	poisonskill.guiAlpha = 80;
+
+	SkillItem bombskill;
+	bombskill.type = 1;
+
+	bombskill.w = bomb.getWidth() * 0.5f;
+	bombskill.h = bomb.getHeight() * 0.5f;
+
+	bombskill.x = (gRandomf() + 1.0f) * 0.1f * (mapw - bombskill.w);
+	bombskill.y = (gRandomf() + 1.0f) * 0.1f * (maph - bombskill.h);
+
+	bombskill.spawned = true;
+	bombskill.owned = false;
+	bombskill.respawnTimer = 0.0f;
+	bombskill.activeTimer = 0.0f;
+	bombskill.guiAlpha = 80;
+
+	SkillItem healingskill;
+	healingskill.type = 2;
+
+	healingskill.w = healing.getWidth() * 0.5f;
+	healingskill.h = healing.getHeight() * 0.5f;
+
+	healingskill.x = (gRandomf() + 1.0f) * 0.1f * (mapw - healingskill.w);
+	healingskill.y = (gRandomf() + 1.0f) * 0.1f * (maph - healingskill.h);
+
+	healingskill.spawned = true;
+	healingskill.owned = false;
+	healingskill.respawnTimer = 0.0f;
+	healingskill.activeTimer = 0.0f;
+	healingskill.guiAlpha = 80;
+
+	SkillItem piercingbulletskill;
+	piercingbulletskill.type = 3;
+
+	piercingbulletskill.w = piercingbullet.getWidth() * 0.5f;
+	piercingbulletskill.h = piercingbullet.getHeight() * 0.5f;
+
+	piercingbulletskill.x = (gRandomf() + 1.0f) * 0.1f * (mapw - piercingbulletskill.w);
+	piercingbulletskill.y = (gRandomf() + 1.0f) * 0.1f * (maph - piercingbulletskill.h);
+
+	piercingbulletskill.spawned = true;
+	piercingbulletskill.owned = false;
+	piercingbulletskill.respawnTimer = 0.0f;
+	piercingbulletskill.activeTimer = 0.0f;
+	piercingbulletskill.guiAlpha = 80;
+
+	SkillItem speedboostskill;
+	speedboostskill.type = 4;
+
+	speedboostskill.w = speedboost.getWidth() * 0.5f;
+	speedboostskill.h = speedboost.getHeight() * 0.5f;
+
+	speedboostskill.x = (gRandomf() + 1.0f) * 0.1f * (mapw - speedboostskill.w);
+	speedboostskill.y = (gRandomf() + 1.0f) * 0.1f * (maph - speedboostskill.h);
+
+	speedboostskill.spawned = true;
+	speedboostskill.owned = false;
+	speedboostskill.respawnTimer = 0.0f;
+	speedboostskill.activeTimer = 0.0f;
+	speedboostskill.guiAlpha = 80;
+
+	skills.push_back(poisonskill);
+	skills.push_back(bombskill);
+	skills.push_back(healingskill);
+	skills.push_back(piercingbulletskill);
+	skills.push_back(speedboostskill);
+
+	gLogi("x") << poisonskill.x;
+	gLogi("y") << poisonskill.y;
+
+	gLogi("x") << bombskill.x;
+	gLogi("y") << bombskill.y;
+}
+
+void gCanvas::drawWorldSkills() {
+	for(int i = 0; i < skills.size(); i++) {
+
+		if(!skills[i].spawned) continue;
+
+		switch(skills[i].type) {
+
+		case 0:
+			poison.draw(
+				skills[i].x - camx,
+				skills[i].y - camy,
+				skills[i].w,
+				skills[i].h
+			);
+			break;
+		case 1:
+			bomb.draw(
+				skills[i].x - camx,
+				skills[i].y - camy,
+				skills[i].w,
+				skills[i].h
+			);
+			break;
+		case 2:
+			healing.draw(
+				skills[i].x - camx,
+				skills[i].y - camy,
+				skills[i].w,
+				skills[i].h
+			);
+			break;
+		case 3:
+			piercingbullet.draw(
+				skills[i].x - camx,
+				skills[i].y - camy,
+				skills[i].w,
+				skills[i].h
+			);
+			break;
+		case 4:
+			speedboost.draw(
+				skills[i].x - camx,
+				skills[i].y - camy,
+				skills[i].w,
+				skills[i].h
+			);
+			break;
+		}
+	}
+}
+
+void gCanvas::drawSkillGui() {
+
+	for(int i = 0; i < skills.size(); i++) {
+
+		setColor(255, 255, 255, skills[i].guiAlpha);
+
+		switch(skills[i].type) {
+
+		case 0:
+			poison.draw(skillguix, skillguiy);
+			break;
+		case 1:
+			bomb.draw(skillguix + skillguiw, skillguiy);
+			break;
+		case 2:
+			healing.draw(skillguix + skillguiw * 2, skillguiy);
+			break;
+		case 3:
+			piercingbullet.draw(skillguix + skillguiw * 3, skillguiy);
+			break;
+		case 4:
+			speedboost.draw(skillguix + skillguiw * 4, skillguiy);
+			break;
+		}
+	}
+
+	setColor(255,255,255);
+}
+
+void gCanvas::checkSkillPickup() {
+
+	for(int i = 0; i < skills.size(); i++) {
+
+		if(!skills[i].spawned) continue;
+
+		bool collision =
+			hx < skills[i].x + skills[i].w &&
+			hx + hw > skills[i].x &&
+			hy < skills[i].y + skills[i].h &&
+			hy + hh > skills[i].y;
+
+		if(collision) {
+
+			skills[i].spawned = false;
+
+			skills[i].owned = true;
+
+			skills[i].guiAlpha = 230;
+
+			skills[i].respawnTimer = 600.0f;
+		}
+	}
+}
+
+void gCanvas::updateSkillTimers() {
+	for(int i = 0; i < skills.size(); i++) {
+		if(skills[i].spawned) continue;
+
+		if(skills[i].respawnTimer > 0.0f) {
+			skills[i].respawnTimer--;
+		}
+
+		if(skills[i].respawnTimer <= 0.0f && !skills[i].owned) {
+			skills[i].x =(gRandomf() + 1.0f) * (mapw - skills[i].w);
+			skills[i].y = (gRandomf() + 1.0f) * (maph - skills[i].h);
+			skills[i].spawned = true;
+			skills[i].guiAlpha = 80;
+			skills[i].activeTimer = 0.0f;
+		}
+	}
+}
+
+void gCanvas::skillsguiSetup() {
+	poison.loadImage("PNG/ICONS/poison.png");
+	bomb.loadImage("PNG/ICONS/bomb.png");
+	healing.loadImage("PNG/ICONS/healing.png");
+	speedboost.loadImage("PNG/ICONS/speedboost.png");
+	piercingbullet.loadImage("PNG/ICONS/piercingbullet.png");
+
+	skillspace = 100;
+	skillguiw = poison.getWidth();
+	skillguih = poison.getHeight();
+	skillguix = skillguiw - (skillspace / 2);
+	skillguiy = getHeight() - skillguih - (skillspace / 4);
+}
+
+void gCanvas::skillsguiDraw() {
+	setColor(255, 255, 255, 110);
+	poison.draw(skillguix, skillguiy);
+	setColor(255, 255, 255, 230);
+	bomb.draw(skillguix + skillspace, skillguiy);
+	healing.draw(skillguix + skillspace * 2, skillguiy);
+	speedboost.draw(skillguix + skillspace * 3, skillguiy , skillguiw * 1.1, skillguih * 1.1);
+	piercingbullet.draw(skillguix + skillspace * 4, skillguiy);
 }
 
 void gCanvas::selectedSetup() {
@@ -72,8 +318,8 @@ void gCanvas::hullSetup() {
 	cangle = 0.0f;
 	cangletr = 0.0f;
 	canglegun = 0.0f;
-	hspeed = 4.0f;
-	hhealth = 100;
+	hspeed = selectedtrack + 3;
+	hhealth = (selectedhull * 20 ) + 100;
 	keystate = KEY_NONE;
 }
 
@@ -124,6 +370,7 @@ void gCanvas::camSetup() {
 
 void gCanvas::mapSetup() {
 	map.loadImage("haritalar/arkaplan1.jpg");
+	//map.loadImage("haritalar/aa.png");
 	minimap.loadImage("haritalar/radar1.png");
 	minimapradarsign1.loadImage("haritalar/radarisaret1.png");
 	minimapradarsign2.loadImage("haritalar/radarisaret2.png");
@@ -445,6 +692,47 @@ void gCanvas::keyPressed(int key) {
 		}
 		else if(root->gamestate == root->GAME_OPTION) {
 			root->gamestate = root->GAME_PAUSE;
+		}
+	}
+
+	if(key == G_KEY_Z) {
+		if(!skills.empty() && skills[0].owned) {
+			skills[0].owned = false;
+			skills[0].guiAlpha = 80;
+			skills[0].respawnTimer = 600.0f;
+			gLogi("skill") << "poison used";
+		}
+	}
+	if(key == G_KEY_X) {
+		if(!skills.empty() && skills[1].owned) {
+			skills[1].owned = false;
+			skills[1].guiAlpha = 80;
+			skills[1].respawnTimer = 600.0f;
+			gLogi("skill") << "bomb used";
+		}
+	}
+	if(key == G_KEY_C) {
+		if(!skills.empty() && skills[2].owned) {
+			skills[2].owned = false;
+			skills[2].guiAlpha = 80;
+			skills[2].respawnTimer = 600.0f;
+			gLogi("skill") << "Healing used";
+		}
+	}
+	if(key == G_KEY_V) {
+		if(!skills.empty() && skills[3].owned) {
+			skills[3].owned = false;
+			skills[3].guiAlpha = 80;
+			skills[3].respawnTimer = 600.0f;
+			gLogi("skill") << "PB used";
+		}
+	}
+	if(key == G_KEY_B) {
+		if(!skills.empty() && skills[4].owned) {
+			skills[4].owned = false;
+			skills[4].guiAlpha = 80;
+			skills[4].respawnTimer = 600.0f;
+			gLogi("skill") << "SB used";
 		}
 	}
 
