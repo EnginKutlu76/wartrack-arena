@@ -84,6 +84,12 @@ private:
 	void nameSetup();
 	void nameDraw();
 
+	void selectedSetup();
+	void hullSetup();
+	void weaponSetup();
+	void trackSetup();
+	void drawCharacter();
+
 	gImage background;
 	std::string starttext, offlinetext, shoptext, optiontext, credittext, exittext, helptext;
 	gImage glistlogo;
@@ -111,5 +117,20 @@ private:
 
 	std::string nametxt, name;
 	int namex, namey;
+
+
+	int selectedhull;
+	int selectedweapon;
+	int selectedtrack;
+	int selectedhullcolor;
+	int selectedweaponcolor;
+
+	gImage hull;
+	gImage weapon;
+	gImage track;
+
+	int hx, hy, hw, hh;
+	int wx, wy, ww, wh;
+	int tx, ty, tw, th;
 };
 #endif /* SRC_MAINMENU_H_ */

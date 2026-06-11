@@ -71,7 +71,7 @@ private:
 	void generateBullet(float bulletX, float bulletY, float bulletDx, float bulletDy, float bulletRotation, int bulletSender);
 	void drawMinimap();
 	void drawEnemies();
-	void drawGui();
+	void guiDraw();
 	void drawDialogues();
 	void applySensitivity();
 	void selectedSetup();
@@ -139,6 +139,7 @@ private:
 	float hdx, hdy;
 	float hspeed;
 	int hhealth;
+	float hmaxhealth;
 
 	float cangle;
 	float cangletr;

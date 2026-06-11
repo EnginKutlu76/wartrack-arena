@@ -18,26 +18,29 @@ gCanvas::~gCanvas() {
 }
 
 void gCanvas::setup() {
+	gamestate = GAMESTATE_PLAY;
+	dialogueshown = false;
 	selectedSetup();
 	hullSetup();
 	weaponSetup();
 	trackSetup();
 	camSetup();
-	guiSetup();
 	mapSetup();
 	enemySetup();
 	keyControls();
 	fpsSetup();
 	skillsguiSetup();
 	skillsSetup();
+	guiSetup();
 }
 
 void gCanvas::update() {
+	if(dialogueshown) return;
+
 	moveCharacter();
 	moveCamera();
 	playAnimations();
 	moveBullets();
-
 	//updateSkills();
 	checkSkillPickup();
 	updateSkillTimers();
@@ -45,18 +48,19 @@ void gCanvas::update() {
 
 void gCanvas::draw() {
 	drawMap();
-	drawBullets();
 	drawCharacter();
+	drawDialogues();
+	if(dialogueshown) return;
+	drawBullets();
 	setColor(255, 255, 255);
 	if(root->getMinimap() == 1) drawMinimap();
 	//drawEnemies();
 	namefont.drawText(root->getName(), hx + hwh, hy + hhh);
 	//namefont.drawText(gToStr(bulletamt), gbbbx, gbbby);
-	drawGui();
-	drawDialogues();
 	fpsDraw();
 	drawWorldSkills();
 	drawSkillGui();
+	guiDraw();
 }
 
 void gCanvas::skillsSetup() {
@@ -438,8 +442,8 @@ void gCanvas::guiSetup() {
 	dialoguex = (getWidth() - dialoguew) / 2.0f;
 	dialoguey = (getHeight() - dialogueh) / 2.0f;
 	score = 0;
-	leftbw = replaybutton.getWidth();
-	leftbh = replaybutton.getHeight();
+	leftbw = mainmbutton.getWidth();
+	leftbh = mainmbutton.getHeight();
 	leftbx = dialoguex + dialoguewidthhalf - leftbw * 5 / 4;
 	leftby = dialoguey + dialogueh - leftbh * 5 / 2;
 	rightbw = mainmbutton.getWidth();
@@ -601,7 +605,7 @@ void gCanvas::drawEnemies() {
 	enemy.draw(ex, ey, ew, eh);
 }
 
-void gCanvas::drawGui() {
+void gCanvas::guiDraw() {
 	gui_charactericon.draw(gcix, gciy);
 	gui_healthicon.draw(ghix, ghiy);
 	gui_bulleticon.draw(gbix, gbiy, gbiw, gbih);
@@ -717,6 +721,7 @@ void gCanvas::keyPressed(int key) {
 			skills[2].guiAlpha = 80;
 			skills[2].respawnTimer = 600.0f;
 			gLogi("skill") << "Healing used";
+			hhealth += 20;
 		}
 	}
 	if(key == G_KEY_V) {
@@ -733,6 +738,7 @@ void gCanvas::keyPressed(int key) {
 			skills[4].guiAlpha = 80;
 			skills[4].respawnTimer = 600.0f;
 			gLogi("skill") << "SB used";
+			hspeed += 3;
 		}
 	}
 
@@ -770,7 +776,8 @@ void gCanvas::charPressed(unsigned int codepoint) {
 void gCanvas::mouseMoved(int x, int y) {
 	//applySensitivity();
 
-    canglegun = (int)(
+	if(dialogueshown) return;
+		canglegun = (int)(
         gRadToDeg(
             std::atan2(
                 y - (hy + hhh),

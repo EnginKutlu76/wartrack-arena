@@ -22,6 +22,7 @@ mainMenu::~mainMenu() {
 
 void mainMenu::setup() {
 	//background.loadImage("black.png");
+	selectedSetup();
 	logoSetup();
 	startSetup();
 	offlineSetup();
@@ -33,6 +34,9 @@ void mainMenu::setup() {
 	exitSetup();
 	moneyExpSetup();
 	nameSetup();
+	hullSetup();
+	weaponSetup();
+	trackSetup();
 }
 
 void mainMenu::update() {
@@ -50,6 +54,7 @@ void mainMenu::draw() {
 	exitDraw();
 	moneyExpDraw();
 	nameDraw();
+	drawCharacter();
 	//fadeEffectDraw();
 }
 
@@ -130,6 +135,21 @@ void mainMenu::mouseExited() {
 }
 
 void mainMenu::windowResized(int w, int h) {
+	selectedSetup();
+	logoSetup();
+	startSetup();
+	offlineSetup();
+	shopSetup();
+	optionSetup();
+	helpSetup();
+	creditSetup();
+	colorSetup();
+	exitSetup();
+	moneyExpSetup();
+	nameSetup();
+	hullSetup();
+	weaponSetup();
+	trackSetup();
 }
 
 void mainMenu::showNotify() {
@@ -153,13 +173,13 @@ void mainMenu::logoSetup() {
 	int glistlogosizer = 3;
 	int padding = 25;
 
-	titlex = getWidth() / titlesizer;
-	titley = getHeight() / titlesizer;
+	titlex = (getWidth() - root->menutitlefont.getStringWidth(root->titlekey)) / 2;
+	titley = root->menutitlefont.getStringHeight(root->titlekey);
 
 	glistlogow = glistlogo.getWidth() / glistlogosizer;
 	glistlogoh = glistlogo.getHeight() / glistlogosizer;
-	glistlogox = 1300;
-	glistlogoy = 840;
+	glistlogox = getWidth() - glistlogow;
+	glistlogoy = getHeight() - glistlogoh;
 
 }
 
@@ -167,8 +187,8 @@ void mainMenu::startSetup() {
 	starttext = root->localizeWord(root->startkey);
 	startw = root->menutitlefont.getStringWidth(starttext);
 	starth = root->menutitlefont.getStringHeight(starttext);
-	startx = 200;
-	starty = 800;
+	startx = getWidth() / 8;
+	starty = getHeight() / 1.1;
 	starthitbox.set(startx, starty - starth, startx + startw, starty);
 	startstate = BUTTON_NONE;
 }
@@ -457,4 +477,75 @@ void mainMenu::checkButtonReleased(int x, int y, int button) {
 		exitstate = BUTTON_CANCELED;
 		helpstate = BUTTON_CANCELED;
 	}
+}
+
+void mainMenu::selectedSetup() {
+	selectedhull = root->getHull();
+	selectedweapon = root->getWeapon();
+	selectedtrack = root->getTrack();
+	selectedhullcolor = root->getHullColor();
+	selectedweaponcolor = root->getWeaponColor();
+}
+
+void mainMenu::hullSetup() {
+	hull.loadImage("oyun/PNG/Hulls_Color_" + gToStr(selectedhullcolor) + "/Hull_0" + gToStr(selectedhull) + ".png");
+	hw = hull.getWidth();
+	hh = hull.getHeight();
+	hx = (getWidth() - hw) / 2;
+	hy = (getHeight() - hh) / 2;
+
+	tx = hx +  track.getWidth();
+	ty = hy;
+	tw = track.getWidth();
+	th = track.getHeight();
+
+	wx = hx + (hw - weapon.getWidth()) / 2;
+	wy = hy;
+	ww = weapon.getWidth();
+	wh = weapon.getHeight();
+}
+
+void mainMenu::weaponSetup() {
+	weapon.loadImage("oyun/PNG/Weapon_Color_" + gToStr(selectedweaponcolor) + "/Gun_0" + gToStr(selectedweapon) + ".png");
+	wx = hx + (hw - weapon.getWidth()) / 2;
+	wy = hy;
+	ww = weapon.getWidth();
+	wh = weapon.getHeight();
+}
+
+void mainMenu::trackSetup() {
+	track.loadImage("oyun/PNG/Tracks/Track_" + gToStr(selectedtrack) + "_1.png");
+	tx = hx +  track.getWidth();
+	ty = hy;
+	tw = track.getWidth();
+	th = track.getHeight();
+}
+
+void mainMenu::drawCharacter() {
+	hx = (getWidth() - hull.getWidth()) / 2;
+	hy = (getHeight() - hull.getHeight()) / 2;
+
+	hw = hull.getWidth();
+	hh = hull.getHeight();
+
+	tx = hx + track.getWidth();
+	ty = hy;
+
+	wx = hx + (hull.getWidth() - weapon.getWidth()) / 2;
+	wy = hy;
+
+	track.draw(tx, ty, track.getWidth(), track.getHeight());
+	track.draw(tx + (hw / 2) + 2, ty, track.getWidth(), track.getHeight());
+
+	hull.draw(hx, hy, hw, hh);
+
+	weapon.draw(
+	    wx,
+	    wy,
+	    weapon.getWidth(),
+		weapon.getHeight(),
+	    weapon.getWidth() / 2,
+	    weapon.getHeight(),
+	    0
+	);
 }
