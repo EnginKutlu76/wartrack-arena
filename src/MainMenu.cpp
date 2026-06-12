@@ -24,6 +24,7 @@ void mainMenu::setup() {
 	//background.loadImage("black.png");
 	selectedSetup();
 	logoSetup();
+	containerSetup();
 	startSetup();
 	offlineSetup();
 	shopSetup();
@@ -45,6 +46,7 @@ void mainMenu::update() {
 void mainMenu::draw() {
 	backgroundDraw();
 	logoDraw();
+	containerDraw();
 	startDraw();
 	offlineDraw();
 	shopDraw();
@@ -79,10 +81,10 @@ void mainMenu::moneyExpSetup() {
 	expamt = root->getExperience();
 	moneytxt = gToStr(moneyamt);
 	exptxt = gToStr(expamt);
-	moneyx = 1450;
-	moneyy = 40;
-	expx = 1450;
-	expy = 100;
+	moneyx = getWidth() - money.getWidth() - root->menutitlefont.getStringWidth(moneytxt);
+	moneyy = root->menutitlefont.getStringHeight(moneytxt);
+	expx = moneyx;
+	expy = moneyy + root->menutitlefont.getStringWidth(exptxt) + root->menutitlefont.getStringHeight(moneytxt);
 }
 
 void mainMenu::moneyExpDraw() {
@@ -137,6 +139,7 @@ void mainMenu::mouseExited() {
 void mainMenu::windowResized(int w, int h) {
 	selectedSetup();
 	logoSetup();
+	containerSetup();
 	startSetup();
 	offlineSetup();
 	shopSetup();
@@ -187,7 +190,7 @@ void mainMenu::startSetup() {
 	starttext = root->localizeWord(root->startkey);
 	startw = root->menutitlefont.getStringWidth(starttext);
 	starth = root->menutitlefont.getStringHeight(starttext);
-	startx = getWidth() / 8;
+	startx = getWidth() / 5;
 	starty = getHeight() / 1.1;
 	starthitbox.set(startx, starty - starth, startx + startw, starty);
 	startstate = BUTTON_NONE;
@@ -549,3 +552,19 @@ void mainMenu::drawCharacter() {
 	    0
 	);
 }
+
+void mainMenu::containerSetup() {
+	containerw = getWidth() / 4;
+	containerh =  getHeight() / 1.2;
+	containerx = (getWidth() - containerw) / 15;
+	containery = containerh / 20;
+
+	containercolor.set(255, 255, 255);
+}
+
+void mainMenu::containerDraw() {
+	setColor(containercolor);
+	gDrawRectangle(containerx, containery, containerw, containerh, true);
+	setColor(255, 255, 255);
+}
+

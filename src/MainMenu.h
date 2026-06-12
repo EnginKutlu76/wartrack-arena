@@ -90,6 +90,9 @@ private:
 	void trackSetup();
 	void drawCharacter();
 
+	void containerSetup();
+	void containerDraw();
+
 	gImage background;
 	std::string starttext, offlinetext, shoptext, optiontext, credittext, exittext, helptext;
 	gImage glistlogo;
@@ -132,5 +135,8 @@ private:
 	int hx, hy, hw, hh;
 	int wx, wy, ww, wh;
 	int tx, ty, tw, th;
+
+	int containerx, containery, containerw, containerh;
+	gColor containercolor;
 };
 #endif /* SRC_MAINMENU_H_ */
