@@ -25,6 +25,7 @@ void mainMenu::setup() {
 	selectedSetup();
 	logoSetup();
 	containerSetup();
+	tabSetup();
 	startSetup();
 	offlineSetup();
 	shopSetup();
@@ -47,6 +48,7 @@ void mainMenu::draw() {
 	backgroundDraw();
 	logoDraw();
 	containerDraw();
+	tabDraw();
 	startDraw();
 	offlineDraw();
 	shopDraw();
@@ -140,6 +142,7 @@ void mainMenu::windowResized(int w, int h) {
 	selectedSetup();
 	logoSetup();
 	containerSetup();
+	tabSetup();
 	startSetup();
 	offlineSetup();
 	shopSetup();
@@ -565,6 +568,30 @@ void mainMenu::containerSetup() {
 void mainMenu::containerDraw() {
 	setColor(containercolor);
 	gDrawRectangle(containerx, containery, containerw, containerh, true);
+	setColor(255, 255, 255);
+}
+
+void mainMenu::tabSetup() {
+	tabw = containerw;
+	tabh =  containerh / 7;
+	tabx = containerx;
+	taby = containery;
+	tabtext = "Friends";
+	tabtextw = root->menutitlefont.getStringWidth(tabtext);
+	tabtexth = root->menutitlefont.getStringHeight(tabtext);
+
+	tabtextx = tabx + (tabw - tabtextw) / 2;
+	tabtexty = taby + (tabh + tabtexth) / 2;
+
+
+	tabcolor.set(25, 225, 225);
+}
+
+void mainMenu::tabDraw() {
+	setColor(tabcolor);
+	gDrawRectangle(tabx, taby, tabw, tabh, true);
+	setColor(120, 10, 11);
+	root->menutitlefont.drawText(tabtext, tabtextx, tabtexty);
 	setColor(255, 255, 255);
 }
 

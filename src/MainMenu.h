@@ -92,6 +92,8 @@ private:
 
 	void containerSetup();
 	void containerDraw();
+	void tabSetup();
+	void tabDraw();
 
 	gImage background;
 	std::string starttext, offlinetext, shoptext, optiontext, credittext, exittext, helptext;
@@ -138,5 +140,10 @@ private:
 
 	int containerx, containery, containerw, containerh;
 	gColor containercolor;
+
+	int tabx, taby, tabw, tabh;
+	std::string tabtext;
+	int tabtextx, tabtexty, tabtextw, tabtexth;
+	gColor tabcolor;
 };
 #endif /* SRC_MAINMENU_H_ */
